@@ -13,7 +13,12 @@ class Handler implements Converter<[number, number]>, Formatter {
 		return [Number.parseInt(value.slice(0, 2)), Number.parseInt(value.slice(2))]
 	}
 	format(unformated: StateEditor): Readonly<State> & Settings {
-		return { ...unformated.padStart(4, " ").insert(2, " / "), type: "text", autocomplete: "cc-exp", length: [5, 5], pattern: /^[\d ]\d \/ \d\d$/ }
+		let result = unformated
+		if (!unformated.is(0, " ", "0", "1"))
+			result = result.prepend(" ")
+		if (result.value.length > 1)
+			result = result.insert(2, " / ")
+		return { ...result, type: "text", autocomplete: "cc-exp", length: [5, 5], pattern: /^[\d ]\d \/ \d\d$/ }
 	}
 	unformat(formated: StateEditor): Readonly<State> {
 		return formated.delete(" / ")

@@ -12,9 +12,9 @@ export class StateEditor implements Readonly<State> {
 	get(index: number): string {
 		return this.value[index]
 	}
-	is(index: number, character: string | string[]) {
+	is(index: number, ...character: string[]) {
 		const c = this.get(index)
-		return typeof character == "string" ? c == character : character.some(d => c == d)
+		return character.some(d => c == d)
 	}
 	isDigit(index: number): boolean {
 		const character = this.get(index)
@@ -72,17 +72,16 @@ export class StateEditor implements Readonly<State> {
 		return result
 	}
 	truncate(end: number): StateEditor {
-		if (this.value.length >= end) {
-			this.delete(end, this.value.length)
-		}
-		return this
+		return this.value.length >= end ? this.delete(end, this.value.length) : this
 	}
 	pad(length: number, padding: string, index: number): StateEditor {
-		while (length > this.value.length + padding.length)
-			this.insert(index, padding)
-		if (length > this.value.length)
-			this.insert(index, padding.substring(0, length - this.value.length))
-		return this
+		// tslint:disable-next-line: no-this-assignment
+		let result: StateEditor = this
+		while (length > result.value.length + padding.length)
+			result = result.insert(index, padding)
+		if (length > result.value.length)
+			result = result.insert(index, padding.substring(0, length - result.value.length))
+		return result
 	}
 	padEnd(length: number, padding: string): StateEditor {
 		return this.pad(length, padding, this.value.length)
@@ -101,8 +100,6 @@ export class StateEditor implements Readonly<State> {
 		}
 		return result
 	}
-
-	toState(): State { return { value: this.value, selection: { start: this.selection.start, end: this.selection.end } } }
 
 	static copy(state: Readonly<State>): StateEditor {
 		return new StateEditor({ ...state })
