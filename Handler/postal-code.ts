@@ -1,0 +1,28 @@
+import * as isoly from "isoly"
+import { Converter } from "../Converter"
+import { Formatter } from "../Formatter"
+import { State } from "../State"
+import { StateEditor } from "../StateEditor"
+import { Settings } from "../Settings"
+import { add } from "./base"
+
+class Handler implements Converter<string>, Formatter {
+	constructor(readonly country: isoly.CountryCode.Alpha2 | undefined) {}
+	toString(data: string): string {
+		return data
+	}
+	fromString(value: string): string | undefined {
+		return value
+	}
+	format(unformated: StateEditor): Readonly<State> & Settings {
+		const result = unformated.value.length >= 3 ? unformated.insert(3, " ") : unformated
+		return { ...result, type: "text", autocomplete: "postal-code", length: [5, 6], pattern: /^[\d ]\d \/ \d\d$/ }
+	}
+	unformat(formated: StateEditor): Readonly<State> {
+		return formated.delete(" ")
+	}
+	allowed(symbol: string, state: Readonly<State>): boolean {
+		return state.value.length < 4 && symbol >= "0" && symbol <= "9"
+	}
+}
+add("postal-code", (argument?: any[]) => new Handler(argument && argument.length > 0 ? argument[0] : undefined))
