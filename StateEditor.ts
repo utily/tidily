@@ -20,7 +20,7 @@ export class StateEditor implements Readonly<State> {
 		const character = this.get(index)
 		return character >= "0" && character <= "9"
 	}
-	match(matcher: { [Symbol.match](string: string): RegExpMatchArray | null }): RegExpMatchArray | null {
+	match(matcher: { [Symbol.match](value: string): RegExpMatchArray | null }): RegExpMatchArray | null {
 		return this.value.match(matcher)
 	}
 	replace(needle: string, value: string): StateEditor
@@ -67,7 +67,7 @@ export class StateEditor implements Readonly<State> {
 			result = this
 			while ((s = result.value.search(start)) > -1)
 				result = result.delete(s, s + start.length)
-		} else 
+		} else
 			result = this.replace(start, end || start + 1, "")
 		return result
 	}
@@ -91,6 +91,7 @@ export class StateEditor implements Readonly<State> {
 		return this.pad(length, padding, 0)
 	}
 	map(mapping: (symbol: string, index: number) => string): StateEditor {
+		// tslint:disable-next-line: no-this-assignment
 		let result: StateEditor = this
 		let j = 0
 		for (let i = 0; i < this.value.length; i++) {

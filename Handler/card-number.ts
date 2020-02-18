@@ -14,7 +14,7 @@ class Handler implements Converter<string>, Formatter {
 	}
 	format(unformated: StateEditor): Readonly<State> & Settings {
 		const issuer = getIssuer(unformated.value)
-		let result = unformated.map((symbol, index) => symbol + (index % 4 == 3 && index + 1 < issuer.length[1] ? " " : ""))
+		const result = unformated.map((symbol, index) => symbol + (index % 4 == 3 && index + 1 < issuer.length[1] ? " " : ""))
 		return { ...result, type: "text", autocomplete: "cc-number", length: issuer.length, pattern: issuer.verification, classes: ["issuer-" + issuer.icon] }
 	}
 	unformat(formated: StateEditor): Readonly<State> {

@@ -1,4 +1,4 @@
-export type Type = 
+export type Type =
 	"card-csc" |
 	"card-expires" |
 	"card-number" |
