@@ -50,7 +50,9 @@
 		"prepare": "npm run build",
 		"clean": "rm -rf dist node_modules coverage"
 	},
-	"dependencies": {},
+	"dependencies": {
+		"isoly": "0.0.12"
+	},
 	"devDependencies": {
 		"@types/jest": "^25.1.2",
 		"@types/node": "^13.7.1",
