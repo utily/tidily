@@ -1,2 +1,2 @@
-# template-library
-Template for NPM library.
+# tidily
+Library for formatting strings both during input and also for pure presentation.
