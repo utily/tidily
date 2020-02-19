@@ -13,7 +13,7 @@ class Handler implements Converter<string>, Formatter {
 		return value
 	}
 	format(unformated: StateEditor): Readonly<State> & Settings {
-		return { ...unformated, type: "text", autocomplete: "current-password" }
+		return { ...unformated, type: "password", autocomplete: "current-password" }
 	}
 	unformat(formated: StateEditor): Readonly<State> {
 		return formated
