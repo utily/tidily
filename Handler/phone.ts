@@ -21,7 +21,7 @@ class Handler implements Converter<string>, Formatter {
 					for (let prefix of country.areaCodes) {
 						prefix = prefix.substring(1)
 						if (result.value.startsWith(country.countryCode + prefix) && !result.value.includes("-"))
-							result.insert(country.countryCode.length + prefix.length, "-")
+							result = result.insert(country.countryCode.length + prefix.length, "-")
 					}
 		} else {
 			const first = phonePrefix[0] // TODO: Decide how default country should be chosen.

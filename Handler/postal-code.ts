@@ -16,13 +16,13 @@ class Handler implements Converter<string>, Formatter {
 	}
 	format(unformated: StateEditor): Readonly<State> & Settings {
 		const result = unformated.value.length >= 3 ? unformated.insert(3, " ") : unformated
-		return { ...result, type: "text", autocomplete: "postal-code", length: [5, 6], pattern: /^[\d ]\d \/ \d\d$/ }
+		return { ...result.truncate(6), type: "text", autocomplete: "postal-code", length: [6, 6], pattern: /^\d{3} \d{2}$/ }
 	}
 	unformat(formated: StateEditor): Readonly<State> {
 		return formated.delete(" ")
 	}
 	allowed(symbol: string, state: Readonly<State>): boolean {
-		return state.value.length < 4 && symbol >= "0" && symbol <= "9"
+		return state.value.length <= 5 && symbol >= "0" && symbol <= "9"
 	}
 }
 add("postal-code", (argument?: any[]) => new Handler(argument && argument.length > 0 ? argument[0] : undefined))

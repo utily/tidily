@@ -18,6 +18,12 @@ describe("card-expires", () => {
 			result = Action.apply(handler, result, { key: character })
 		expect(result).toMatchObject({ value: "12 / 34", selection: { start: 7, end: 7 } })
 	})
+	it("key event full expires short", () => {
+		let result = { value: "", selection: { start: 0, end: 0 } }
+		for (const character of "234")
+			result = Action.apply(handler, result, { key: character })
+		expect(result).toMatchObject({ value: " 2 / 34", selection: { start: 7, end: 7 } })
+	})
 	it("key event full expires with extra chars", () => {
 		let result = { value: "", selection: { start: 0, end: 0 } }
 		for (const character of "12349999")
