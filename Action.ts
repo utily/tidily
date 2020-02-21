@@ -12,7 +12,7 @@ export interface Action {
 	metaKey?: boolean
 }
 export namespace Action {
-	export function apply(formatter: Formatter, state: Readonly<State>, action?: Action): Readonly<State> & Settings {
+	export function apply(formatter: Formatter, state: Readonly<State>, action?: Action): Readonly<State> & Readonly<Settings> {
 		const result = State.copy(formatter.unformat(StateEditor.copy(state)))
 		if (action) {
 			if (action.key == "ArrowLeft") {
