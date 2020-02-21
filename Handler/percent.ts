@@ -13,13 +13,13 @@ class Handler implements Converter<number>, Formatter {
 		return Number.parseFloat(value) / 100
 	}
 	format(unformated: StateEditor): Readonly<State> & Settings {
-		return { ...unformated.replace(",", "."), type: "text", length: [3, undefined], pattern: /^\d+(.\d)? %+$/ }
+		return { ...unformated.suffix(unformated.value != "" ? " %" : ""), type: "text", length: [3, undefined], pattern: /^\d+(.\d)? %+$/ }
 	}
 	unformat(formated: StateEditor): Readonly<State> {
-		return formated
+		return formated.delete(" %")
 	}
 	allowed(symbol: string, state: Readonly<State>): boolean {
-		return symbol >= "0" && symbol <= "9" || symbol == "."
+		return symbol >= "0" && symbol <= "9" || symbol == "." && !state.value.includes(".")
 	}
 }
 add("percent", () => new Handler())

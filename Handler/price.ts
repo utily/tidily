@@ -15,14 +15,25 @@ class Handler implements Converter<string>, Formatter {
 		return value
 	}
 	format(unformated: StateEditor): Readonly<State> & Settings {
-		const result = unformated.append(" " +  this.currency)
+		let separator = unformated.value.includes(".") ? unformated.value.indexOf(".")
+			: unformated.value.length
+		let result = StateEditor.copy(unformated)
+		const maxDecimals = !this.currency || isoly.Currency.decimalDigits(this.currency) == undefined ? 2 : isoly.Currency.decimalDigits(this.currency) as number
+		result = result.truncate(separator + maxDecimals + 1)
+		const spaces = separator <= 0 ? 0 : Math.ceil(separator / 3) - 1
+		for (let i = 0; i < spaces; i++) {
+			const position = separator - (spaces - i) * 3
+			result = result.insert(position, " ")
+			separator++
+		}
+		result = result.suffix(" " +  this.currency)
 		return { ...result, type: "text", length: [3, undefined], pattern: new RegExp("^\\d*(\\.\\d+)? " + this.currency + "$/") }
 	}
 	unformat(formated: StateEditor): Readonly<State> {
-		return formated.replace(",", ".").delete(" " + this.currency)
+		return formated.delete(" ").delete("" + this.currency)
 	}
 	allowed(symbol: string, state: Readonly<State>): boolean {
-		return state.value.length < 4 && symbol >= "0" && symbol <= "9"
+		return symbol >= "0" && symbol <= "9" || symbol == "." && !state.value.includes(".")
 	}
 }
 add("price", (argument?: any[]) => new Handler(argument && argument.length > 0 ? argument[0] : undefined))
