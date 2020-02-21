@@ -58,6 +58,9 @@ export class StateEditor implements Readonly<State> {
 	prepend(value: string): StateEditor {
 		return this.insert(0, value)
 	}
+	suffix(value: string): StateEditor {
+		return new StateEditor({ value: this.value + value, selection: this.selection })
+	}
 	delete(needle: string): StateEditor
 	delete(start: number, end?: number): StateEditor
 	delete(start: number | string, end?: number): StateEditor {
