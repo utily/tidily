@@ -10,7 +10,7 @@ describe("card-expires", () => {
 	})
 	it("key event first key 2", () => {
 		const result = Action.apply(handler, { value: "", selection: { start: 0, end: 0 } }, { key: "2" })
-		expect(result).toMatchObject({ value: " 2 / ", selection: { start: 5, end: 5 } })
+		expect(result).toMatchObject({ value: "02 / ", selection: { start: 5, end: 5 } })
 	})
 	it("key event full expires", () => {
 		let result = { value: "", selection: { start: 0, end: 0 } }
@@ -22,7 +22,7 @@ describe("card-expires", () => {
 		let result = { value: "", selection: { start: 0, end: 0 } }
 		for (const character of "234")
 			result = Action.apply(handler, result, { key: character })
-		expect(result).toMatchObject({ value: " 2 / 34", selection: { start: 7, end: 7 } })
+		expect(result).toMatchObject({ value: "02 / 34", selection: { start: 7, end: 7 } })
 	})
 	it("key event full expires with extra chars", () => {
 		let result = { value: "", selection: { start: 0, end: 0 } }

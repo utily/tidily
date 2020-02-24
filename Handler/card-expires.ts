@@ -14,8 +14,8 @@ class Handler implements Converter<[number, number]>, Formatter {
 	}
 	format(unformated: StateEditor): Readonly<State> & Settings {
 		let result = unformated
-		if (!unformated.is(0, " ", "0", "1"))
-			result = result.prepend(" ")
+		if (!unformated.is(0, "0", "1"))
+			result = result.prepend("0")
 		if (result.value.length > 1)
 			result = result.insert(2, " / ")
 		return { ...result, type: "text", autocomplete: "cc-exp", length: [5, 5], pattern: /^[\d ]\d \/ \d\d$/ }
