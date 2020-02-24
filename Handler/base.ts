@@ -9,7 +9,7 @@ export function add(type: Type, create: (argument?: any[]) => Converter<any> & F
 	handlers[type] = create
 }
 
-export function get(type: "card-csc" | "card-number" | "password" | "text"): Converter<string> & Formatter | undefined
+export function get(type: "card-csc" | "card-number" | "email" | "password" | "text"): Converter<string> & Formatter | undefined
 export function get(type: "card-expires"): Converter<[number, number]> & Formatter | undefined
 export function get(type: "percent"): Converter<number> & Formatter | undefined
 export function get(type: "phone" | "postal-code", country?: isoly.CountryCode.Alpha2): Converter<string> & Formatter | undefined
@@ -19,7 +19,7 @@ export function get<T>(type: Type, ...argument: any[]): Converter<T> & Formatter
 	const create = handlers[type]
 	return create && create(argument)
 }
-export function format(data: string, type: "card-csc" | "card-number" | "password" | "text") : string
+export function format(data: string, type: "card-csc" | "card-number" | "email" | "password" | "text") : string
 export function format(data: [number, number], type: "card-expires") : string
 export function format(data: number, type: "percent") : string
 export function format(data: string, type: "phone" | "postal-code", country?: isoly.CountryCode.Alpha2) : string
@@ -28,7 +28,7 @@ export function format(data: any, type: Type, ...argument: any[]): string {
 	const handler = get(type, argument)
 	return handler ? handler.format(StateEditor.modify(handler.toString(data))).value : ""
 }
-export function parse(value: string, type: "card-csc" | "card-number" | "password" | "text"): string | undefined
+export function parse(value: string, type: "card-csc" | "card-number" | "email" | "password" | "text"): string | undefined
 export function parse(value: string, type: "card-expires"): [number, number] | undefined
 export function parse(value: string, type: "percent"): number | undefined
 export function parse(value: string, type: "phone" | "postal-code", country?: isoly.CountryCode.Alpha2): string | undefined
