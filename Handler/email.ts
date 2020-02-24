@@ -14,7 +14,7 @@ class Handler implements Converter<string>, Formatter {
 		return value
 	}
 	format(unformated: StateEditor): Readonly<State> & Settings {
-		return { ...unformated, ...this.settings, type: "email", autocomplete: "email" }
+		return { ...unformated, ...this.settings, type: "text", autocomplete: "email" }
 	}
 	unformat(formated: StateEditor): Readonly<State> {
 		return formated
