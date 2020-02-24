@@ -36,4 +36,9 @@ describe("price", () => {
 			result = Action.apply(handler, result, { key: character })
 		expect(result).toMatchObject({ value: ".12 SEK", selection: { start: 3, end: 3 } })
 	})
+	it("no currency without digits", () => {
+		let result = { value: "", selection: { start: 0, end: 0 } }
+		result = Action.apply(handler, result, { key: "." })
+		expect(result).toMatchObject({ value: ".", selection: { start: 1, end: 1 } })
+	})
 })

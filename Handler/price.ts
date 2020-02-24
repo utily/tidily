@@ -26,7 +26,7 @@ class Handler implements Converter<string>, Formatter {
 			result = result.insert(position, " ")
 			separator++
 		}
-		result = result.suffix(" " +  this.currency)
+		result = result.value.length > 1 || result.value.length == 1 && result.value.charAt(0) != "." ? result.suffix(" " +  this.currency) : result
 		return { ...result, type: "text", length: [3, undefined], pattern: new RegExp("^\\d*(\\.\\d+)? " + this.currency + "$/") }
 	}
 	unformat(formated: StateEditor): Readonly<State> {
