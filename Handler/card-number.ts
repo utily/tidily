@@ -6,11 +6,11 @@ import { Settings } from "../Settings"
 import { add } from "./base"
 
 class Handler implements Converter<string>, Formatter {
-	toString(data: string): string {
-		return data
+	toString(data: string | any): string {
+		return typeof data == "string" ? data : ""
 	}
 	fromString(value: string): string | undefined {
-		return value
+		return typeof value == "string" ? value : undefined
 	}
 	format(unformated: StateEditor): Readonly<State> & Settings {
 		const issuer = getIssuer(unformated.value)
