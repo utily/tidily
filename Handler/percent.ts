@@ -6,11 +6,11 @@ import { Settings } from "../Settings"
 import { add } from "./base"
 
 class Handler implements Converter<number>, Formatter {
-	toString(data: number): string {
-		return (data * 100).toString()
+	toString(data: number | any): string {
+		return typeof data == "number" ? (data * 100).toString() : ""
 	}
 	fromString(value: string): number | undefined {
-		return Number.parseFloat(value) / 100
+		return typeof value == "string" ? Number.parseFloat(value) / 100 : undefined
 	}
 	format(unformated: StateEditor): Readonly<State> & Settings {
 		return { ...unformated.suffix(unformated.value != "" ? " %" : ""), type: "text", length: [3, undefined], pattern: /^\d+(.\d)? %+$/ }

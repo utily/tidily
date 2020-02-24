@@ -5,12 +5,12 @@ import { StateEditor } from "../StateEditor"
 import { Settings } from "../Settings"
 import { add } from "./base"
 
-class Handler implements Converter<[number, number]>, Formatter {
-	toString(data: [number, number]): string {
-		return data[0].toString().padStart(2, " ") + data[1].toString().padStart(2, " ")
+class Handler implements Converter<number>, Formatter {
+	toString(data: number | any): string {
+		return typeof data == "number" ? data.toString() : ""
 	}
-	fromString(value: string): [number, number] | undefined {
-		return [Number.parseInt(value.slice(0, 2)), Number.parseInt(value.slice(2))]
+	fromString(value: string): number | undefined {
+		return typeof value == "string" ? Number.parseInt(value) : undefined
 	}
 	format(unformated: StateEditor): Readonly<State> & Settings {
 		return { ...unformated, type: "text", autocomplete: "cc-csc", length: [3, 3], pattern: /^\d{3}$/ }

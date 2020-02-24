@@ -8,11 +8,11 @@ import { add } from "./base"
 
 class Handler implements Converter<string>, Formatter {
 	constructor(readonly country: isoly.CountryCode.Alpha2 | undefined) {}
-	toString(data: string): string {
-		return data
+	toString(data: string | any): string {
+		return typeof data == "string" ? data : ""
 	}
 	fromString(value: string): string | undefined {
-		return value
+		return typeof value == "string" ? value : undefined
 	}
 	format(unformated: StateEditor): Readonly<State> & Settings {
 		const result = unformated.value.length >= 4 ? unformated.insert(3, " ") : unformated

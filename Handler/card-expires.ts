@@ -6,11 +6,11 @@ import { Settings } from "../Settings"
 import { add } from "./base"
 
 class Handler implements Converter<[number, number]>, Formatter {
-	toString(data: [number, number]): string {
-		return data[0].toString().padStart(2, " ") + data[1].toString().padStart(2, " ")
+	toString(data: [number, number] | any): string {
+		return Array.isArray(data) && data.length == 2 && typeof data[0] == "number" && typeof data[1] == "number" ? data[0].toString().padStart(2, " ") + data[1].toString().padStart(2, " ") : ""
 	}
 	fromString(value: string): [number, number] | undefined {
-		return [Number.parseInt(value.slice(0, 2)), Number.parseInt(value.slice(2))]
+		return typeof value == "string" && value.length == 4 ? [Number.parseInt(value.slice(0, 2)), Number.parseInt(value.slice(2))] : undefined
 	}
 	format(unformated: StateEditor): Readonly<State> & Settings {
 		let result = unformated
