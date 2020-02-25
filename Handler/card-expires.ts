@@ -14,7 +14,7 @@ class Handler implements Converter<[number, number]>, Formatter {
 	}
 	format(unformated: StateEditor): Readonly<State> & Settings {
 		let result = unformated
-		if (unformated.value.length == 1 && !unformated.is(0, "0", "1"))
+		if (unformated.value.length > 0 && !unformated.is(0, "0", "1"))
 			result = result.prepend("0")
 		if (result.value.length > 1)
 			result = result.insert(2, " / ")
