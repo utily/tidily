@@ -27,7 +27,7 @@ class Handler implements Converter<string>, Formatter {
 			separator++
 		}
 		result = result.value.length > 1 || result.value.length == 1 && result.value.charAt(0) != "." ? result.suffix(" " +  this.currency) : result
-		return { ...result, type: "text", length: [3, undefined], pattern: new RegExp("^\\d*(\\.\\d+)? " + this.currency + "$") }
+		return { ...result, type: "text", length: [3, undefined], pattern: new RegExp("^(\\d{0,3})( \\d{3})*(\\.\\d+)? " + this.currency + "$") }
 	}
 	unformat(formated: StateEditor): Readonly<State> {
 		return formated.delete(" ").delete("" + this.currency)
