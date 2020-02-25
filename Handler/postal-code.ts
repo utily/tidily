@@ -15,7 +15,7 @@ class Handler implements Converter<string>, Formatter {
 		return typeof value == "string" ? value : undefined
 	}
 	format(unformated: StateEditor): Readonly<State> & Settings {
-		const result = unformated.value.length >= 4 ? unformated.insert(3, " ") : unformated
+		const result = !unformated.value.includes(" ") && unformated.value.length >= 4 ? unformated.insert(3, " ") : unformated
 		return { ...result.truncate(6), type: "text", autocomplete: "postal-code", length: [6, 6], pattern: /^\d{3} \d{2}$/ }
 	}
 	unformat(formated: StateEditor): Readonly<State> {
