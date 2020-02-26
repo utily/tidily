@@ -13,4 +13,12 @@ describe("percent", () => {
 		const result = Action.apply(handler, { value: "", selection: { start: 0, end: 0 } }, { key: "a" })
 		expect(result).toMatchObject({ value: "", selection: { start: 0, end: 0 } })
 	})
+	it("deletes with empty value", () => {
+		const result = Action.apply(handler, { value: "", selection: { start: 0, end: 0 } }, { key: "Delete" })
+		expect(result).toMatchObject({ value: "", selection: { start: 0, end: 0 } })
+	})
+	it("unformats empty value", () => {
+		const result = handler.unformat(StateEditor.copy({ value: "", selection: { start: 0, end: 0 } }))
+		expect(result).toMatchObject({ value: "", selection: { start: 0, end: 0 } })
+	})
 })
