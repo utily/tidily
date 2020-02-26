@@ -13,7 +13,7 @@ class Handler implements Converter<number>, Formatter {
 		return typeof value == "string" ? Number.parseFloat(value) / 100 : undefined
 	}
 	format(unformated: StateEditor): Readonly<State> & Settings {
-		return { ...unformated.suffix(unformated.value != "" ? " %" : ""), type: "text", length: [3, undefined], pattern: /^\d+(.\d)? %+$/ }
+		return { ...(unformated.value ? unformated.suffix(" %") : unformated), type: "text", length: [3, undefined], pattern: /^\d+(.\d)? %+$/ }
 	}
 	unformat(formated: StateEditor): Readonly<State> {
 		return formated.delete(" %")

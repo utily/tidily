@@ -21,4 +21,8 @@ describe("percent", () => {
 		const result = handler.unformat(StateEditor.copy({ value: "", selection: { start: 0, end: 0 } }))
 		expect(result).toMatchObject({ value: "", selection: { start: 0, end: 0 } })
 	})
+	it("doesn't add suffix on empty", () => {
+		const result = handler.format(StateEditor.copy({ value: "", selection: { start: 0, end: 0 } }))
+		expect(result).toMatchObject({ value: "", selection: { start: 0, end: 0 } })
+	})
 })
