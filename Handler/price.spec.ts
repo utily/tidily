@@ -6,6 +6,7 @@ import { State } from "../State"
 
 describe("price", () => {
 	const handler = get("price", "SEK") as Formatter
+	const noCurrencyHandler = get("price") as Formatter
 	it("key event first key 1", () => {
 		const result = Action.apply(handler, { value: "", selection: { start: 0, end: 0 } }, { key: "1" })
 		expect(result).toMatchObject({ value: "1 SEK", selection: { start: 1, end: 1 } })
@@ -45,5 +46,12 @@ describe("price", () => {
 		let result = { value: "", selection: { start: 0, end: 0 } }
 		result = Action.apply(handler, result, { key: "." })
 		expect(result).toMatchObject({ value: ".", selection: { start: 1, end: 1 } })
+	})
+	it("doesn't add currency", () => {
+		let result: State & Settings = { value: "", selection: { start: 0, end: 0 }, type: "text" }
+		for (const character of "1234")
+			result = Action.apply(noCurrencyHandler, result, { key: character })
+		expect(result).toMatchObject({ value: "1 234", selection: { start: 5, end: 5 } })
+		expect(result.pattern?.test("1 234")).toEqual(true)
 	})
 })
