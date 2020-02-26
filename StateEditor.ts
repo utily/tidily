@@ -65,7 +65,9 @@ export class StateEditor implements Readonly<State> {
 	delete(start: number, end?: number): StateEditor
 	delete(start: number | string, end?: number): StateEditor {
 		let result: StateEditor
-		if (typeof start == "string") {
+		if (!this.value)
+			result = this
+		else if (typeof start == "string") {
 			let s: number
 			result = this
 			while ((s = result.value.search(start)) > -1)
