@@ -26,11 +26,11 @@ class Handler implements Converter<string>, Formatter {
 			result = result.insert(position, " ")
 			separator++
 		}
-		result = result.value.length > 1 || result.value.length == 1 && result.value.charAt(0) != "." ? result.suffix(" " +  this.currency) : result
-		return { ...result, type: "text", length: [3, undefined], pattern: new RegExp("^(\\d{0,3})( \\d{3})*(\\.\\d+)? " + this.currency + "$") }
+		result = this.currency && (result.value.length > 1 || result.value.length == 1 && result.value.charAt(0) != ".") ? result.suffix(" " + this.currency) : result
+		return { ...result, type: "text", length: [3, undefined], pattern: new RegExp("^(\\d{0,3})( \\d{3})*(\\.\\d+)?" + (this.currency ? " " + this.currency : "") + "$") }
 	}
 	unformat(formated: StateEditor): Readonly<State> {
-		return formated.delete(" ").delete("" + this.currency)
+		return this.currency ? formated.delete(" ").delete("" + this.currency) : formated
 	}
 	allowed(symbol: string, state: Readonly<State>): boolean {
 		return symbol >= "0" && symbol <= "9" || symbol == "." && !state.value.includes(".")
