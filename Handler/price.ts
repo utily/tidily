@@ -30,7 +30,7 @@ class Handler implements Converter<number>, Formatter {
 		return { ...result, type: "text", length: [3, undefined], pattern: new RegExp("^(\\d{0,3})( \\d{3})*(\\.\\d+)?" + (this.currency ? " " + this.currency : "") + "$") }
 	}
 	unformat(formated: StateEditor): Readonly<State> {
-		return this.currency ? formated.delete(" ").delete("" + this.currency) : formated
+		return this.currency ? formated.delete(" ").delete("" + this.currency) : formated.delete(" ")
 	}
 	allowed(symbol: string, state: Readonly<State>): boolean {
 		return symbol >= "0" && symbol <= "9" || symbol == "." && !state.value.includes(".")
