@@ -18,7 +18,7 @@ class Handler implements Converter<[number, number]>, Formatter {
 			result = result.prepend("0")
 		if (result.value.length > 1)
 			result = result.insert(2, " / ")
-		return { ...result, type: "text", autocomplete: "cc-exp", length: [7, 7], pattern: /^(0[1-9])|(1[012]) \/ \d\d$/ }
+		return { ...result, type: "text", autocomplete: "cc-exp", length: [7, 7], pattern: /^(0[1-9]|1[012]) \/ \d\d$/ }
 	}
 	unformat(formated: StateEditor): Readonly<State> {
 		return formated.delete(" / ")
