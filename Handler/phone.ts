@@ -21,7 +21,7 @@ class Handler implements Converter<string>, Formatter {
 					for (let prefix of country.areaCodes) {
 						prefix = prefix.substring(1)
 						if (result.value.startsWith(country.countryCode + prefix) && !result.value.includes("-"))
-							result = result.insert(country.countryCode.length + prefix.length, "-")
+							result = result.insert(country.countryCode.length, "-").insert(country.countryCode.length + 1 + prefix.length, "-")
 					}
 		} else {
 			const first = phonePrefix[0] // TODO: Decide how default country should be chosen.
@@ -29,11 +29,11 @@ class Handler implements Converter<string>, Formatter {
 				if (result.value.startsWith(prefix) && !result.value.includes("-")) {
 					result = result.insert(prefix.length, "-")
 					result = result.delete(0)
-					result = result.insert(0, first.countryCode)
+					result = result.insert(0, "-").insert(0, first.countryCode)
 				}
 		}
 		if (result.value.includes("-")) {
-			const digitIndex = result.value.indexOf("-") + 1
+			const digitIndex = result.value.indexOf("-", result.value.indexOf("-") + 1) + 1
 			const digitCount = result.value.substring(digitIndex, result.value.length + 1).length
 			switch (digitCount) {
 				case 4:
