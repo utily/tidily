@@ -12,24 +12,24 @@ describe("phone", () => {
 		let result = { value: "", selection: { start: 0, end: 0 } }
 		for (const character of "08")
 			result = Action.apply(handler, result, { key: character })
-		expect(result).toMatchObject({ value: "+468-", selection: { start: 5, end: 5 } })
+		expect(result).toMatchObject({ value: "+46-8-", selection: { start: 6, end: 6 } })
 	})
 	it("adds country code and keeps rest of number", () => {
 		let result = { value: "", selection: { start: 0, end: 0 } }
 		for (const character of "0812345678")
 			result = Action.apply(handler, result, { key: character })
-		expect(result).toMatchObject({ value: "+468-123 456 78", selection: { start: 15, end: 15 } })
+		expect(result).toMatchObject({ value: "+46-8-123 456 78", selection: { start: 16, end: 16 } })
 	})
 	it("formats whole number", () => {
 		let result = { value: "", selection: { start: 0, end: 0 } }
 		for (const character of "0812345678")
 			result = Action.apply(handler, result, { key: character })
-		expect(result).toMatchObject({ value: "+468-123 456 78", selection: { start: 15, end: 15 } })
+		expect(result).toMatchObject({ value: "+46-8-123 456 78", selection: { start: 16, end: 16 } })
 	})
 	it("key event backspace", () => {
 		let result = { value: "+46812", selection: { start: 6, end: 6 } }
 		result = Action.apply(handler, result, { key: "Backspace" })
-		expect(result).toMatchObject({ value: "+468-1", selection: { start: 6, end: 6 } })
+		expect(result).toMatchObject({ value: "+46-8-1", selection: { start: 7, end: 7 } })
 	})
 	it("key event backspace beyond area code", () => {
 		let result = { value: "+468", selection: { start: 4, end: 4 } }

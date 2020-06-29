@@ -7,7 +7,7 @@ import { add } from "./base"
 
 class Handler implements Converter<string>, Formatter {
 	toString(data: string | any): string {
-		return typeof data == "string" ? "*".repeat(data.length) : ""
+		return typeof data == "string" ? data : ""
 	}
 	fromString(value: string): string | undefined {
 		return typeof value == "string" ? value : undefined
