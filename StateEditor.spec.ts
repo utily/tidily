@@ -28,6 +28,10 @@ describe("StateEditor", () => {
 		const state = StateEditor.modify({ value: "abcdefg", selection: { start: 3, end: 4 } })
 		expect(state.append("post")).toMatchObject({ value: "abcdefgpost", selection: { start: 3, end: 4 } })
 	})
+	it("append selection at end", () => {
+		const state = StateEditor.modify({ value: "abcdefg", selection: { start: 7, end: 7 } })
+		expect(state.append("post")).toMatchObject({ value: "abcdefgpost", selection: { start: 11, end: 11 } })
+	})
 	it("replace before selection", () => {
 		const result = StateEditor.modify({ value: "abcdefg", selection: { start: 3, end: 4 } }).replace(2, 3, "0")
 		expect(result.value).toEqual("ab0defg")

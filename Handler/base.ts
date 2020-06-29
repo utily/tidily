@@ -24,15 +24,17 @@ export function format(data: [number, number], type: "card-expires") : string
 export function format(data: number, type: "percent") : string
 export function format(data: string, type: "phone" | "postal-code", country?: isoly.CountryCode.Alpha2) : string
 export function format(data: number, type: "price", currency: isoly.Currency) : string
+export function format(data: any, type: Type, ...argument: any[]): string
 export function format(data: any, type: Type, ...argument: any[]): string {
 	const handler = get(type, argument)
-	return handler ? handler.format(StateEditor.modify(handler.toString(data))).value : ""
+	return handler ? handler.format(StateEditor.modify(handler.toString(typeof data == "string" ? parse(data, type, argument) : data))).value : ""
 }
 export function parse(value: string, type: "card-csc" | "card-number" | "email" | "password" | "text"): string | undefined
 export function parse(value: string, type: "card-expires"): [number, number] | undefined
 export function parse(value: string, type: "percent"): number | undefined
 export function parse(value: string, type: "phone" | "postal-code", country?: isoly.CountryCode.Alpha2): string | undefined
 export function parse(value: string, type: "price", currency: isoly.Currency): number | undefined
+export function parse(value: string, type: Type, ...argument: any[]): any
 export function parse(value: string, type: Type, ...argument: any[]): any {
 	const handler = get(type, argument)
 	return handler ? handler.fromString(handler.unformat(StateEditor.modify(value)).value) : undefined

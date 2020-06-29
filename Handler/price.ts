@@ -8,18 +8,24 @@ import { add } from "./base"
 
 class Handler implements Converter<number>, Formatter {
 	constructor(readonly currency: isoly.Currency | undefined) {}
-	toString(data: string | any): string {
-		return typeof data == "string" ? data : ""
+	toString(data: number | any): string {
+		return typeof data == "number" ? data.toString() : data
 	}
 	fromString(value: string): number | undefined {
-		return typeof value == "string" ? Number(value) : undefined
+		return typeof value == "string" ? Number.parseFloat(value) : undefined
 	}
 	format(unformated: StateEditor): Readonly<State> & Settings {
-		let separator = unformated.value.includes(".") ? unformated.value.indexOf(".")
-			: unformated.value.length
+		let separator = unformated.value.includes(".") ? unformated.value.indexOf(".") : undefined
 		let result = StateEditor.copy(unformated)
-		const maxDecimals = !this.currency || isoly.Currency.decimalDigits(this.currency) == undefined ? 2 : isoly.Currency.decimalDigits(this.currency) as number
-		result = result.truncate(separator + maxDecimals + 1)
+		if (separator == 0) {
+			result = result.prepend("0")
+			separator++
+		}
+		if (separator != undefined) {
+			const adjust = separator + 1 + (!this.currency || isoly.Currency.decimalDigits(this.currency) == undefined ? 2 : isoly.Currency.decimalDigits(this.currency) ?? 2) - result.value.length
+			result = adjust < 0 ? result.truncate(result.value.length + adjust) : result.suffix("0".repeat(adjust))
+		} else
+			separator = result.value.length
 		const spaces = separator <= 0 ? 0 : Math.ceil(separator / 3) - 1
 		for (let i = 0; i < spaces; i++) {
 			const position = separator - (spaces - i) * 3
