@@ -12,7 +12,9 @@ class Handler implements Converter<[number, number]>, Formatter {
 			: ""
 	}
 	fromString(value: string): [number, number] | undefined {
-		return typeof value == "string" && value.length == 4 ? [Number.parseInt(value.slice(0, 2)), Number.parseInt(value.slice(2))] : undefined
+		return typeof value == "string" && value.length == 4
+			? [Number.parseInt(value.slice(0, 2)), Number.parseInt(value.slice(2))]
+			: undefined
 	}
 	format(unformated: StateEditor): Readonly<State> & Settings {
 		let result = unformated

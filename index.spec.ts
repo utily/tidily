@@ -13,5 +13,5 @@ describe("Handler", () => {
 		["normal text", "text", "normal text"],
 	]
 	for (const [value, type, expected, ...argument] of data)
-		it(`format ${ type }`, () => expect(tidily.format(value, type, ...argument)).toEqual(expected))
+		it(`format ${type}`, () => expect(tidily.format(value, type, ...argument)).toEqual(expected))
 })

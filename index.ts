@@ -8,16 +8,4 @@ import { StateEditor } from "./StateEditor"
 import { Type } from "./Type"
 import { get, format, parse } from "./Handler"
 
-export {
-	Action,
-	Converter,
-	Formatter,
-	Selection,
-	Settings,
-	State,
-	StateEditor,
-	Type,
-	get,
-	format,
-	parse,
-}
+export { Action, Converter, Formatter, Selection, Settings, State, StateEditor, Type, get, format, parse }

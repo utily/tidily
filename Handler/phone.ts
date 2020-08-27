@@ -21,7 +21,9 @@ class Handler implements Converter<string>, Formatter {
 					for (let prefix of country.areaCodes) {
 						prefix = prefix.substring(1)
 						if (result.value.startsWith(country.countryCode + prefix) && !result.value.includes("-"))
-							result = result.insert(country.countryCode.length, "-").insert(country.countryCode.length + 1 + prefix.length, "-")
+							result = result
+								.insert(country.countryCode.length, "-")
+								.insert(country.countryCode.length + 1 + prefix.length, "-")
 					}
 		} else {
 			const first = phonePrefix[0] // TODO: Decide how default country should be chosen.
@@ -54,6 +56,7 @@ class Handler implements Converter<string>, Formatter {
 				case 9:
 					result = result.insert(digitIndex + 3, " ")
 					result = result.insert(digitIndex + 7, " ")
+					break
 				default:
 					break
 			}
@@ -73,7 +76,9 @@ class Handler implements Converter<string>, Formatter {
 		return formated.delete(" ").delete("-")
 	}
 	allowed(symbol: string, state: Readonly<State>): boolean {
-		return symbol >= "0" && symbol <= "9" || state.selection.start == 0 && symbol == "+" && !state.value.includes("+")
+		return (
+			(symbol >= "0" && symbol <= "9") || (state.selection.start == 0 && symbol == "+" && !state.value.includes("+"))
+		)
 	}
 }
 add("phone", () => new Handler())
