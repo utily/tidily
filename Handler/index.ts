@@ -10,8 +10,4 @@ import "./text"
 
 import { get, format, parse } from "./base"
 
-export {
-	get,
-	format,
-	parse,
-}
+export { get, format, parse }

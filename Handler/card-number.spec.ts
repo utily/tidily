@@ -58,7 +58,9 @@ describe("card-number", () => {
 		let result = { value: "", selection: { start: 0, end: 0 } }
 		for (const character of "440542424242424999")
 			result = Action.apply(handler, result, { key: character })
-		expect(result.value).toMatch(/^((4026|4405|4508|4844|4913|4917)\s[0-9]{4}\s[0-9]{4}\s[0-9]{4})|((4175)\s(00)[0-9]{2}\s[0-9]{4}\s[0-9]{4})$/)
+		expect(result.value).toMatch(
+			/^((4026|4405|4508|4844|4913|4917)\s[0-9]{4}\s[0-9]{4}\s[0-9]{4})|((4175)\s(00)[0-9]{2}\s[0-9]{4}\s[0-9]{4})$/
+		)
 	})
 	it("matches interpayment format", () => {
 		let result = { value: "", selection: { start: 0, end: 0 } }
@@ -70,7 +72,9 @@ describe("card-number", () => {
 		let result = { value: "", selection: { start: 0, end: 0 } }
 		for (const character of "350042424242424999")
 			result = Action.apply(handler, result, { key: character })
-		expect(result.value).toMatch(/^((?:2131|1800)\s[0-9]{4}\s[0-9]{4}\s[0-9]{4})|(35[0-9]{2}\s[0-9]{4}\s[0-9]{4}\s[0-9]{4})$/)
+		expect(result.value).toMatch(
+			/^((?:2131|1800)\s[0-9]{4}\s[0-9]{4}\s[0-9]{4})|(35[0-9]{2}\s[0-9]{4}\s[0-9]{4}\s[0-9]{4})$/
+		)
 	})
 	it("matches unionpay format", () => {
 		let result = { value: "", selection: { start: 0, end: 0 } }
@@ -82,7 +86,9 @@ describe("card-number", () => {
 		let result = { value: "", selection: { start: 0, end: 0 } }
 		for (const character of "5020345123451234999")
 			result = Action.apply(handler, result, { key: character })
-		expect(result.value).toMatch(/^(5018|5020|5038|5612|5893|6304|6759|6761|6762|6763|0604|6390)\s[0-9]{4}\s[0-9]{4}\s[0-9]{4}$/)
+		expect(result.value).toMatch(
+			/^(5018|5020|5038|5612|5893|6304|6759|6761|6762|6763|0604|6390)\s[0-9]{4}\s[0-9]{4}\s[0-9]{4}$/
+		)
 	})
 	it("matches mastercard format", () => {
 		let result = { value: "", selection: { start: 0, end: 0 } }
