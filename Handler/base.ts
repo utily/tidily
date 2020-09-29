@@ -15,7 +15,7 @@ export function get(
 export function get(type: "card-expires"): (Converter<[number, number]> & Formatter) | undefined
 export function get(type: "percent"): (Converter<number> & Formatter) | undefined
 export function get(
-	type: "phone" | "postal-code",
+	type: "identity-number" | "phone" | "postal-code",
 	country?: isoly.CountryCode.Alpha2
 ): (Converter<string> & Formatter) | undefined
 export function get(type: "price", currency: isoly.Currency): (Converter<number> & Formatter) | undefined
@@ -27,7 +27,11 @@ export function get<T>(type: Type, ...argument: any[]): (Converter<T> & Formatte
 export function format(data: string, type: "card-csc" | "card-number" | "email" | "password" | "text"): string
 export function format(data: [number, number], type: "card-expires"): string
 export function format(data: number, type: "percent"): string
-export function format(data: string, type: "phone" | "postal-code", country?: isoly.CountryCode.Alpha2): string
+export function format(
+	data: string,
+	type: "identity-number" | "phone" | "postal-code",
+	country?: isoly.CountryCode.Alpha2
+): string
 export function format(data: number, type: "price", currency: isoly.Currency): string
 export function format(data: any, type: Type, ...argument: any[]): string
 export function format(data: any, type: Type, ...argument: any[]): string {
@@ -45,7 +49,7 @@ export function parse(value: string, type: "card-expires"): [number, number] | u
 export function parse(value: string, type: "percent"): number | undefined
 export function parse(
 	value: string,
-	type: "phone" | "postal-code",
+	type: "identity-number" | "phone" | "postal-code",
 	country?: isoly.CountryCode.Alpha2
 ): string | undefined
 export function parse(value: string, type: "price", currency: isoly.Currency): number | undefined
