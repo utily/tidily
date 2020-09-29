@@ -3,6 +3,7 @@ export type Type =
 	| "card-expires"
 	| "card-number"
 	| "email"
+	| "identity-number"
 	| "password"
 	| "percent"
 	| "phone"

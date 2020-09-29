@@ -9,8 +9,8 @@ export class StateEditor implements Readonly<State> {
 		this.selection = { start: state.selection.start, end: state.selection.end }
 	}
 
-	get(index: number): string {
-		return this.value[index]
+	get(index: number, length = 1): string {
+		return this.value.substr(index, length)
 	}
 	is(index: number, ...character: string[]) {
 		const c = this.get(index)
