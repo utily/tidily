@@ -1,6 +1,8 @@
 import "./card-csc"
 import "./card-expires"
 import "./card-number"
+import "./date"
+import "./date-time"
 import "./identity-number"
 import "./password"
 import "./percent"

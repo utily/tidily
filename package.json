@@ -53,7 +53,7 @@
 	},
 	"dependencies": {
 		"eslint-plugin-prettierx": "github:nilssonemma/eslint-plugin-prettierx#master",
-		"isoly": "0.0.14",
+		"isoly": "0.0.23",
 		"prettierx": "github:simonmika/prettierx#newline-before-clause"
 	},
 	"devDependencies": {
