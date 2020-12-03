@@ -9,7 +9,7 @@ import { formatDate, stringToDate } from "./date"
 
 class Handler implements Converter<string>, Formatter {
 	toString(data: isoly.DateTime | any): string {
-		return typeof data == "string" ? (isoly.DateTime.is(data) ? isoly.DateTime.localize(data) : data) : ""
+		return typeof data == "string" ? data : ""
 	}
 	fromString(value: string): isoly.DateTime | undefined {
 		return stringToDate(value)
