@@ -10,7 +10,7 @@ export function add(type: Type, create: (argument?: any[]) => Converter<any> & F
 }
 
 export function get(
-	type: "card-csc" | "card-number" | "date" | "date-time" | "email" | "password" | "text"
+	type: "card-csc" | "card-number" | "date" | "date-time"| "divisor" | "email" | "password" | "text"
 ): (Converter<string> & Formatter) | undefined
 export function get(type: "card-expires"): (Converter<[number, number]> & Formatter) | undefined
 export function get(type: "percent"): (Converter<number> & Formatter) | undefined
@@ -27,6 +27,7 @@ export function get<T>(type: Type, ...argument: any[]): (Converter<T> & Formatte
 export function format(data: string, type: "card-csc" | "card-number" | "email" | "password" | "text"): string
 export function format(data: [number, number], type: "card-expires"): string
 export function format(data: isoly.DateTime, type: "date" | "date-time"): string
+export function format(data: number | [number, number], type: "divisor"): string
 export function format(data: number, type: "percent"): string
 export function format(
 	data: string,
@@ -48,6 +49,7 @@ export function parse(
 ): string | undefined
 export function parse(value: string, type: "card-expires"): [number, number] | undefined
 export function parse(value: string, type: "date" | "date-time"): isoly.DateTime | undefined
+export function parse(value: string, type: "divisor"): number | [number, number]
 export function parse(value: string, type: "percent"): number | undefined
 export function parse(
 	value: string,
