@@ -2,6 +2,8 @@ export type Type =
 	| "card-csc"
 	| "card-expires"
 	| "card-number"
+	| "date"
+	| "date-time"
 	| "email"
 	| "identity-number"
 	| "password"
