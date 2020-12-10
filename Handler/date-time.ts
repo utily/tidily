@@ -5,14 +5,21 @@ import { State } from "../State"
 import { StateEditor } from "../StateEditor"
 import { Settings } from "../Settings"
 import { add } from "./base"
-import { formatDate, stringToDate } from "./date"
+import { formatDate } from "./date"
 
 class Handler implements Converter<string>, Formatter {
 	toString(data: isoly.DateTime | any): string {
 		return typeof data == "string" ? data : ""
 	}
 	fromString(value: string): isoly.DateTime | undefined {
-		return stringToDate(value)
+		let result: string | isoly.DateTime | undefined = value.replace(" ", "T")
+		const fillerDate = "0000-01-01T00:00:00.000Z"
+		if (result?.match(/-\d$/))
+			result = result.substring(0, result.length - 1) + "0" + result.substring(result.length - 1, result.length)
+		result = !result.match(/^\d{4}-(0[1-9]|1[012])/)
+			? undefined
+			: result + fillerDate.substring(result.length, fillerDate.length)
+		return isoly.DateTime.is(result) ? result : undefined
 	}
 	format(unformated: StateEditor): Readonly<State> & Settings {
 		let result = formatDate(unformated)

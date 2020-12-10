@@ -7,11 +7,11 @@ import { Settings } from "../Settings"
 import { add } from "./base"
 
 class Handler implements Converter<string>, Formatter {
-	toString(data: isoly.DateTime | any): string {
-		return typeof data == "string" ? (isoly.DateTime.is(data) ? isoly.DateTime.localize(data) : data) : ""
+	toString(data: isoly.Date | any): string {
+		return typeof data == "string" ? (isoly.Date.is(data) ? isoly.Date.localize(data) : data) : ""
 	}
-	fromString(value: string): isoly.DateTime | undefined {
-		return stringToDate(value)
+	fromString(value: string): isoly.Date | undefined {
+		return isoly.Date.is(value) ? value : undefined
 	}
 	format(unformated: StateEditor): Readonly<State> & Settings {
 		return {
@@ -30,16 +30,6 @@ class Handler implements Converter<string>, Formatter {
 }
 add("date", () => new Handler())
 
-export function stringToDate(value: string) {
-	let result: string | isoly.DateTime | undefined = value.replace(" ", "T")
-	const fillerDate = "0000-01-01T00:00:00.000Z"
-	if (result?.match(/-\d$/))
-		result = result.substring(0, result.length - 1) + "0" + result.substring(result.length - 1, result.length)
-	result = !result.match(/^\d{4}-(0[1-9]|1[012])/)
-		? undefined
-		: result + fillerDate.substring(result.length, fillerDate.length)
-	return isoly.DateTime.is(result) ? result : undefined
-}
 export function formatDate(unformated: StateEditor): StateEditor {
 	let result = unformated
 	if (result.match(/^\d{5}$/))
