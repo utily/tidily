@@ -28,7 +28,9 @@ class Handler implements Converter<number | [number, number]>, Formatter {
 			result = unformated.replace(1, 2, " / ")
 		else if (unformated.match(/^\d\d\/$/))
 			result = unformated.replace(2, 3, " / ")
-		else if (unformated.value.length > 1 && unformated.value.search("/") < 1)
+		else if (unformated.match(/^\d\d \/$/))
+			result = unformated.replace(unformated.value.length - 2, unformated.value.length, "")
+		else if (unformated.value.length > 1 && unformated.value.indexOf("/") < 1)
 			result = unformated.insert(2, " / ")
 		else if (unformated.value.length > 1 && unformated.value.split("/").length > 2)
 			result = unformated.delete(unformated.value.lastIndexOf("/"))
@@ -37,7 +39,7 @@ class Handler implements Converter<number | [number, number]>, Formatter {
 		return { ...result, type: "text", length: [1, 7], pattern: /^(\d{1,2}|\d{1,2} \/ \d{1,2})$/ }
 	}
 	unformat(formated: StateEditor): Readonly<State> {
-		return formated //.delete(" / ")
+		return formated
 	}
 	allowed(symbol: string, state: Readonly<State>): boolean {
 		return state.value.length < 7 && ((symbol >= "0" && symbol <= "9") || symbol == "/" || symbol == " ")

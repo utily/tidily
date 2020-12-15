@@ -43,19 +43,19 @@ describe("divisor", () => {
 		result = Action.apply(handler, result, { key: "Backspace" })
 		expect(result).toMatchObject({ value: "12 / 3", selection: { start: 6, end: 6 } })
 	})
-	it("key event backspace past formatting character", () => {
-		let result = { value: "12 /", selection: { start: 5, end: 5 } }
-		result = Action.apply(handler, result, { key: "Backspace" })
-		expect(result).toMatchObject({ value: "12 /", selection: { start: 4, end: 4 } })
-	})
 	it("key event space", () => {
-		let result = { value: " ", selection: { start: 5, end: 5 } }
+		let result = { value: " ", selection: { start: 1, end: 1 } }
 		result = Action.apply(handler, result, { key: "Backspace" })
-		expect(result).toMatchObject({ value: "", selection: { start: 3, end: 3 } })
+		expect(result).toMatchObject({ value: "", selection: { start: 0, end: 0 } })
 	})
 	it("key event slash", () => {
-		let result = { value: "/", selection: { start: 5, end: 5 } }
+		let result = { value: "/", selection: { start: 1, end: 1 } }
 		result = Action.apply(handler, result, { key: "Backspace" })
-		expect(result).toMatchObject({ value: "", selection: { start: 3, end: 3 } })
+		expect(result).toMatchObject({ value: "", selection: { start: 0, end: 0 } })
+	})
+	it("key event backspace #2", () => {
+		let result = { value: "11 / ", selection: { start: 5, end: 5 } }
+		result = Action.apply(handler, result, { key: "Backspace" })
+		expect(result).toMatchObject({ value: "11", selection: { start: 2, end: 2 } })
 	})
 })
