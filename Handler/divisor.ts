@@ -8,17 +8,15 @@ import { add } from "./base"
 class Handler implements Converter<number | [number, number]>, Formatter {
 	toString(data: number | [number, number] | string | any): string {
 		return Array.isArray(data) && data.length == 2 && typeof data[0] == "number" && typeof data[1] == "number"
-			? data[0].toString() + data[1].toString()
+			? data[0].toString() + " / " + data[1].toString()
 			: typeof data == "number"
 			? data.toString()
 			: ""
 	}
 	fromString(value: string): number | [number, number] | undefined {
-		return typeof value == "string" && value.length == 4
-			? [Number.parseInt(value.slice(0, 2)), Number.parseInt(value.slice(2))]
-			: typeof value == "string" && (value.length == 3 || value.length == 2)
-			? [Number.parseInt(value.slice(0, 1)), Number.parseInt(value.slice(1))]
-			: typeof value == "string" && value.length == 1
+		return typeof value == "string" && value.match(/^\d{1,2}\s+\/\s+\d{1,2}$/)
+			? [Number.parseInt(value.slice(0, 2)), Number.parseInt(value.slice(value.length - 2))]
+			: typeof value == "string" && value.match(/\d{1,2}/)
 			? Number.parseInt(value)
 			: undefined
 	}
@@ -46,6 +44,8 @@ class Handler implements Converter<number | [number, number]>, Formatter {
 			result = unformated.replace(2, unformated.value.length, " / ")
 		else if (unformated.match(/^\d\s\s+(\/\s*)?$/))
 			result = unformated.replace(1, unformated.value.length, " / ")
+		else if (unformated.match(/^\d\s\/\s\d\d.+$/))
+			result = unformated.delete(6, unformated.value.length)
 		else if (unformated.value.length > 1 && unformated.value.indexOf("/") < 1)
 			result = unformated.insert(2, " / ")
 		else if (unformated.value.length > 1 && unformated.value.split("/").length > 2)
