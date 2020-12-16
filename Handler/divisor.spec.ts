@@ -73,9 +73,19 @@ describe("divisor", () => {
 		result = Action.apply(handler, result, { key: "2" })
 		expect(result).toMatchObject({ value: "2", selection: { start: 1, end: 1 } })
 	})
-	it("key event weird input 2", () => {
+	it("key event weird input #2", () => {
 		let result = { value: "  / ", selection: { start: 4, end: 4 } }
 		result = Action.apply(handler, result, { key: "/" })
 		expect(result).toMatchObject({ value: "", selection: { start: 0, end: 0 } })
+	})
+	it("key event no extra space please", () => {
+		let result = { value: "1 ", selection: { start: 2, end: 2 } }
+		result = Action.apply(handler, result, { key: "/" })
+		expect(result).toMatchObject({ value: "1", selection: { start: 1, end: 1 } })
+	})
+	it("key event no extra space please #2", () => {
+		let result = { value: "1", selection: { start: 1, end: 1 } }
+		result = Action.apply(handler, result, { key: " " })
+		expect(result).toMatchObject({ value: "1 / ", selection: { start: 4, end: 4 } })
 	})
 })
