@@ -43,6 +43,21 @@ describe("divisor", () => {
 		result = Action.apply(handler, result, { key: "Backspace" })
 		expect(result).toMatchObject({ value: "12 / 3", selection: { start: 6, end: 6 } })
 	})
+	it("key event backspace #2", () => {
+		let result = { value: "11 / 2", selection: { start: 6, end: 6 } }
+		result = Action.apply(handler, result, { key: "Backspace" })
+		expect(result).toMatchObject({ value: "11 / ", selection: { start: 5, end: 5 } })
+	})
+	it("key event backspace #4", () => {
+		let result = { value: "11  / ", selection: { start: 6, end: 6 } }
+		result = Action.apply(handler, result, { key: "Backspace" })
+		expect(result).toMatchObject({ value: "11", selection: { start: 2, end: 2 } })
+	})
+	it("key event backspace #5", () => {
+		let result = { value: "1  / ", selection: { start: 5, end: 5 } }
+		result = Action.apply(handler, result, { key: "Backspace" })
+		expect(result).toMatchObject({ value: "1", selection: { start: 1, end: 1 } })
+	})
 	it("key event space", () => {
 		let result = { value: " ", selection: { start: 1, end: 1 } }
 		result = Action.apply(handler, result, { key: "Backspace" })
@@ -53,9 +68,14 @@ describe("divisor", () => {
 		result = Action.apply(handler, result, { key: "Backspace" })
 		expect(result).toMatchObject({ value: "", selection: { start: 0, end: 0 } })
 	})
-	it("key event backspace #2", () => {
-		let result = { value: "11 / ", selection: { start: 5, end: 5 } }
-		result = Action.apply(handler, result, { key: "Backspace" })
-		expect(result).toMatchObject({ value: "11", selection: { start: 2, end: 2 } })
+	it("key event weird input", () => {
+		let result = { value: "  / ", selection: { start: 4, end: 4 } }
+		result = Action.apply(handler, result, { key: "2" })
+		expect(result).toMatchObject({ value: "2", selection: { start: 1, end: 1 } })
+	})
+	it("key event weird input 2", () => {
+		let result = { value: "  / ", selection: { start: 4, end: 4 } }
+		result = Action.apply(handler, result, { key: "/" })
+		expect(result).toMatchObject({ value: "", selection: { start: 0, end: 0 } })
 	})
 })
