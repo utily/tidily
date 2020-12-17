@@ -10,9 +10,10 @@ export function add(type: Type, create: (argument?: any[]) => Converter<any> & F
 }
 
 export function get(
-	type: "card-csc" | "card-number" | "date" | "date-time" | "divisor" | "email" | "password" | "text"
+	type: "card-csc" | "card-number" | "date" | "date-time" | "email" | "password" | "text"
 ): (Converter<string> & Formatter) | undefined
 export function get(type: "card-expires"): (Converter<[number, number]> & Formatter) | undefined
+export function get(type: "divisor"): (Converter<number | [number, number]> & Formatter) | undefined
 export function get(type: "percent"): (Converter<number> & Formatter) | undefined
 export function get(
 	type: "identity-number" | "phone" | "postal-code",
