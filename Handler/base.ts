@@ -1,8 +1,8 @@
 import * as isoly from "isoly"
 import { Converter } from "../Converter"
 import { Formatter } from "../Formatter"
-import { Type } from "../Type"
 import { StateEditor } from "../StateEditor"
+import { Type } from "../Type"
 
 const handlers: { [type: string]: ((argument?: any[]) => Converter<any> & Formatter) | undefined } = {}
 export function add(type: Type, create: (argument?: any[]) => Converter<any> & Formatter): void {

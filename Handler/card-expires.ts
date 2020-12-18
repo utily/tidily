@@ -1,8 +1,8 @@
 import { Converter } from "../Converter"
 import { Formatter } from "../Formatter"
+import { Settings } from "../Settings"
 import { State } from "../State"
 import { StateEditor } from "../StateEditor"
-import { Settings } from "../Settings"
 import { add } from "./base"
 
 class Handler implements Converter<[number, number]>, Formatter {

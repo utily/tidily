@@ -1,6 +1,6 @@
+import { Settings } from "./Settings"
 import { State } from "./State"
 import { StateEditor } from "./StateEditor"
-import { Settings } from "./Settings"
 
 export interface Formatter {
 	format(data: StateEditor): Readonly<State> & Settings

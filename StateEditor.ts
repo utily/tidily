@@ -1,5 +1,5 @@
-import { State } from "./State"
 import { Selection } from "./Selection"
+import { State } from "./State"
 
 export class StateEditor implements Readonly<State> {
 	readonly value: string
