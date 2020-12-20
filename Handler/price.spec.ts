@@ -1,8 +1,8 @@
 import { Action } from "../Action"
 import { Formatter } from "../Formatter"
-import { get, format } from "./index"
 import { Settings } from "../Settings"
 import { State } from "../State"
+import { format, get } from "./index"
 
 describe("price", () => {
 	const handler = get("price", "SEK") as Formatter

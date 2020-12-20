@@ -1,6 +1,6 @@
 import { Action } from "../Action"
-import { Formatter } from "../Formatter"
 import { Converter } from "../Converter"
+import { Formatter } from "../Formatter"
 import { get } from "./index"
 
 describe("date-time", () => {
