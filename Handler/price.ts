@@ -15,7 +15,13 @@ class Handler implements Converter<number>, Formatter {
 		return typeof value == "string" ? Number.parseFloat(value) : undefined
 	}
 	format(unformated: StateEditor): Readonly<State> & Settings {
-		let separator = unformated.value.includes(".") ? unformated.value.indexOf(".") : undefined
+		let separator =
+			unformated.value != undefined &&
+			unformated != undefined &&
+			unformated.value != "" &&
+			unformated.value.includes(".")
+				? unformated.value.indexOf(".")
+				: undefined
 		let result = StateEditor.copy(unformated)
 		if (separator == 0) {
 			result = result.prepend("0")
