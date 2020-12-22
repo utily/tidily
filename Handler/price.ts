@@ -15,14 +15,10 @@ class Handler implements Converter<number>, Formatter {
 		return typeof value == "string" ? Number.parseFloat(value) : undefined
 	}
 	format(unformated: StateEditor): Readonly<State> & Settings {
-		let separator =
-			unformated.value != undefined &&
-			unformated != undefined &&
-			unformated.value != "" &&
-			unformated.value.includes(".")
-				? unformated.value.indexOf(".")
-				: undefined
-		let result = StateEditor.copy(unformated)
+		let separator = unformated.value && unformated.value.includes(".") ? unformated.value.indexOf(".") : undefined
+		let result =
+			unformated.value == "NaN" ? unformated.replace(0, unformated.value.length, "") : StateEditor.copy(unformated)
+
 		if (separator == 0) {
 			result = result.prepend("0")
 			separator++

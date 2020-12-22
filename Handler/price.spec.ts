@@ -55,4 +55,7 @@ describe("price", () => {
 	it("format from string", () => {
 		expect(format("133.7", "price", "SEK")).toEqual("133.70 SEK")
 	})
+	it("format from empty string", () => {
+		expect(format("", "price", "SEK")).toEqual("")
+	})
 })
