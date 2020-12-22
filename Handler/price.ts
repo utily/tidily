@@ -9,16 +9,16 @@ import { add } from "./base"
 class Handler implements Converter<number>, Formatter {
 	constructor(readonly currency: isoly.Currency | undefined) {}
 	toString(data: number | any): string {
-		return typeof data == "number" ? data.toString() : data
+		return typeof data == "number" ? (isNaN(data) ? "" : data.toString()) : ""
 	}
 	fromString(value: string): number | undefined {
-		return typeof value == "string" ? Number.parseFloat(value) : undefined
+		const result = typeof value == "string" ? Number.parseFloat(value) : undefined
+		return result && !isNaN(result) ? result : undefined
 	}
 	format(unformated: StateEditor): Readonly<State> & Settings {
 		let separator = unformated.value && unformated.value.includes(".") ? unformated.value.indexOf(".") : undefined
 		let result =
 			unformated.value == "NaN" ? unformated.replace(0, unformated.value.length, "") : StateEditor.copy(unformated)
-
 		if (separator == 0) {
 			result = result.prepend("0")
 			separator++
