@@ -40,6 +40,10 @@ class Handler implements Converter<number>, Formatter {
 			result = result.insert(position, " ")
 			separator++
 		}
+		if (result.match(/^[0\s]{2,}$/))
+			result = result.replace(0, result.value.length, "0")
+		else if (result.match(/^[0\s]{2,}(\s\w{3}){1}$/))
+			result = result.replace(0, result.value.length - 4, "0")
 		result =
 			this.currency && (result.value.length > 1 || (result.value.length == 1 && result.value.charAt(0) != "."))
 				? result.suffix(" " + this.currency)
