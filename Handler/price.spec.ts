@@ -55,4 +55,15 @@ describe("price", () => {
 	it("format from string", () => {
 		expect(format("133.7", "price", "SEK")).toEqual("133.70 SEK")
 	})
+	it("format from empty string", () => {
+		expect(format("", "price", "SEK")).toEqual("")
+	})
+	it('test for avoiding "0.00 SEK" -> "000 SEK"', () => {
+		let result: State & Settings = { value: "", selection: { start: 0, end: 0 }, type: "text" }
+		result = Action.apply(handler, result, { key: "." })
+		expect(result).toMatchObject({ value: "0.00 SEK", selection: { start: 2, end: 2 } })
+		result = Action.apply(handler, result, { key: "Backspace" })
+		expect(result).toMatchObject({ value: "0 SEK", selection: { start: 1, end: 1 } })
+		expect(result.pattern?.test("0 SEK")).toEqual(true)
+	})
 })
