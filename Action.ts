@@ -1,5 +1,6 @@
 import { Formatter } from "./Formatter"
 import { getAdjecentWordBreakIndex } from "./getAdjecentWordBreakIndex"
+import { Selection } from "./Selection"
 import { Settings } from "./Settings"
 import { State } from "./State"
 import { StateEditor } from "./StateEditor"
@@ -28,7 +29,7 @@ export namespace Action {
 		state: Readonly<State>,
 		action?: Action
 	): Readonly<State> & Readonly<Settings> {
-		const result = State.copy(formatter.unformat(StateEditor.copy(state)))
+		let result = State.copy(formatter.unformat(StateEditor.copy(state)))
 
 		if (action) {
 			if (action.key == "ArrowLeft" || action.key == "ArrowRight" || action.key == "Home" || action.key == "End") {
@@ -48,6 +49,8 @@ export namespace Action {
 					showString(state.value, cursorPosition)
 					console.log("------adjecentIndex", adjecentIndex)
 					showString(state.value, adjecentIndex)
+					const tempSelection: Selection = { start: adjecentIndex, end: adjecentIndex, direction: "forward" }
+					result = State.copy(formatter.unformat(StateEditor.copy({ ...state, selection: tempSelection })))
 				} else {
 					let cursorPosition: number =
 						result.selection.direction == "backward" ? result.selection.start : result.selection.end
