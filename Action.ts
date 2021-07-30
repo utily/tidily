@@ -34,8 +34,8 @@ export namespace Action {
 		if (action) {
 			if (action.key == "ArrowLeft" || action.key == "ArrowRight" || action.key == "Home" || action.key == "End") {
 				if (action.ctrlKey && (action.key == "ArrowLeft" || action.key == "ArrowRight")) {
-					const cursorPosition: number =
-						state.selection.direction == "backward" ? state.selection.start : state.selection.end
+					let cursorPosition = state.selection.direction == "backward" ? state.selection.start : state.selection.end
+					let otherPosition = cursorPosition == state.selection.start ? state.selection.end : state.selection.start
 					// jump to next stop
 					console.log("action", action)
 					console.log("result", result)
@@ -49,13 +49,18 @@ export namespace Action {
 					showString(state.value, cursorPosition)
 					console.log("------adjecentIndex", adjecentIndex)
 					showString(state.value, adjecentIndex)
-					const tempSelection: Selection = { start: adjecentIndex, end: adjecentIndex, direction: "forward" }
+					cursorPosition = adjecentIndex
+					otherPosition = action.shiftKey ? otherPosition : cursorPosition
+					const tempSelection: Selection = {
+						start: Math.min(otherPosition, cursorPosition),
+						end: Math.max(otherPosition, cursorPosition),
+						direction:
+							otherPosition < cursorPosition ? "forward" : otherPosition > cursorPosition ? "backward" : "none",
+					}
 					result = State.copy(formatter.unformat(StateEditor.copy({ ...state, selection: tempSelection })))
 				} else {
-					let cursorPosition: number =
-						result.selection.direction == "backward" ? result.selection.start : result.selection.end
-					let otherPosition: number =
-						cursorPosition == result.selection.start ? result.selection.end : result.selection.start
+					let cursorPosition = result.selection.direction == "backward" ? result.selection.start : result.selection.end
+					let otherPosition = cursorPosition == result.selection.start ? result.selection.end : result.selection.start
 					cursorPosition =
 						action.key == "Home"
 							? 0
