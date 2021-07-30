@@ -49,6 +49,9 @@ export namespace Action {
 					console.log("----cursorPosition", cursorPosition)
 					showString(state.value, cursorPosition)
 					otherPosition = action.shiftKey ? otherPosition : cursorPosition
+					console.log("state", state)
+					console.log("action", action)
+
 					result = State.copy(
 						formatter.unformat(
 							StateEditor.copy({
@@ -62,6 +65,7 @@ export namespace Action {
 							})
 						)
 					)
+					console.log("result", result)
 				} else {
 					let cursorPosition = result.selection.direction == "backward" ? result.selection.start : result.selection.end
 					let otherPosition = cursorPosition == result.selection.start ? result.selection.end : result.selection.start
