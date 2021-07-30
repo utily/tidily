@@ -21,26 +21,33 @@ export namespace Action {
 
 		if (action) {
 			if (action.key == "ArrowLeft" || action.key == "ArrowRight" || action.key == "Home" || action.key == "End") {
-				let cursorPosition: number =
-					result.selection.direction == "backward" ? result.selection.start : result.selection.end
-				let otherPosition: number =
-					cursorPosition == result.selection.start ? result.selection.end : result.selection.start
+				if (action.ctrlKey) {
+					// jump to next stop
+					console.log("action", action)
+					console.log("result", result)
+					console.log("state", state)
+				} else {
+					let cursorPosition: number =
+						result.selection.direction == "backward" ? result.selection.start : result.selection.end
+					let otherPosition: number =
+						cursorPosition == result.selection.start ? result.selection.end : result.selection.start
 
-				cursorPosition =
-					action.key == "Home"
-						? 0
-						: action.key == "End"
-						? result.value.length
-						: result.selection.start == result.selection.end || action.shiftKey
-						? Math.min(Math.max(cursorPosition + (action.key == "ArrowLeft" ? -1 : 1), 0), result.value.length)
-						: action.key == "ArrowLeft"
-						? result.selection.start
-						: result.selection.end
-				otherPosition = action.shiftKey ? otherPosition : cursorPosition
-				result.selection.direction =
-					otherPosition < cursorPosition ? "forward" : otherPosition > cursorPosition ? "backward" : "none"
-				result.selection.start = Math.min(otherPosition, cursorPosition)
-				result.selection.end = Math.max(otherPosition, cursorPosition)
+					cursorPosition =
+						action.key == "Home"
+							? 0
+							: action.key == "End"
+							? result.value.length
+							: result.selection.start == result.selection.end || action.shiftKey
+							? Math.min(Math.max(cursorPosition + (action.key == "ArrowLeft" ? -1 : 1), 0), result.value.length)
+							: action.key == "ArrowLeft"
+							? result.selection.start
+							: result.selection.end
+					otherPosition = action.shiftKey ? otherPosition : cursorPosition
+					result.selection.direction =
+						otherPosition < cursorPosition ? "forward" : otherPosition > cursorPosition ? "backward" : "none"
+					result.selection.start = Math.min(otherPosition, cursorPosition)
+					result.selection.end = Math.max(otherPosition, cursorPosition)
+				}
 			} else if (action.ctrlKey) {
 				switch (action.key) {
 					case "a":
