@@ -39,18 +39,12 @@ export namespace Action {
 				) {
 					let cursorPosition = state.selection.direction == "backward" ? state.selection.start : state.selection.end
 					let otherPosition = cursorPosition == state.selection.start ? state.selection.end : state.selection.start
-					console.log("----cursorPosition", cursorPosition)
-					showString(state.value, cursorPosition)
 					cursorPosition = getAdjecentWordBreakIndex(
 						state.value,
 						cursorPosition,
 						action.key == "ArrowLeft" ? "backward" : "forward"
 					)
-					console.log("----cursorPosition", cursorPosition)
-					showString(state.value, cursorPosition)
 					otherPosition = action.shiftKey ? otherPosition : cursorPosition
-					console.log("state", state)
-					console.log("action", action)
 
 					result = State.copy(
 						formatter.unformat(
@@ -65,7 +59,6 @@ export namespace Action {
 							})
 						)
 					)
-					console.log("result", result)
 				} else {
 					let cursorPosition = result.selection.direction == "backward" ? result.selection.start : result.selection.end
 					let otherPosition = cursorPosition == result.selection.start ? result.selection.end : result.selection.start
@@ -93,15 +86,11 @@ export namespace Action {
 				} else if ((action.key == "Delete" || action.key == "Backspace") && (state as any)?.type != "password") {
 					// delete until wordbreak
 					const cursorPosition = state.selection.direction == "backward" ? state.selection.start : state.selection.end
-					console.log("----cursorPosition", cursorPosition)
-					showString(state.value, cursorPosition)
 					const adjecentIndex = getAdjecentWordBreakIndex(
 						state.value,
 						cursorPosition,
 						action.key == "Backspace" ? "backward" : "forward"
 					)
-					console.log("----adjecentIndex", adjecentIndex)
-					showString(state.value, adjecentIndex)
 					result = State.copy(
 						formatter.unformat(
 							StateEditor.copy({

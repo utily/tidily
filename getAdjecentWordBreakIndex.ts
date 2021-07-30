@@ -30,7 +30,7 @@ export function getAdjecentWordBreakIndex(
 	direction: "backward" | "forward"
 ): number {
 	let result = 0
-	const wordRegex = /[\wåäöüéáúíóßðœøæñµçþ]+/gi
+	const wordRegex = /([\wåäöüéáúíóßðœøæñµçþ_]+|[@-]+)/gi
 	if (direction == "backward") {
 		result = getBackwardWordBreakIndex(word, currentIndex, wordRegex)
 	} else {
