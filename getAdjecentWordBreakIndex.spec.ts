@@ -1,0 +1,51 @@
+import { getAdjecentWordBreakIndex } from "./getAdjecentWordBreakIndex"
+
+describe("findWordBreak", () => {
+	it("Step backward", () => {
+		//									  10*			0					1
+		// 										1*			012345678901234567
+		expect(getAdjecentWordBreakIndex("This is a sentence", 0, "backward")).toEqual(0)
+		expect(getAdjecentWordBreakIndex("This is a sentence", 1, "backward")).toEqual(0)
+		expect(getAdjecentWordBreakIndex("This is a sentence", 2, "backward")).toEqual(0)
+		expect(getAdjecentWordBreakIndex("This is a sentence", 3, "backward")).toEqual(0)
+		expect(getAdjecentWordBreakIndex("This is a sentence", 4, "backward")).toEqual(0)
+		expect(getAdjecentWordBreakIndex("This is a sentence", 5, "backward")).toEqual(0)
+		expect(getAdjecentWordBreakIndex("This is a sentence", 6, "backward")).toEqual(5)
+		expect(getAdjecentWordBreakIndex("This is a sentence", 7, "backward")).toEqual(5)
+		expect(getAdjecentWordBreakIndex("This is a sentence", 8, "backward")).toEqual(5)
+		expect(getAdjecentWordBreakIndex("This is a sentence", 9, "backward")).toEqual(8)
+		expect(getAdjecentWordBreakIndex("This is a sentence", 10, "backward")).toEqual(8)
+		expect(getAdjecentWordBreakIndex("This is a sentence", 11, "backward")).toEqual(10)
+		expect(getAdjecentWordBreakIndex("This is a sentence", 12, "backward")).toEqual(10)
+		expect(getAdjecentWordBreakIndex("This is a sentence", 13, "backward")).toEqual(10)
+		expect(getAdjecentWordBreakIndex("This is a sentence", 14, "backward")).toEqual(10)
+		expect(getAdjecentWordBreakIndex("This is a sentence", 15, "backward")).toEqual(10)
+		expect(getAdjecentWordBreakIndex("This is a sentence", 16, "backward")).toEqual(10)
+		expect(getAdjecentWordBreakIndex("This is a sentence", 17, "backward")).toEqual(10)
+		expect(getAdjecentWordBreakIndex("This is a sentence", 18, "backward")).toEqual(10)
+		expect(getAdjecentWordBreakIndex("This is a sentence", 19, "backward")).toEqual(10)
+	})
+	it("Step forward", () => {
+		//									  10*			0					1
+		// 										1*			012345678901234567
+		expect(getAdjecentWordBreakIndex("This is a sentence", 0, "forward")).toEqual(4)
+		expect(getAdjecentWordBreakIndex("This is a sentence", 1, "forward")).toEqual(4)
+		expect(getAdjecentWordBreakIndex("This is a sentence", 2, "forward")).toEqual(4)
+		expect(getAdjecentWordBreakIndex("This is a sentence", 3, "forward")).toEqual(4)
+		expect(getAdjecentWordBreakIndex("This is a sentence", 4, "forward")).toEqual(7)
+		expect(getAdjecentWordBreakIndex("This is a sentence", 5, "forward")).toEqual(7)
+		expect(getAdjecentWordBreakIndex("This is a sentence", 6, "forward")).toEqual(7)
+		expect(getAdjecentWordBreakIndex("This is a sentence", 7, "forward")).toEqual(9)
+		expect(getAdjecentWordBreakIndex("This is a sentence", 8, "forward")).toEqual(9)
+		expect(getAdjecentWordBreakIndex("This is a sentence", 9, "forward")).toEqual(18)
+		expect(getAdjecentWordBreakIndex("This is a sentence", 10, "forward")).toEqual(18)
+		expect(getAdjecentWordBreakIndex("This is a sentence", 11, "forward")).toEqual(18)
+		expect(getAdjecentWordBreakIndex("This is a sentence", 12, "forward")).toEqual(18)
+		expect(getAdjecentWordBreakIndex("This is a sentence", 13, "forward")).toEqual(18)
+		expect(getAdjecentWordBreakIndex("This is a sentence", 14, "forward")).toEqual(18)
+		expect(getAdjecentWordBreakIndex("This is a sentence", 15, "forward")).toEqual(18)
+		expect(getAdjecentWordBreakIndex("This is a sentence", 16, "forward")).toEqual(18)
+		expect(getAdjecentWordBreakIndex("This is a sentence", 17, "forward")).toEqual(18)
+		expect(getAdjecentWordBreakIndex("This is a sentence", 18, "forward")).toEqual(18)
+	})
+})

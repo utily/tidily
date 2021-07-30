@@ -1,4 +1,5 @@
 import { Formatter } from "./Formatter"
+import { getAdjecentWordBreakIndex } from "./getAdjecentWordBreakIndex"
 import { Settings } from "./Settings"
 import { State } from "./State"
 import { StateEditor } from "./StateEditor"
@@ -21,17 +22,28 @@ export namespace Action {
 
 		if (action) {
 			if (action.key == "ArrowLeft" || action.key == "ArrowRight" || action.key == "Home" || action.key == "End") {
+				let cursorPosition: number =
+					result.selection.direction == "backward" ? result.selection.start : result.selection.end
+				let otherPosition: number =
+					cursorPosition == result.selection.start ? result.selection.end : result.selection.start
 				if (action.ctrlKey && (action.key == "ArrowLeft" || action.key == "ArrowRight")) {
 					// jump to next stop
 					console.log("action", action)
 					console.log("result", result)
 					console.log("state", state)
+					const adjecentIndex = getAdjecentWordBreakIndex(
+						state.value,
+						cursorPosition,
+						action.key == "ArrowLeft" ? "backward" : "forward"
+					)
+					console.log("adjecentIndex", adjecentIndex)
+					console.log(state.value)
+					let pointerString = ""
+					for (let i = 0; i <= adjecentIndex; i++) {
+						pointerString += i != adjecentIndex ? " " : "^"
+					}
+					console.log(pointerString)
 				} else {
-					let cursorPosition: number =
-						result.selection.direction == "backward" ? result.selection.start : result.selection.end
-					let otherPosition: number =
-						cursorPosition == result.selection.start ? result.selection.end : result.selection.start
-
 					cursorPosition =
 						action.key == "Home"
 							? 0
