@@ -12,6 +12,16 @@ export interface Action {
 	altKey?: boolean
 	metaKey?: boolean
 }
+
+function showString(str: string, index: number) {
+	console.log(str)
+	let pointerString = ""
+	for (let i = 0; i <= index; i++) {
+		pointerString += i != index ? " " : "^"
+	}
+	console.log(pointerString)
+}
+
 export namespace Action {
 	export function apply(
 		formatter: Formatter,
@@ -22,11 +32,9 @@ export namespace Action {
 
 		if (action) {
 			if (action.key == "ArrowLeft" || action.key == "ArrowRight" || action.key == "Home" || action.key == "End") {
-				let cursorPosition: number =
-					result.selection.direction == "backward" ? result.selection.start : result.selection.end
-				let otherPosition: number =
-					cursorPosition == result.selection.start ? result.selection.end : result.selection.start
 				if (action.ctrlKey && (action.key == "ArrowLeft" || action.key == "ArrowRight")) {
+					const cursorPosition: number =
+						state.selection.direction == "backward" ? state.selection.start : state.selection.end
 					// jump to next stop
 					console.log("action", action)
 					console.log("result", result)
@@ -36,14 +44,15 @@ export namespace Action {
 						cursorPosition,
 						action.key == "ArrowLeft" ? "backward" : "forward"
 					)
-					console.log("adjecentIndex", adjecentIndex)
-					console.log(state.value)
-					let pointerString = ""
-					for (let i = 0; i <= adjecentIndex; i++) {
-						pointerString += i != adjecentIndex ? " " : "^"
-					}
-					console.log(pointerString)
+					console.log("------cursorPosition: ", cursorPosition)
+					showString(state.value, cursorPosition)
+					console.log("------adjecentIndex", adjecentIndex)
+					showString(state.value, adjecentIndex)
 				} else {
+					let cursorPosition: number =
+						result.selection.direction == "backward" ? result.selection.start : result.selection.end
+					let otherPosition: number =
+						cursorPosition == result.selection.start ? result.selection.end : result.selection.start
 					cursorPosition =
 						action.key == "Home"
 							? 0
