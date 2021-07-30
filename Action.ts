@@ -33,10 +33,15 @@ export namespace Action {
 
 		if (action) {
 			if (action.key == "ArrowLeft" || action.key == "ArrowRight" || action.key == "Home" || action.key == "End") {
-				if (action.ctrlKey && (action.key == "ArrowLeft" || action.key == "ArrowRight")) {
+				if (
+					action.ctrlKey &&
+					(action.key == "ArrowLeft" || action.key == "ArrowRight") &&
+					(state as any)?.type != "password"
+				) {
 					let cursorPosition = state.selection.direction == "backward" ? state.selection.start : state.selection.end
 					let otherPosition = cursorPosition == state.selection.start ? state.selection.end : state.selection.start
 					// jump to next stop
+					console.log("formatter", formatter)
 					console.log("action", action)
 					console.log("result", result)
 					console.log("state", state)
