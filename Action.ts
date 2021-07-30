@@ -40,29 +40,25 @@ export namespace Action {
 				) {
 					let cursorPosition = state.selection.direction == "backward" ? state.selection.start : state.selection.end
 					let otherPosition = cursorPosition == state.selection.start ? state.selection.end : state.selection.start
-					// jump to next stop
-					console.log("formatter", formatter)
-					console.log("action", action)
-					console.log("result", result)
-					console.log("state", state)
-					const adjecentIndex = getAdjecentWordBreakIndex(
+					cursorPosition = getAdjecentWordBreakIndex(
 						state.value,
 						cursorPosition,
 						action.key == "ArrowLeft" ? "backward" : "forward"
 					)
-					console.log("------cursorPosition: ", cursorPosition)
-					showString(state.value, cursorPosition)
-					console.log("------adjecentIndex", adjecentIndex)
-					showString(state.value, adjecentIndex)
-					cursorPosition = adjecentIndex
 					otherPosition = action.shiftKey ? otherPosition : cursorPosition
-					const tempSelection: Selection = {
-						start: Math.min(otherPosition, cursorPosition),
-						end: Math.max(otherPosition, cursorPosition),
-						direction:
-							otherPosition < cursorPosition ? "forward" : otherPosition > cursorPosition ? "backward" : "none",
-					}
-					result = State.copy(formatter.unformat(StateEditor.copy({ ...state, selection: tempSelection })))
+					result = State.copy(
+						formatter.unformat(
+							StateEditor.copy({
+								...state,
+								selection: {
+									start: Math.min(otherPosition, cursorPosition),
+									end: Math.max(otherPosition, cursorPosition),
+									direction:
+										otherPosition < cursorPosition ? "forward" : otherPosition > cursorPosition ? "backward" : "none",
+								},
+							})
+						)
+					)
 				} else {
 					let cursorPosition = result.selection.direction == "backward" ? result.selection.start : result.selection.end
 					let otherPosition = cursorPosition == result.selection.start ? result.selection.end : result.selection.start
