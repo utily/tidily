@@ -1,6 +1,5 @@
 import { Formatter } from "./Formatter"
 import { getAdjecentWordBreakIndex } from "./getAdjecentWordBreakIndex"
-import { Selection } from "./Selection"
 import { Settings } from "./Settings"
 import { State } from "./State"
 import { StateEditor } from "./StateEditor"
@@ -40,11 +39,15 @@ export namespace Action {
 				) {
 					let cursorPosition = state.selection.direction == "backward" ? state.selection.start : state.selection.end
 					let otherPosition = cursorPosition == state.selection.start ? state.selection.end : state.selection.start
+					console.log("----cursorPosition", cursorPosition)
+					showString(state.value, cursorPosition)
 					cursorPosition = getAdjecentWordBreakIndex(
 						state.value,
 						cursorPosition,
 						action.key == "ArrowLeft" ? "backward" : "forward"
 					)
+					console.log("----cursorPosition", cursorPosition)
+					showString(state.value, cursorPosition)
 					otherPosition = action.shiftKey ? otherPosition : cursorPosition
 					result = State.copy(
 						formatter.unformat(
