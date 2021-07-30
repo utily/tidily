@@ -21,7 +21,7 @@ export namespace Action {
 
 		if (action) {
 			if (action.key == "ArrowLeft" || action.key == "ArrowRight" || action.key == "Home" || action.key == "End") {
-				if (action.ctrlKey) {
+				if (action.ctrlKey && (action.key == "ArrowLeft" || action.key == "ArrowRight")) {
 					// jump to next stop
 					console.log("action", action)
 					console.log("result", result)
