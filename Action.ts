@@ -79,11 +79,22 @@ export namespace Action {
 					result.selection.end = Math.max(otherPosition, cursorPosition)
 				}
 			} else if (action.ctrlKey) {
-				switch (action.key) {
-					case "a":
-						result.selection.start = 0
-						result.selection.end = result.value.length
-						result.selection.direction = "forward"
+				if (action.key == "a") {
+					result.selection.start = 0
+					result.selection.end = result.value.length
+					result.selection.direction = "forward"
+				} else if ((action.key == "Delete" || action.key == "Backspace") && (state as any)?.type != "password") {
+					// delete until wordbreak
+					const cursorPosition = state.selection.direction == "backward" ? state.selection.start : state.selection.end
+					console.log("----cursorPosition", cursorPosition)
+					showString(state.value, cursorPosition)
+					const adjecentIndex = getAdjecentWordBreakIndex(
+						state.value,
+						cursorPosition,
+						action.key == "Backspace" ? "backward" : "forward"
+					)
+					console.log("----adjecentIndex", adjecentIndex)
+					showString(state.value, adjecentIndex)
 				}
 			} else {
 				if (result.selection.start != result.selection.end) {
