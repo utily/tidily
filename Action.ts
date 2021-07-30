@@ -95,6 +95,21 @@ export namespace Action {
 					)
 					console.log("----adjecentIndex", adjecentIndex)
 					showString(state.value, adjecentIndex)
+					result = State.copy(
+						formatter.unformat(
+							StateEditor.copy({
+								...state,
+								selection: {
+									start: Math.min(cursorPosition, adjecentIndex),
+									end: Math.max(cursorPosition, adjecentIndex),
+									direction: "none",
+								},
+							})
+						)
+					)
+					result.value =
+						result.value.substring(0, result.selection.start) + result.value.substring(result.selection.end)
+					result.selection.end = result.selection.start
 				}
 			} else {
 				if (result.selection.start != result.selection.end) {
