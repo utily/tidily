@@ -1,40 +1,29 @@
-function getForwardWordBreakIndex(word: string, currentIndex: number, wordRegex: RegExp): number {
+function getForwardWordBreakIndex(str: string, index: number, wordRegex: RegExp): number {
 	let result = 0
-	while (wordRegex.exec(word) != null) {
+	while (wordRegex.exec(str) != null) {
 		result = wordRegex.lastIndex
-		if (wordRegex.lastIndex > currentIndex)
+		if (wordRegex.lastIndex > index)
 			break
 	}
-	if (wordRegex.lastIndex <= currentIndex)
-		result = word.length
-
+	wordRegex.lastIndex <= index && (result = str.length)
 	return result
 }
 
-function getBackwardWordBreakIndex(word: string, stopIndex: number, wordRegex: RegExp): number {
+function getBackwardWordBreakIndex(str: string, index: number, wordRegex: RegExp): number {
 	let result = 0
-	let arr: RegExpExecArray | null
-	while ((arr = wordRegex.exec(word)) != null) {
-		if (wordRegex.lastIndex - arr[0].length < stopIndex) {
-			result = wordRegex.lastIndex - arr[0].length
-		} else {
+	let execArray: RegExpExecArray | null
+	while ((execArray = wordRegex.exec(str)) != null) {
+		if (wordRegex.lastIndex - execArray[0].length < index)
+			result = wordRegex.lastIndex - execArray[0].length
+		else
 			break
-		}
 	}
 	return result
 }
 
-export function getAdjecentWordBreakIndex(
-	word: string,
-	currentIndex: number,
-	direction: "backward" | "forward"
-): number {
-	let result = 0
+export function getAdjecentWordBreakIndex(str: string, index: number, direction: "backward" | "forward"): number {
 	const wordRegex = /([\wåäöüéáúíóßðœøæñµçþ_]+|[@-]+)/gi
-	if (direction == "backward") {
-		result = getBackwardWordBreakIndex(word, currentIndex, wordRegex)
-	} else {
-		result = getForwardWordBreakIndex(word, currentIndex, wordRegex)
-	}
-	return result
+	return direction == "backward"
+		? getBackwardWordBreakIndex(str, index, wordRegex)
+		: getForwardWordBreakIndex(str, index, wordRegex)
 }
