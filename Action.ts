@@ -32,52 +32,27 @@ export namespace Action {
 
 		if (action) {
 			if (action.ctrlKey) {
+				console.log("ctrlKey")
 				if (action.key == "a")
 					selectAll(formatter, state)
 				else if (["ArrowLeft", "ArrowRight"].includes(action.key) && (state as any)?.type != "password")
 					result = ctrlArrow(formatter, state, action)
 				else if (["Delete", "Backspace"].includes(action.key) && (state as any)?.type != "password")
 					result = ctrlDeleteAction(formatter, state, action)
-			} else {
-				if (["ArrowLeft", "ArrowRight", "Home", "End"].includes(action.key))
-					result = arrowHomeEnd(formatter, state, action)
-				else {
-					if (result.selection.start != result.selection.end) {
-						// selection exists
-						action = ["Delete", "Backspace"].includes(action.key) ? undefined : action
-						result.value =
-							result.value.substring(0, result.selection.start) + result.value.substring(result.selection.end)
-						result.selection.end = result.selection.start
-					}
-					if (action) {
-						switch (action.key) {
-							case "Unidentified":
-								break
-							case "Backspace":
-								if (result.selection.start > 0) {
-									result.value =
-										result.value.substring(0, result.selection.start - 1) +
-										result.value.substring(result.selection.start)
-									result.selection.start = --result.selection.end
-								}
-								break
-							case "Delete":
-								if (result.selection.start < result.value.length)
-									result.value =
-										result.value.substring(0, result.selection.start) +
-										result.value.substring(result.selection.start + 1)
-								break
-							default:
-								if (formatter.allowed(action.key, result)) {
-									result.value =
-										result.value.substring(0, result.selection.start) +
-										action.key +
-										result.value.substring(result.selection.start)
-									result.selection.start = result.selection.end += action.key.length
-								}
-						}
-					}
-				}
+			} else if (["ArrowLeft", "ArrowRight", "Home", "End"].includes(action.key))
+				result = arrowHomeEnd(formatter, state, action)
+			else if (["Delete", "Backspace"].includes(action.key)) {
+				console.log("Delete or Backspace")
+				result.selection.start == result.selection.end &&
+					select(
+						result,
+						result.selection.start + (action.key == "Backspace" ? -1 : 0),
+						result.selection.end + (action.key == "Delete" ? 1 : 0)
+					)
+				erase(result)
+			} else if (action.key != "Unidentified" && formatter.allowed(action.key, result)) {
+				console.log("insert")
+				insert(result, action.key)
 			}
 		}
 		return formatter.format(StateEditor.copy(result))
@@ -129,6 +104,7 @@ export namespace Action {
 		return result
 	}
 	function selectAll(formatter: Formatter, state: Readonly<State>): Readonly<State> {
+		console.log("selectAll")
 		const result = State.copy(formatter.unformat(StateEditor.copy(state)))
 		result.selection.start = 0
 		result.selection.end = result.value.length
@@ -137,6 +113,7 @@ export namespace Action {
 	}
 
 	function ctrlDeleteAction(formatter: Formatter, state: Readonly<State>, action: Action): Readonly<State> {
+		console.log("ctrlDeleteAction")
 		const cursorPosition = state.selection.direction == "backward" ? state.selection.start : state.selection.end
 		const adjecentIndex = getAdjecentWordBreakIndex(
 			state.value,
@@ -158,5 +135,21 @@ export namespace Action {
 		result.value = result.value.substring(0, result.selection.start) + result.value.substring(result.selection.end)
 		result.selection.end = result.selection.start
 		return result
+	}
+	function select(state: State, from: number, to: number): void {
+		console.log("select")
+		state.selection.start = from
+		state.selection.end = to
+	}
+	function erase(state: State): void {
+		console.log("erase")
+		insert(state, "")
+	}
+	function insert(state: State, insertString: string): void {
+		console.log("insert inside", state, insertString)
+		state.value =
+			state.value.substring(0, state.selection.start) + insertString + state.value.substring(state.selection.end)
+		state.selection.start = state.selection.start + insertString.length
+		state.selection.end = state.selection.start
 	}
 }
