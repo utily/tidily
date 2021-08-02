@@ -43,7 +43,7 @@ export namespace Action {
 				erase(result)
 			} else if (action.key != "Unidentified") {
 				erase(result)
-				formatter.allowed(action.key, result) && insert(result, action.key)
+				formatter.allowed(action.key, result) && replace(result, action.key)
 			}
 		}
 		return formatter.format(StateEditor.copy(result))
@@ -120,9 +120,9 @@ export namespace Action {
 		direction && (state.selection.direction = direction)
 	}
 	function erase(state: State): void {
-		insert(state, "")
+		replace(state, "")
 	}
-	function insert(state: State, insertString: string): void {
+	function replace(state: State, insertString: string): void {
 		state.value =
 			state.value.substring(0, state.selection.start) + insertString + state.value.substring(state.selection.end)
 		state.selection.start = state.selection.start + insertString.length
