@@ -2,8 +2,6 @@ import { getAdjecentWordBreakIndex } from "./getAdjecentWordBreakIndex"
 
 describe("findWordBreak", () => {
 	it("Step backward", () => {
-		//									  10*			0					1
-		// 										1*			012345678901234567
 		expect(getAdjecentWordBreakIndex("This is a sentence", 0, "backward")).toEqual(0)
 		expect(getAdjecentWordBreakIndex("This is a sentence", 1, "backward")).toEqual(0)
 		expect(getAdjecentWordBreakIndex("This is a sentence", 2, "backward")).toEqual(0)
@@ -26,8 +24,6 @@ describe("findWordBreak", () => {
 		expect(getAdjecentWordBreakIndex("This is a sentence", 19, "backward")).toEqual(10)
 	})
 	it("Step forward", () => {
-		//									  10*			0					1
-		// 										1*			012345678901234567
 		expect(getAdjecentWordBreakIndex("This is a sentence", 0, "forward")).toEqual(4)
 		expect(getAdjecentWordBreakIndex("This is a sentence", 1, "forward")).toEqual(4)
 		expect(getAdjecentWordBreakIndex("This is a sentence", 2, "forward")).toEqual(4)
