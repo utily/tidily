@@ -85,7 +85,8 @@ const issuers: { [name: string]: Partial<CardIssuer> & { identification: RegExp 
 		icon: "generic",
 	},
 	electron: {
-		verification: /^((4026|4405|4508|4844|4913|4917)\s[0-9]{4}\s[0-9]{4}\s[0-9]{4})|((4175)\s(00)[0-9]{2}\s[0-9]{4}\s[0-9]{4})$/,
+		verification:
+			/^((4026|4405|4508|4844|4913|4917)\s[0-9]{4}\s[0-9]{4}\s[0-9]{4})|((4175)\s(00)[0-9]{2}\s[0-9]{4}\s[0-9]{4})$/,
 		identification: /^(4026|417500|4405|4508|4844|4913|4917)/,
 		length: [16, 19, 19],
 		icon: "generic",
