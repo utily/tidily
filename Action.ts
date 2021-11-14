@@ -26,7 +26,7 @@ export namespace Action {
 		if (action) {
 			if (action.ctrlKey) {
 				if (action.key == "a")
-					select(state, 0, state.value.length, "forward")
+					select(result, 0, result.value.length, "forward")
 				else if (["ArrowLeft", "ArrowRight"].includes(action.key) && (state as any)?.type != "password")
 					result = ctrlArrow(formatter, state, action)
 				else if (["Delete", "Backspace"].includes(action.key) && (state as any)?.type != "password")
