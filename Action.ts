@@ -24,7 +24,7 @@ export namespace Action {
 		let result = State.copy(formatter.unformat(StateEditor.copy(state)))
 
 		if (action) {
-			if (action.ctrlKey) {
+			if (action.ctrlKey || action.metaKey) {
 				if (action.key == "a")
 					select(result, 0, result.value.length, "forward")
 				else if (["ArrowLeft", "ArrowRight"].includes(action.key) && (state as any)?.type != "password")
