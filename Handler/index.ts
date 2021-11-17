@@ -10,6 +10,7 @@ import "./percent"
 import "./phone"
 import "./postal-code"
 import "./price"
+import "./email"
 import "./text"
 import { format, get, parse } from "./base"
 
