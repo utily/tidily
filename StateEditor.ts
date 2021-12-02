@@ -108,6 +108,17 @@ export class StateEditor implements Readonly<State> {
 		}
 		return result
 	}
+	split(splitter: string): { value: string; selection: Partial<Selection> }[] {
+		let start = this.selection.start
+		let end = this.selection.end
+		return this.value.split(splitter).map(value => ({
+			value,
+			selection: {
+				start: (start -= value.length) < 0 ? start + value.length : undefined,
+				end: (end -= value.length) < 0 ? end + value.length : undefined,
+			},
+		}))
+	}
 
 	static copy(state: Readonly<State>): StateEditor {
 		return new StateEditor({ ...state })
