@@ -17,7 +17,7 @@ class Handler implements Converter<string>, Formatter {
 		return typeof data != "string" ? "" : isoly.Date.is(data) ? isoly.Date.localize(data, this.formatting) : data
 	}
 	fromString(value: string): isoly.Date | undefined {
-		return parse(value, this.formatting)
+		return isoly.Date.is(value) ? value : undefined
 	}
 	format(unformated: StateEditor): Readonly<State> & Settings {
 		let result: Readonly<State> & Settings
@@ -58,19 +58,6 @@ class Handler implements Converter<string>, Formatter {
 	}
 }
 add("date", (argument?: any[]) => new Handler(argument && argument.length > 0 ? argument[0] : undefined))
-export function parse(value: string, formatting?: DateFormat | isoly.Locale): isoly.Date | undefined {
-	let parts: string[]
-	switch (formatting) {
-		case "dd/MM/YYYY":
-			parts = value.split("/").reverse()
-			break
-		default:
-			parts = value.split("-")
-			break
-	}
-	const result = parts.join("-")
-	return isoly.Date.is(result) ? result : undefined
-}
 export function formatDate(unformated: StateEditor, format?: DateFormat | isoly.Locale): StateEditor {
 	let result = unformated
 	switch (format) {

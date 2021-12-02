@@ -4,25 +4,17 @@ import { get } from "../index"
 
 describe("date iso", () => {
 	const handler = get("date") as Formatter
-	it("date key event year last digit + auto dash", () => {
+	it("only splitter is allowed in fifth digit", () => {
 		const result = Action.apply(handler, { value: "2021", selection: { start: 4, end: 4 } }, { key: "-" })
 		expect(result).toMatchObject({ value: "2021-", selection: { start: 5, end: 5 } })
 	})
-	it("date key event month trigger format", () => {
+	it("the first digit of month must be smaller than 2", () => {
 		const result = Action.apply(handler, { value: "2020-", selection: { start: 5, end: 5 } }, { key: "1" })
 		expect(result).toMatchObject({ value: "2020-1", selection: { start: 6, end: 6 } })
 	})
-	it("date key event month last digit trigger format", () => {
+	it("the first digit of day should be smaller than 4", () => {
 		const result = Action.apply(handler, { value: "2020-02-", selection: { start: 8, end: 8 } }, { key: "3" })
 		expect(result).toMatchObject({ value: "2020-02-3", selection: { start: 9, end: 9 } })
-	})
-	it("date key event 29 february (leap year) last digit trigger format", () => {
-		const result = Action.apply(handler, { value: "2020-02-2", selection: { start: 9, end: 9 } }, { key: "9" })
-		expect(result).toMatchObject({ value: "2020-02-28", selection: { start: 10, end: 10 } })
-	})
-	it("date key event 29 february last digit trigger format", () => {
-		const result = Action.apply(handler, { value: "2021-02-3", selection: { start: 9, end: 9 } }, { key: "9" })
-		expect(result).toMatchObject({ value: "2021-02-28", selection: { start: 10, end: 10 } })
 	})
 	it("date test end of months - too big day", () => {
 		expect(Action.apply(handler, { value: "2021-01-3", selection: { start: 9, end: 9 } }, { key: "5" })).toMatchObject({
