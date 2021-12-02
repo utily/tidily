@@ -9,25 +9,25 @@ import { add } from "../base"
 import { validFormat } from "./helper"
 
 class Handler implements Converter<string>, Formatter {
-	constructor(readonly formatting?: DateFormat | isoly.Locale) {}
+	formatting?: DateFormat
+	constructor(formatting?: DateFormat | isoly.Locale) {
+		this.formatting = DateFormat.is(formatting) ? formatting : DateFormat.fromLocale(formatting)
+	}
 	toString(data: isoly.Date | any): string {
-		return typeof data == "string" ? (isoly.Date.is(data) ? isoly.Date.localize(data, this.formatting) : data) : ""
+		return typeof data != "string" ? "" : isoly.Date.is(data) ? isoly.Date.localize(data, this.formatting) : data
 	}
 	fromString(value: string): isoly.Date | undefined {
-		return isoly.Date.is(value) ? value : undefined
+		return parse(value, this.formatting)
 	}
 	format(unformated: StateEditor): Readonly<State> & Settings {
 		let result: Readonly<State> & Settings
-		const splitted = unformated.split("-")
-		while (splitted.length < 3)
-			splitted.push({ value: "", selection: {} })
 		switch (this.formatting) {
 			case "dd/MM/YYYY":
 				result = {
-					...State.merge(splitted[2], "/", splitted[1], "/", splitted[0]),
+					...formatDate(unformated, "dd/MM/YYYY"),
 					type: "text",
 					length: [0, 10],
-					pattern: /^(0?[1-9]|[12][0-9]|3[01])[/-](0?[1-9]|1[012])[/-]\d{4}$/,
+					pattern: /^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$/,
 				}
 				break
 			default:
@@ -42,26 +42,11 @@ class Handler implements Converter<string>, Formatter {
 		return result
 	}
 	unformat(formated: StateEditor): Readonly<State> {
-		let result: State
-		switch (this.formatting) {
-			case "dd/MM/YYYY":
-				const splitted = formated.split("/")
-				while (splitted.length < 3)
-					splitted.push({ value: "", selection: {} })
-				result = State.merge(splitted[2], "-", splitted[1], "-", splitted[0])
-				break
-			default:
-				result = formated
-				break
-		}
-		return result
+		return formated
 	}
 	allowed(symbol: string, state: Readonly<State>): boolean {
-		let format = this.formatting
-		if (!DateFormat.is(format))
-			format = DateFormat.fromLocale(format)
 		let result: boolean
-		switch (format) {
+		switch (this.formatting) {
 			case "dd/MM/YYYY":
 				result = validFormat(symbol, state, "dd/MM/YYYY")
 				break
@@ -73,26 +58,38 @@ class Handler implements Converter<string>, Formatter {
 	}
 }
 add("date", (argument?: any[]) => new Handler(argument && argument.length > 0 ? argument[0] : undefined))
-
+export function parse(value: string, formatting?: DateFormat | isoly.Locale): isoly.Date | undefined {
+	let parts: string[]
+	switch (formatting) {
+		case "dd/MM/YYYY":
+			parts = value.split("/").reverse()
+			break
+		default:
+			parts = value.split("-")
+			break
+	}
+	const result = parts.join("-")
+	return isoly.Date.is(result) ? result : undefined
+}
 export function formatDate(unformated: StateEditor, format?: DateFormat | isoly.Locale): StateEditor {
 	let result = unformated
 	switch (format) {
 		case "dd/MM/YYYY":
-			if (!validDate(result.value))
+			if (!validDate(result.value, format))
 				result = result.replace(
 					0,
 					10,
-					validDate("31" + result.value.substring(2, 10))
+					validDate("31" + result.value.substring(2, 10), format)
 						? "31" + result.value.substring(2, 10)
-						: validDate("30" + result.value.substring(2, 10))
+						: validDate("30" + result.value.substring(2, 10), format)
 						? "30" + result.value.substring(2, 10)
-						: validDate("29" + result.value.substring(2, 10))
+						: validDate("29" + result.value.substring(2, 10), format)
 						? "29" + result.value.substring(2, 10)
-						: validDate("28" + result.value.substring(2, 10))
+						: validDate("28" + result.value.substring(2, 10), format)
 						? "28" + result.value.substring(2, 10)
 						: result.value
 				)
-			return result
+			break
 		default:
 			if (!validDate(result.value))
 				result = result.replace(
@@ -108,21 +105,26 @@ export function formatDate(unformated: StateEditor, format?: DateFormat | isoly.
 						? result.value.substring(0, 8) + "28"
 						: result.value
 				)
-			return result
+			console.log("running2", !validDate(result.value), result)
+			break
 	}
+	return result
 }
 function validDate(date: string, format?: DateFormat | isoly.Locale): boolean {
+	let year: number
+	let month: number
+	let day: number
 	switch (format) {
 		case "dd/MM/YYYY":
-			const year = parseInt(date.substring(6, 10))
-			const month = parseInt(date.substring(3, 5))
-			const day = parseInt(date.substring(0, 2))
-			return daysPerMonth(year, month) >= day
+			year = parseInt(date.substring(6, 10))
+			month = parseInt(date.substring(3, 5))
+			day = parseInt(date.substring(0, 2))
+			return year && month && day ? day > 0 && daysPerMonth(year, month) >= day : false
 		default:
-			const year1 = parseInt(date.substring(0, 4))
-			const month1 = parseInt(date.substring(5, 7))
-			const day1 = parseInt(date.substring(8, 10))
-			return daysPerMonth(year1, month1) >= day1
+			year = parseInt(date.substring(0, 4))
+			month = parseInt(date.substring(5, 7))
+			day = parseInt(date.substring(8, 10))
+			return year && month && day ? day > 0 && daysPerMonth(year, month) >= day : false
 	}
 }
 function daysPerMonth(year: number, month: number): 28 | 29 | 30 | 31 {
