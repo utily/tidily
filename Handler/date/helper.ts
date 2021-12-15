@@ -18,8 +18,8 @@ export function validMonth(symbol: string, state: Readonly<State>, startIndex: n
 	if (state.value.length == startIndex)
 		return symbol <= "1"
 	else if (state.value.length == endIndex) {
-		if (state.value == "0")
-			return symbol < "10" || symbol >= "1"
+		if (state.value !== "1")
+			return symbol <= "9" || symbol >= "1"
 		else
 			return symbol < "3"
 	}
