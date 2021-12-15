@@ -21,8 +21,8 @@ describe("date english", () => {
 		expect(result).toMatchObject({ value: "31/1", selection: { start: 4, end: 4 } })
 	})
 	it("second digit of month must be smaller than 3", () => {
-		const result = Action.apply(handler, { value: "30/1", selection: { start: 4, end: 4 } }, { key: "2" })
-		expect(result).toMatchObject({ value: "30/12", selection: { start: 5, end: 5 } })
+		const result = Action.apply(handler, { value: "30/0", selection: { start: 4, end: 4 } }, { key: "9" })
+		expect(result).toMatchObject({ value: "30/09", selection: { start: 5, end: 5 } })
 	})
 	it("only splitter is allowed in sixth digit", () => {
 		const result = Action.apply(handler, { value: "31/10", selection: { start: 5, end: 5 } }, { key: "/" })
