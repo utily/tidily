@@ -11,7 +11,7 @@ export function validDay(symbol: string, state: Readonly<State>, startIndex: num
 		else if (state.value == "0")
 			return symbol <= "9" && symbol >= "1"
 		else
-			return symbol <= "1"
+			return symbol == "1" || symbol == "0"
 	}
 	return false
 }
@@ -23,7 +23,7 @@ export function validMonth(symbol: string, state: Readonly<State>, startIndex: n
 		if (state.value.substr(startIndex, 1) !== "1")
 			return symbol <= "9" && symbol >= "1"
 		else
-			return symbol < "3"
+			return symbol < "3" && symbol >= "0"
 	}
 	return false
 }
