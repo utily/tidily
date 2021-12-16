@@ -139,7 +139,7 @@ export function formatDate(unformated: StateEditor, format?: DateFormat | isoly.
 				break
 			}
 	}
-	return result
+	return unformated
 }
 function validDate(date: string, format?: DateFormat | isoly.Locale): boolean {
 	let year: number
