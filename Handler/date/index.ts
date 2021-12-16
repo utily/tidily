@@ -30,6 +30,22 @@ class Handler implements Converter<string>, Formatter {
 					pattern: /^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$/,
 				}
 				break
+			case "dd.mm.YYYY":
+				result = {
+					...formatDate(unformated, "dd.mm.YYYY"),
+					type: "text",
+					length: [0, 10],
+					pattern: /^([0-2][0-9]|(3)[0-1])(\.)(((0)[0-9])|((1)[0-2]))(\.)\d{4}$/,
+				}
+				break
+			case "mm/dd/YYYY":
+				result = {
+					...formatDate(unformated, "mm/dd/YYYY"),
+					type: "text",
+					length: [0, 10],
+					pattern: /^(((0)[0-9])|((1)[0-2]))(\/)([0-2][0-9]|(3)[0-1])(\/)\d{4}$/,
+				}
+				break
 			default:
 				result = {
 					...formatDate(unformated),
@@ -53,6 +69,7 @@ export function formatDate(unformated: StateEditor, format?: DateFormat | isoly.
 	let result = unformated
 	switch (format) {
 		case "dd/mm/YYYY":
+		case "dd.mm.YYYY":
 			if (!validDate(result.value, format))
 				result = result.replace(
 					0,
@@ -65,6 +82,22 @@ export function formatDate(unformated: StateEditor, format?: DateFormat | isoly.
 						? "29" + result.value.substring(2, 10)
 						: validDate("28" + result.value.substring(2, 10), format)
 						? "28" + result.value.substring(2, 10)
+						: result.value
+				)
+			break
+		case "mm/dd/YYYY":
+			if (!validDate(result.value, format))
+				result = result.replace(
+					0,
+					10,
+					validDate(result.value.substring(0, 3) + "31" + result.value.substring(5, 10), format)
+						? result.value.substring(0, 3) + "31" + result.value.substring(5, 10)
+						: validDate(result.value.substring(0, 3) + "30" + result.value.substring(5, 10), format)
+						? result.value.substring(0, 3) + "30" + result.value.substring(5, 10)
+						: validDate(result.value.substring(0, 3) + "29" + result.value.substring(5, 10), format)
+						? result.value.substring(0, 3) + "29" + result.value.substring(5, 10)
+						: validDate(result.value.substring(0, 3) + "28" + result.value.substring(5, 10), format)
+						? result.value.substring(0, 3) + "28" + result.value.substring(5, 10)
 						: result.value
 				)
 			break
