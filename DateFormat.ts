@@ -5,9 +5,6 @@ export namespace DateFormat {
 	export function fromLocale(locale: DateFormat | isoly.Locale | undefined): DateFormat {
 		let result: DateFormat
 		switch (locale) {
-			default:
-				result = "YYYY-mm-dd"
-				break
 			case "en-GB":
 				result = "dd/mm/YYYY"
 				break
@@ -18,6 +15,9 @@ export namespace DateFormat {
 			case "pl-PL":
 			case "ru-RU":
 				result = "dd.mm.YYYY"
+				break
+			default:
+				result = "YYYY-mm-dd"
 				break
 		}
 		return result
