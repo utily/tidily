@@ -23,6 +23,9 @@ export namespace DateFormat {
 		return result
 	}
 	export function is(value: DateFormat | any): value is DateFormat {
-		return typeof value == "string" && (value == "YYYY-mm-dd" || value == "dd/mm/YYYY")
+		return (
+			typeof value == "string" &&
+			(value == "YYYY-mm-dd" || value == "dd/mm/YYYY" || value == "dd.mm.YYYY" || value == "mm/dd/YYYY")
+		)
 	}
 }
