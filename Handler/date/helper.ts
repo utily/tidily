@@ -20,7 +20,7 @@ export function validMonth(symbol: string, state: Readonly<State>, startIndex: n
 	if (state.value.length == startIndex)
 		return symbol == "1" || symbol == "0"
 	else if (state.value.length == endIndex) {
-		if (state.value.substr(startIndex, 1) !== "1")
+		if (state.value.substr(startIndex, 1) != "1")
 			return symbol <= "9" && symbol >= "1"
 		else
 			return symbol < "3" && symbol >= "0"

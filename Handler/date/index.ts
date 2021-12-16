@@ -66,59 +66,62 @@ class Handler implements Converter<string>, Formatter {
 }
 add("date", (argument?: any[]) => new Handler(argument && argument.length > 0 ? argument[0] : undefined))
 export function formatDate(unformated: StateEditor, format?: DateFormat | isoly.Locale): StateEditor {
-	let result = unformated
-	switch (format) {
-		case "dd/mm/YYYY":
-		case "dd.mm.YYYY":
-			if (!validDate(result.value, format))
-				result = result.replace(
-					0,
-					10,
-					validDate("31" + result.value.substring(2, 10), format)
-						? "31" + result.value.substring(2, 10)
-						: validDate("30" + result.value.substring(2, 10), format)
-						? "30" + result.value.substring(2, 10)
-						: validDate("29" + result.value.substring(2, 10), format)
-						? "29" + result.value.substring(2, 10)
-						: validDate("28" + result.value.substring(2, 10), format)
-						? "28" + result.value.substring(2, 10)
-						: result.value
-				)
-			break
-		case "mm/dd/YYYY":
-			if (!validDate(result.value, format))
-				result = result.replace(
-					0,
-					10,
-					validDate(result.value.substring(0, 3) + "31" + result.value.substring(5, 10), format)
-						? result.value.substring(0, 3) + "31" + result.value.substring(5, 10)
-						: validDate(result.value.substring(0, 3) + "30" + result.value.substring(5, 10), format)
-						? result.value.substring(0, 3) + "30" + result.value.substring(5, 10)
-						: validDate(result.value.substring(0, 3) + "29" + result.value.substring(5, 10), format)
-						? result.value.substring(0, 3) + "29" + result.value.substring(5, 10)
-						: validDate(result.value.substring(0, 3) + "28" + result.value.substring(5, 10), format)
-						? result.value.substring(0, 3) + "28" + result.value.substring(5, 10)
-						: result.value
-				)
-			break
-		default:
-			if (!validDate(result.value))
-				result = result.replace(
-					0,
-					10,
-					validDate(result.value.substring(0, 8) + "31")
-						? result.value.substring(0, 8) + "31"
-						: validDate(result.value.substring(0, 8) + "30")
-						? result.value.substring(0, 8) + "30"
-						: validDate(result.value.substring(0, 8) + "29")
-						? result.value.substring(0, 8) + "29"
-						: validDate(result.value.substring(0, 8) + "28")
-						? result.value.substring(0, 8) + "28"
-						: result.value
-				)
-			break
+	if (unformated.selection.start >= 9) {
+		let result = unformated
+		switch (format) {
+			case "dd/mm/YYYY":
+			case "dd.mm.YYYY":
+				if (!validDate(result.value, format))
+					result = result.replace(
+						0,
+						10,
+						validDate("31" + result.value.substring(2, 10), format)
+							? "31" + result.value.substring(2, 10)
+							: validDate("30" + result.value.substring(2, 10), format)
+							? "30" + result.value.substring(2, 10)
+							: validDate("29" + result.value.substring(2, 10), format)
+							? "29" + result.value.substring(2, 10)
+							: validDate("28" + result.value.substring(2, 10), format)
+							? "28" + result.value.substring(2, 10)
+							: result.value
+					)
+				break
+			case "mm/dd/YYYY":
+				if (!validDate(result.value, format))
+					result = result.replace(
+						0,
+						10,
+						validDate(result.value.substring(0, 3) + "31" + result.value.substring(5, 10), format)
+							? result.value.substring(0, 3) + "31" + result.value.substring(5, 10)
+							: validDate(result.value.substring(0, 3) + "30" + result.value.substring(5, 10), format)
+							? result.value.substring(0, 3) + "30" + result.value.substring(5, 10)
+							: validDate(result.value.substring(0, 3) + "29" + result.value.substring(5, 10), format)
+							? result.value.substring(0, 3) + "29" + result.value.substring(5, 10)
+							: validDate(result.value.substring(0, 3) + "28" + result.value.substring(5, 10), format)
+							? result.value.substring(0, 3) + "28" + result.value.substring(5, 10)
+							: result.value
+					)
+				break
+			default:
+				if (!validDate(result.value))
+					result = result.replace(
+						0,
+						10,
+						validDate(result.value.substring(0, 8) + "31")
+							? result.value.substring(0, 8) + "31"
+							: validDate(result.value.substring(0, 8) + "30")
+							? result.value.substring(0, 8) + "30"
+							: validDate(result.value.substring(0, 8) + "29")
+							? result.value.substring(0, 8) + "29"
+							: validDate(result.value.substring(0, 8) + "28")
+							? result.value.substring(0, 8) + "28"
+							: result.value
+					)
+				break
+		}
+		return result
 	}
-	return result
+	return unformated
 }
 function validDate(date: string, format?: DateFormat | isoly.Locale): boolean {
 	let year: number

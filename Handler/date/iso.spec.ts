@@ -17,8 +17,8 @@ describe("date iso", () => {
 		expect(result).toMatchObject({ value: "2020-1", selection: { start: 6, end: 6 } })
 	})
 	it("the first digit of day should be smaller than 4", () => {
-		const result = Action.apply(handler, { value: "2020-02-", selection: { start: 8, end: 8 } }, { key: "3" })
-		expect(result).toMatchObject({ value: "2020-02-3", selection: { start: 9, end: 9 } })
+		const result = Action.apply(handler, { value: "2020-0", selection: { start: 6, end: 6 } }, { key: "3" })
+		expect(result).toMatchObject({ value: "2020-03", selection: { start: 7, end: 7 } })
 	})
 	it("date test end of months - too big day", () => {
 		expect(Action.apply(handler, { value: "2021-01-3", selection: { start: 9, end: 9 } }, { key: "1" })).toMatchObject({
