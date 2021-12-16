@@ -4,7 +4,7 @@ import { State } from "../../State"
 
 export function validDay(symbol: string, state: Readonly<State>, startIndex: number, endIndex: number): boolean {
 	if (state.value.length == startIndex)
-		return symbol <= "3"
+		return symbol <= "3" && symbol >= "0"
 	else if (state.value.length == endIndex) {
 		if (
 			state.value.substring(startIndex, startIndex + 1) == "2" ||

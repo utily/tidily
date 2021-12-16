@@ -21,9 +21,9 @@ describe("date iso", () => {
 		expect(result).toMatchObject({ value: "2020-03", selection: { start: 7, end: 7 } })
 	})
 	it("date test end of months - too big day", () => {
-		expect(Action.apply(handler, { value: "2021-01-3", selection: { start: 9, end: 9 } }, { key: "1" })).toMatchObject({
-			value: "2021-01-31",
-			selection: { start: 10, end: 10 },
+		expect(Action.apply(handler, { value: "2021-01-", selection: { start: 8, end: 8 } }, { key: "1" })).toMatchObject({
+			value: "2021-01-1",
+			selection: { start: 9, end: 9 },
 		})
 	})
 	it("date test end of months", () => {
