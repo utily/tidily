@@ -6,9 +6,12 @@ export function validDay(symbol: string, state: Readonly<State>, startIndex: num
 	if (state.value.length == startIndex)
 		return symbol <= "3"
 	else if (state.value.length == endIndex) {
-		if (state.value == "2" || state.value == "1")
+		if (
+			state.value.substring(startIndex, startIndex + 1) == "2" ||
+			state.value.substring(startIndex, startIndex + 1) == "1"
+		)
 			return symbol <= "9" && symbol >= "0"
-		else if (state.value == "0")
+		else if (state.value.substring(startIndex, startIndex + 1) == "0")
 			return symbol <= "9" && symbol >= "1"
 		else
 			return symbol == "1" || symbol == "0"

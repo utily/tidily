@@ -66,43 +66,43 @@ class Handler implements Converter<string>, Formatter {
 }
 add("date", (argument?: any[]) => new Handler(argument && argument.length > 0 ? argument[0] : undefined))
 export function formatDate(unformated: StateEditor, format?: DateFormat | isoly.Locale): StateEditor {
-	if (unformated.selection.start >= 10) {
-		let result = unformated
-		switch (format) {
-			case "dd/mm/YYYY":
-			case "dd.mm.YYYY":
-				if (!validDate(result.value, format))
-					result = result.replace(
-						0,
-						10,
-						validDate("31" + result.value.substring(2, 10), format)
-							? "31" + result.value.substring(2, 10)
-							: validDate("30" + result.value.substring(2, 10), format)
-							? "30" + result.value.substring(2, 10)
-							: validDate("29" + result.value.substring(2, 10), format)
-							? "29" + result.value.substring(2, 10)
-							: validDate("28" + result.value.substring(2, 10), format)
-							? "28" + result.value.substring(2, 10)
-							: result.value
-					)
-				break
-			case "mm/dd/YYYY":
-				if (!validDate(result.value, format))
-					result = result.replace(
-						0,
-						10,
-						validDate(result.value.substring(0, 3) + "31" + result.value.substring(5, 10), format)
-							? result.value.substring(0, 3) + "31" + result.value.substring(5, 10)
-							: validDate(result.value.substring(0, 3) + "30" + result.value.substring(5, 10), format)
-							? result.value.substring(0, 3) + "30" + result.value.substring(5, 10)
-							: validDate(result.value.substring(0, 3) + "29" + result.value.substring(5, 10), format)
-							? result.value.substring(0, 3) + "29" + result.value.substring(5, 10)
-							: validDate(result.value.substring(0, 3) + "28" + result.value.substring(5, 10), format)
-							? result.value.substring(0, 3) + "28" + result.value.substring(5, 10)
-							: result.value
-					)
-				break
-			default:
+	let result = unformated
+	switch (format) {
+		case "dd/mm/YYYY":
+		case "dd.mm.YYYY":
+			if (!validDate(result.value, format))
+				result = result.replace(
+					0,
+					10,
+					validDate("31" + result.value.substring(2, 10), format)
+						? "31" + result.value.substring(2, 10)
+						: validDate("30" + result.value.substring(2, 10), format)
+						? "30" + result.value.substring(2, 10)
+						: validDate("29" + result.value.substring(2, 10), format)
+						? "29" + result.value.substring(2, 10)
+						: validDate("28" + result.value.substring(2, 10), format)
+						? "28" + result.value.substring(2, 10)
+						: result.value
+				)
+			break
+		case "mm/dd/YYYY":
+			if (!validDate(result.value, format))
+				result = result.replace(
+					0,
+					10,
+					validDate(result.value.substring(0, 3) + "31" + result.value.substring(5, 10), format)
+						? result.value.substring(0, 3) + "31" + result.value.substring(5, 10)
+						: validDate(result.value.substring(0, 3) + "30" + result.value.substring(5, 10), format)
+						? result.value.substring(0, 3) + "30" + result.value.substring(5, 10)
+						: validDate(result.value.substring(0, 3) + "29" + result.value.substring(5, 10), format)
+						? result.value.substring(0, 3) + "29" + result.value.substring(5, 10)
+						: validDate(result.value.substring(0, 3) + "28" + result.value.substring(5, 10), format)
+						? result.value.substring(0, 3) + "28" + result.value.substring(5, 10)
+						: result.value
+				)
+			break
+		default:
+			if (unformated.value.length == 10) {
 				if (!validDate(result.value))
 					result = result.replace(
 						0,
@@ -118,9 +118,10 @@ export function formatDate(unformated: StateEditor, format?: DateFormat | isoly.
 							: result.value
 					)
 				break
-		}
-		return result
+			}
 	}
+	return result
+
 	return unformated
 }
 function validDate(date: string, format?: DateFormat | isoly.Locale): boolean {
