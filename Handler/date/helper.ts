@@ -18,7 +18,7 @@ export function validDay(symbol: string, state: Readonly<State>, startIndex: num
 
 export function validMonth(symbol: string, state: Readonly<State>, startIndex: number, endIndex: number): boolean {
 	if (state.value.length == startIndex)
-		return symbol <= "1"
+		return symbol == "1" || symbol == "0"
 	else if (state.value.length == endIndex) {
 		if (state.value.substr(startIndex, 1) !== "1")
 			return symbol <= "9" && symbol >= "1"
