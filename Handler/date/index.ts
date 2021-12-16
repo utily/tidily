@@ -126,9 +126,15 @@ function validDate(date: string, format?: DateFormat | isoly.Locale): boolean {
 	let day: number
 	switch (format) {
 		case "dd/mm/YYYY":
+		case "dd.mm.YYYY":
 			year = parseInt(date.substring(6, 10))
 			month = parseInt(date.substring(3, 5))
 			day = parseInt(date.substring(0, 2))
+			return year && month && day ? day > 0 && daysPerMonth(year, month) >= day : false
+		case "mm/dd/YYYY":
+			year = parseInt(date.substring(6, 10))
+			month = parseInt(date.substring(0, 2))
+			day = parseInt(date.substring(3, 5))
 			return year && month && day ? day > 0 && daysPerMonth(year, month) >= day : false
 		default:
 			year = parseInt(date.substring(0, 4))
