@@ -29,8 +29,8 @@ describe("date english", () => {
 		expect(result).toMatchObject({ value: "31/10/", selection: { start: 6, end: 6 } })
 	})
 	it("only numbers are allowed in year", () => {
-		const result = Action.apply(handler, { value: "30/10/202", selection: { start: 9, end: 9 } }, { key: "1" })
-		expect(result).toMatchObject({ value: "30/10/2021", selection: { start: 10, end: 10 } })
+		const result = Action.apply(handler, { value: "30/10/202", selection: { start: 9, end: 9 } }, { key: "0" })
+		expect(result).toMatchObject({ value: "30/10/2020", selection: { start: 10, end: 10 } })
 	})
 
 	it("date test end of months", () => {
