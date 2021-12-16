@@ -70,7 +70,7 @@ export function validFormat(symbol: string, state: Readonly<State>, format?: Dat
 				validDay(symbol, state, 8, 9) ||
 				validSymbol(symbol, state, 4, 7, "-") ||
 				validMonth(symbol, state, 5, 6) ||
-				validYear(symbol, state, 0, 3)
+				validYear(symbol, state, 0, 4)
 			)
 	}
 }

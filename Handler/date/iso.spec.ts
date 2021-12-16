@@ -5,6 +5,10 @@ import { get } from "../index"
 describe("date iso", () => {
 	const handler = get("date") as Formatter
 	it("only splitter is allowed in fifth digit", () => {
+		const result = Action.apply(handler, { value: "202", selection: { start: 3, end: 3 } }, { key: "1" })
+		expect(result).toMatchObject({ value: "2021", selection: { start: 4, end: 4 } })
+	})
+	it("only splitter is allowed in fifth digit", () => {
 		const result = Action.apply(handler, { value: "2021", selection: { start: 4, end: 4 } }, { key: "-" })
 		expect(result).toMatchObject({ value: "2021-", selection: { start: 5, end: 5 } })
 	})

@@ -130,18 +130,18 @@ function validDate(date: string, format?: DateFormat | isoly.Locale): boolean {
 			year = parseInt(date.substring(6, 10))
 			month = parseInt(date.substring(3, 5))
 			day = parseInt(date.substring(0, 2))
-			break
+			return year && month && day ? day > 0 && daysPerMonth(year, month) >= day : false
 		case "mm/dd/YYYY":
 			year = parseInt(date.substring(6, 10))
 			month = parseInt(date.substring(0, 2))
 			day = parseInt(date.substring(3, 5))
-			break
+			return year && month && day ? day > 0 && daysPerMonth(year, month) >= day : false
 		default:
 			year = parseInt(date.substring(0, 4))
 			month = parseInt(date.substring(5, 7))
 			day = parseInt(date.substring(8, 10))
+			return year && month && day ? day > 0 && daysPerMonth(year, month) >= day : false
 	}
-	return year && month && day ? day > 0 && daysPerMonth(year, month) >= day : false
 }
 function daysPerMonth(year: number, month: number): 28 | 29 | 30 | 31 {
 	let result: 28 | 29 | 30 | 31
