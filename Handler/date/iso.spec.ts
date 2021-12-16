@@ -67,8 +67,8 @@ describe("date iso", () => {
 			value: "2021-11-30",
 			selection: { start: 10, end: 10 },
 		})
-		expect(Action.apply(handler, { value: "2021-12-3", selection: { start: 9, end: 9 } }, { key: "1" })).toMatchObject({
-			value: "2021-12-31",
+		expect(Action.apply(handler, { value: "2021-12-0", selection: { start: 9, end: 9 } }, { key: "1" })).toMatchObject({
+			value: "2021-12-01",
 			selection: { start: 10, end: 10 },
 		})
 	})

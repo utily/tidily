@@ -66,7 +66,7 @@ class Handler implements Converter<string>, Formatter {
 }
 add("date", (argument?: any[]) => new Handler(argument && argument.length > 0 ? argument[0] : undefined))
 export function formatDate(unformated: StateEditor, format?: DateFormat | isoly.Locale): StateEditor {
-	if (unformated.selection.start >= 9) {
+	if (unformated.selection.start >= 10) {
 		let result = unformated
 		switch (format) {
 			case "dd/mm/YYYY":
