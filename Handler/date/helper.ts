@@ -44,11 +44,25 @@ export function validSymbol(
 
 export function validFormat(symbol: string, state: Readonly<State>, format?: DateFormat | isoly.Locale): boolean {
 	switch (format) {
-		case "DD/MM/YYYY":
+		case "dd/mm/YYYY":
 			return (
 				validDay(symbol, state, 0, 1) ||
 				validSymbol(symbol, state, 2, 5, "/") ||
 				validMonth(symbol, state, 3, 4) ||
+				validYear(symbol, state, 6, 10)
+			)
+		case "dd.mm.YYYY":
+			return (
+				validDay(symbol, state, 0, 1) ||
+				validSymbol(symbol, state, 2, 5, ".") ||
+				validMonth(symbol, state, 3, 4) ||
+				validYear(symbol, state, 6, 10)
+			)
+		case "mm/dd/YYYY":
+			return (
+				validDay(symbol, state, 3, 4) ||
+				validSymbol(symbol, state, 2, 5, "/") ||
+				validMonth(symbol, state, 0, 1) ||
 				validYear(symbol, state, 6, 10)
 			)
 		default:

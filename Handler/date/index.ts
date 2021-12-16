@@ -22,9 +22,9 @@ class Handler implements Converter<string>, Formatter {
 	format(unformated: StateEditor): Readonly<State> & Settings {
 		let result: Readonly<State> & Settings
 		switch (this.formatting) {
-			case "DD/MM/YYYY":
+			case "dd/mm/YYYY":
 				result = {
-					...formatDate(unformated, "DD/MM/YYYY"),
+					...formatDate(unformated, "dd/mm/YYYY"),
 					type: "text",
 					length: [0, 10],
 					pattern: /^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$/,
@@ -45,14 +45,14 @@ class Handler implements Converter<string>, Formatter {
 		return formated
 	}
 	allowed(symbol: string, state: Readonly<State>): boolean {
-		return validFormat(symbol, state, this.formatting ?? "YYYY-MM-DD")
+		return validFormat(symbol, state, this.formatting ?? "YYYY-mm-dd")
 	}
 }
 add("date", (argument?: any[]) => new Handler(argument && argument.length > 0 ? argument[0] : undefined))
 export function formatDate(unformated: StateEditor, format?: DateFormat | isoly.Locale): StateEditor {
 	let result = unformated
 	switch (format) {
-		case "DD/MM/YYYY":
+		case "dd/mm/YYYY":
 			if (!validDate(result.value, format))
 				result = result.replace(
 					0,
@@ -92,7 +92,7 @@ function validDate(date: string, format?: DateFormat | isoly.Locale): boolean {
 	let month: number
 	let day: number
 	switch (format) {
-		case "DD/MM/YYYY":
+		case "dd/mm/YYYY":
 			year = parseInt(date.substring(6, 10))
 			month = parseInt(date.substring(3, 5))
 			day = parseInt(date.substring(0, 2))

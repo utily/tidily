@@ -3,7 +3,7 @@ import { Formatter } from "../../Formatter"
 import { get } from "../index"
 
 describe("date english", () => {
-	const handler = get("date", "DD/MM/YYYY") as Formatter
+	const handler = get("date", "en-GB") as Formatter
 	it("first digit of day must be smaller than 4", () => {
 		const result = Action.apply(handler, { value: "", selection: { start: 0, end: 0 } }, { key: "3" })
 		expect(result).toMatchObject({ value: "3", selection: { start: 1, end: 1 } })
