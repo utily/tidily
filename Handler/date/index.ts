@@ -22,9 +22,10 @@ class Handler implements Converter<string>, Formatter {
 	toString(data: isoly.Date | any): string {
 		return typeof data != "string" ? "" : isoly.Date.is(data) ? isoly.Date.localize(data, this.locale) : data
 	}
-	fromString(value: string): isoly.Date | undefined {
+	fromString(value: string, locale?: isoly.Locale): isoly.Date | undefined {
 		let result: isoly.Date | undefined
-		switch (this.formatting) {
+		const format: DateFormat = DateFormat.fromLocale(locale)
+		switch (format) {
 			case "dd/mm/YYYY":
 			case "dd.mm.YYYY":
 				result = `${value.substring(6, 10)}-${value.substring(3, 5)}-${value.substring(0, 2)}`
