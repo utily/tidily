@@ -10,11 +10,17 @@ import { validFormat } from "./helper"
 
 class Handler implements Converter<string>, Formatter {
 	formatting?: DateFormat
+	locale: isoly.Locale | undefined
 	constructor(formatting?: DateFormat | isoly.Locale) {
 		this.formatting = DateFormat.is(formatting) ? formatting : DateFormat.fromLocale(formatting)
+		this.locale = isoly.Locale.is(this.locale)
+			? this.locale
+			: DateFormat.is(formatting)
+			? DateFormat.toLocale(formatting)
+			: undefined
 	}
 	toString(data: isoly.Date | any): string {
-		return typeof data != "string" ? "" : isoly.Date.is(data) ? isoly.Date.localize(data, this.formatting) : data
+		return typeof data != "string" ? "" : isoly.Date.is(data) ? isoly.Date.localize(data, this.locale) : data
 	}
 	fromString(value: string): isoly.Date | undefined {
 		let result: isoly.Date | undefined

@@ -2,7 +2,7 @@ import * as isoly from "isoly"
 export type DateFormat = "YYYY-mm-dd" | "mm/dd/YYYY" | "dd/mm/YYYY" | "dd.mm.YYYY"
 
 export namespace DateFormat {
-	export function fromLocale(locale: DateFormat | isoly.Locale | undefined): DateFormat {
+	export function fromLocale(locale: isoly.Locale | undefined): DateFormat {
 		let result: DateFormat
 		switch (locale) {
 			case "en-GB":
@@ -18,6 +18,24 @@ export namespace DateFormat {
 				break
 			default:
 				result = "YYYY-mm-dd"
+				break
+		}
+		return result
+	}
+	export function toLocale(format: DateFormat | undefined): isoly.Locale {
+		let result: isoly.Locale
+		switch (format) {
+			case "dd/mm/YYYY":
+				result = "en-GB"
+				break
+			case "mm/dd/YYYY":
+				result = "en-US"
+				break
+			case "dd.mm.YYYY":
+				result = "de-DE"
+				break
+			default:
+				result = "sv-SE"
 				break
 		}
 		return result
