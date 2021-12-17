@@ -16,8 +16,22 @@ class Handler implements Converter<string>, Formatter {
 	toString(data: isoly.Date | any): string {
 		return typeof data != "string" ? "" : isoly.Date.is(data) ? isoly.Date.localize(data, this.formatting) : data
 	}
-	fromString(value: string): isoly.Date | undefined {
-		return isoly.Date.is(value) ? value : undefined
+	fromString(value: string, locale?: isoly.Locale): isoly.Date | undefined {
+		let result: isoly.Date | undefined
+		const format: DateFormat = DateFormat.fromLocale(locale)
+		switch (format) {
+			case "dd/mm/YYYY":
+			case "dd.mm.YYYY":
+				result = `${value.substring(6, 10)}-${value.substring(3, 5)}-${value.substring(0, 2)}`
+				break
+			case "mm/dd/YYYY":
+				result = `${value.substring(6, 10)}-${value.substring(0, 2)}-${value.substring(3, 5)}`
+				break
+			default:
+				result = value
+				break
+		}
+		return isoly.Date.is(result) ? result : undefined
 	}
 	format(unformated: StateEditor): Readonly<State> & Settings {
 		let result: Readonly<State> & Settings
