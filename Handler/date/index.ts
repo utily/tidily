@@ -13,8 +13,8 @@ class Handler implements Converter<string>, Formatter {
 	locale: isoly.Locale | undefined
 	constructor(formatting?: DateFormat | isoly.Locale) {
 		this.formatting = DateFormat.is(formatting) ? formatting : DateFormat.fromLocale(formatting)
-		this.locale = isoly.Locale.is(formatting)
-			? formatting
+		this.locale = isoly.Locale.is(this.locale)
+			? this.locale
 			: DateFormat.is(formatting)
 			? DateFormat.toLocale(formatting)
 			: undefined
