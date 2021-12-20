@@ -10,7 +10,7 @@ describe("date english", () => {
 	})
 	it("second digit of day must be 0 or 1 if first digit is 3", () => {
 		const result = Action.apply(handler, { value: "3", selection: { start: 1, end: 1 } }, { key: "1" })
-		expect(result).toMatchObject({ value: "31", selection: { start: 2, end: 2 } })
+		expect(result).toMatchObject({ value: "31/", selection: { start: 3, end: 3 } })
 	})
 	it("only splitter is allowed in third digit", () => {
 		const result = Action.apply(handler, { value: "31", selection: { start: 2, end: 2 } }, { key: "/" })
@@ -22,7 +22,7 @@ describe("date english", () => {
 	})
 	it("second digit of month must be smaller than 3", () => {
 		const result = Action.apply(handler, { value: "30/1", selection: { start: 4, end: 4 } }, { key: "2" })
-		expect(result).toMatchObject({ value: "30/12", selection: { start: 5, end: 5 } })
+		expect(result).toMatchObject({ value: "30/12/", selection: { start: 6, end: 6 } })
 	})
 	it("only splitter is allowed in sixth digit", () => {
 		const result = Action.apply(handler, { value: "31/10", selection: { start: 5, end: 5 } }, { key: "/" })

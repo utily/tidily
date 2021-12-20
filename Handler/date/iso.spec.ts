@@ -6,7 +6,7 @@ describe("date iso", () => {
 	const handler = get("date") as Formatter
 	it("only splitter is allowed in fifth digit", () => {
 		const result = Action.apply(handler, { value: "202", selection: { start: 3, end: 3 } }, { key: "1" })
-		expect(result).toMatchObject({ value: "2021", selection: { start: 4, end: 4 } })
+		expect(result).toMatchObject({ value: "2021-", selection: { start: 5, end: 5 } })
 	})
 	it("only splitter is allowed in fifth digit", () => {
 		const result = Action.apply(handler, { value: "2021", selection: { start: 4, end: 4 } }, { key: "-" })
@@ -18,7 +18,7 @@ describe("date iso", () => {
 	})
 	it("the first digit of day should be smaller than 4", () => {
 		const result = Action.apply(handler, { value: "2020-0", selection: { start: 6, end: 6 } }, { key: "3" })
-		expect(result).toMatchObject({ value: "2020-03", selection: { start: 7, end: 7 } })
+		expect(result).toMatchObject({ value: "2020-03-", selection: { start: 8, end: 8 } })
 	})
 	it("date test end of months - too big day", () => {
 		expect(Action.apply(handler, { value: "2021-01-", selection: { start: 8, end: 8 } }, { key: "1" })).toMatchObject({
