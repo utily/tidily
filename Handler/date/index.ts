@@ -207,21 +207,21 @@ function autoDivider(result: StateEditor, format?: DateFormat | isoly.Locale) {
 	switch (format) {
 		case "mm/dd/YYYY":
 		case "dd/mm/YYYY":
-			if (result.value.length == 2)
+			if (result.selection.start == 2 && result.selection.end == 2)
 				result = result.replace(0, 2, result.value.substring(0, 2) + "/")
-			else if (result.value.length == 5)
+			else if (result.selection.start == 5)
 				result = result.replace(0, 5, result.value.substring(0, 5) + "/")
 			break
 		case "dd.mm.YYYY":
-			if (result.value.length == 2)
+			if (result.selection.start == 2 && result.selection.end == 2)
 				result = result.replace(0, 2, result.value.substring(0, 2) + ".")
-			else if (result.value.length == 5)
+			else if (result.selection.start == 5 && result.selection.end == 5)
 				result = result.replace(0, 5, result.value.substring(0, 5) + ".")
 			break
 		default:
-			if (result.value.length == 4)
+			if (result.selection.start == 4 && result.selection.end == 4)
 				result = result.replace(0, 4, result.value.substring(0, 4) + "-")
-			else if (result.value.length == 7)
+			else if (result.selection.start == 7 && result.selection.end == 7)
 				result = result.replace(0, 7, result.value.substring(0, 7) + "-")
 	}
 	return result
