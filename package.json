@@ -52,7 +52,7 @@
     "clean": "rm -rf dist node_modules coverage"
   },
   "dependencies": {
-    "isoly": "payfunc/isoly#language-to-locale-parity"
+    "isoly": "0.0.39"
   },
   "devDependencies": {
     "@types/jest": "^26.0.0",
