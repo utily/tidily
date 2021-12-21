@@ -1,18 +1,20 @@
 import { Action } from "../../Action"
-import { Formatter } from "../../Formatter"
 import { get } from "../index"
 
 describe("date iso", () => {
-	const handler = get("date") as Formatter
+	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+	const handler = get("date")!
+	it("fromString", () => expect(handler.fromString("20211231")).toEqual("2021-12-31"))
+	it("toString", () => expect(handler.toString("2021-12-31")).toEqual("2021-12-31"))
 	it("only splitter is allowed in fifth digit", () =>
 		expect(Action.apply(handler, { value: "202", selection: { start: 3, end: 3 } }, { key: "1" })).toMatchObject({
 			value: "2021-",
 			selection: { start: 5, end: 5 },
 		}))
 	it("only splitter is allowed in fifth digit", () =>
-		expect(Action.apply(handler, { value: "2021", selection: { start: 4, end: 4 } }, { key: "-" })).toMatchObject({
-			value: "2021-",
-			selection: { start: 5, end: 5 },
+		expect(Action.apply(handler, { value: "2021", selection: { start: 4, end: 4 } }, { key: "2" })).toMatchObject({
+			value: "2021-02-",
+			selection: { start: 8, end: 8 },
 		}))
 	it("the first digit of month must be smaller than 2", () =>
 		expect(Action.apply(handler, { value: "2020-", selection: { start: 5, end: 5 } }, { key: "1" })).toMatchObject({
@@ -44,54 +46,11 @@ describe("date iso", () => {
 			value: "2020-02-29",
 			selection: { start: 10, end: 10 },
 		}))
-	it("end of month 2021-03-3 + 1", () =>
-		expect(Action.apply(handler, { value: "2021-03-3", selection: { start: 9, end: 9 } }, { key: "1" })).toMatchObject({
-			value: "2021-03-31",
-			selection: { start: 10, end: 10 },
-		}))
-	it("end of month 2021-04-3 + 1", () =>
-		expect(Action.apply(handler, { value: "2021-04-3", selection: { start: 9, end: 9 } }, { key: "1" })).toMatchObject({
-			value: "2021-04-3",
-			selection: { start: 9, end: 9 },
-		}))
-	it("end of month 2021-05-3 + 1", () =>
-		expect(Action.apply(handler, { value: "2021-05-3", selection: { start: 9, end: 9 } }, { key: "1" })).toMatchObject({
-			value: "2021-05-31",
-			selection: { start: 10, end: 10 },
-		}))
-	it("end of month 2021-06-3 + 1", () =>
-		expect(Action.apply(handler, { value: "2021-06-3", selection: { start: 9, end: 9 } }, { key: "1" })).toMatchObject({
-			value: "2021-06-3",
-			selection: { start: 9, end: 9 },
-		}))
-	it("end of month 2021-07-3 + 1", () =>
-		expect(Action.apply(handler, { value: "2021-07-3", selection: { start: 9, end: 9 } }, { key: "1" })).toMatchObject({
-			value: "2021-07-31",
-			selection: { start: 10, end: 10 },
-		}))
-	it("end of month 2021-08-3 + 1", () =>
-		expect(Action.apply(handler, { value: "2021-08-3", selection: { start: 9, end: 9 } }, { key: "1" })).toMatchObject({
-			value: "2021-08-31",
-			selection: { start: 10, end: 10 },
-		}))
-	it("end of month 2021-09-3 + 1", () =>
-		expect(Action.apply(handler, { value: "2021-09-3", selection: { start: 9, end: 9 } }, { key: "1" })).toMatchObject({
-			value: "2021-09-3",
-			selection: { start: 9, end: 9 },
-		}))
-	it("end of month 2021-10-3 + 1", () =>
-		expect(Action.apply(handler, { value: "2021-10-3", selection: { start: 9, end: 9 } }, { key: "1" })).toMatchObject({
-			value: "2021-10-31",
-			selection: { start: 10, end: 10 },
-		}))
-	it("end of month 2021-11-3 + 1", () =>
-		expect(Action.apply(handler, { value: "2021-11-3", selection: { start: 9, end: 9 } }, { key: "1" })).toMatchObject({
-			value: "2021-11-3",
-			selection: { start: 9, end: 9 },
-		}))
-	it("end of month 2021-12-3 + 1", () =>
-		expect(Action.apply(handler, { value: "2021-12-3", selection: { start: 9, end: 9 } }, { key: "1" })).toMatchObject({
-			value: "2021-12-31",
+	it("beyond full length", () =>
+		expect(
+			Action.apply(handler, { value: "2020-02-29", selection: { start: 10, end: 10 } }, { key: "1" })
+		).toMatchObject({
+			value: "2020-02-29",
 			selection: { start: 10, end: 10 },
 		}))
 })

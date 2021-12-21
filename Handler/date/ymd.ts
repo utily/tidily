@@ -36,9 +36,6 @@ class Handler extends Base {
 			pattern: new RegExp(["^\\d{4}", "(0[1-9]|1[012])", "(0[1-9]|[12][0-9]|3[01])$"].join(this.seperator)),
 		}
 	}
-	unformat(formated: StateEditor): Readonly<State> {
-		return formated.delete(this.seperator)
-	}
 	allowed(symbol: string, state: Readonly<State>): boolean {
 		const daysInMonth = this.daysInMonth(state.value)
 		return state.selection.start == 5 && state.value[4] == "0"
@@ -49,27 +46,7 @@ class Handler extends Base {
 			? symbol >= "1" && symbol <= "9"
 			: state.selection.start == 7 && ((state.value[6] == "2" && daysInMonth < 30) || state.value[6] == "3")
 			? symbol >= "0" && symbol <= daysInMonth.toString().substring(1)
-			: symbol >= "0" && symbol <= "9"
-		/*	
-		| position | p | range |
-		|----------|---|-------|
-		| 0        | x | 0-9   |
-		| 1        | x | 0-9   |
-		| 2        | x | 0-9   |
-		| 3        | x | 0-9   |
-		| 3        | x | 0-9   |
-		| 6        | x | 0-9   |
-		| 7        | 1-2 | 0-9   |
-		| 5        | 0 | 1-9   |
-		| 7        | 0 | 1-9   |
-		| 5        | 1 | 0-2   |
-		| 7        | 3 | 0-1   |
-*/
+			: state.selection.start < 8 && symbol >= "0" && symbol <= "9"
 	}
 }
 register("YYYY-mm-dd", () => new Handler("-"))
-/*
-20211230
-0123456789
-2021-12-30
-*/

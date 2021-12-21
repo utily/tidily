@@ -10,11 +10,7 @@ class Handler extends Base {
 		super(seperator)
 	}
 	toString(data: isoly.Date | any): string {
-		/*
-0123456789
-2021-12-30
-*/
-		return data.length == 8
+		return data.length == 10
 			? [data.substring(8, 10), data.substring(5, 7), data.substring(0, 4)].join(this.seperator)
 			: ""
 	}
@@ -24,18 +20,15 @@ class Handler extends Base {
 		return isoly.Date.is(result) ? result : undefined
 	}
 	format(unformatted: StateEditor): Readonly<State> & Settings {
-		// TODO: line 26-26
 		let result = unformatted
-		if (result.value.length > 3) {
-			result = result.insert(4, this.seperator)
-			if (result.get(5, 1) > "1")
-				result = result.insert(5, "0")
-			if (result.value.length > 6) {
-				result = result.insert(7, this.seperator)
-				if (result.get(8, 1) > this.daysInMonth(unformatted.value).toString().substring(0, 1))
-					result = result.insert(8, "0")
-			}
-		}
+		if (result.get(0, 1) > "3")
+			result = result.insert(0, "0")
+		if (result.value.length > 1)
+			result = result.insert(2, this.seperator)
+		if (result.get(3, 1) > "1")
+			result = result.insert(3, "0")
+		if (result.value.length > 4)
+			result = result.insert(5, this.seperator)
 		return {
 			...result,
 			type: "date",
@@ -43,28 +36,23 @@ class Handler extends Base {
 			pattern: new RegExp(["^(0[1-9]|[12][0-9]|3[01])", "(0[1-9]|1[012])", "\\d{4}$"].join(this.seperator)),
 		}
 	}
-	unformat(formated: StateEditor): Readonly<State> {
-		return formated.delete(this.seperator)
-	}
 	allowed(symbol: string, state: Readonly<State>): boolean {
-		// TODO: line 61-70
-		const daysInMonth = this.daysInMonth(state.value)
-		return state.selection.start == 5 && state.value[4] == "0"
+		return state.selection.start == 1 && state.value[0] == "3" // 2nd digit of day when 1st is 3
+			? symbol >= "0" && symbol <= "1"
+			: state.selection.start == 1 && state.value[0] == "0" // 2nd digit of day when 1st is 0
 			? symbol >= "1" && symbol <= "9"
-			: state.selection.start == 5 && state.value[4] == "1"
-			? symbol >= "0" && symbol <= "2"
-			: state.selection.start == 7 && state.value[6] == "0"
-			? symbol >= "1" && symbol <= "9"
-			: state.selection.start == 7 && ((state.value[6] == "2" && daysInMonth < 30) || state.value[6] == "3")
-			? symbol >= "0" && symbol <= daysInMonth.toString().substring(1)
-			: symbol >= "0" && symbol <= "9"
+			: state.selection.start == 2 // first digit of month
+			? symbol >= "0" &&
+			  symbol <= "9" &&
+			  (symbol == "0" || symbol == "1" || this.validMonth(state.value.substring(0, 2), symbol))
+			: state.selection.start == 3 // 2nd digit of month
+			? symbol >= "0" && symbol <= "9" && this.validMonth(state.value.substring(0, 2), state.value[2] + symbol)
+			: state.selection.start == 7 // last digit of year
+			? symbol >= "0" &&
+			  symbol <= "9" &&
+			  this.validMonth(state.value.substring(0, 2), state.value.substring(2, 4), state.value.substring(4, 7) + symbol)
+			: state.selection.start < 8 && symbol >= "0" && symbol <= "9"
 	}
 }
 register("dd.mm.YYYY", () => new Handler("."))
 register("dd/mm/YYYY", () => new Handler("/"))
-
-/*
-30122021
-0123456789
-30.12.2021
-*/
