@@ -3,32 +3,34 @@ import { DateFormat } from "../../DateFormat"
 import { State } from "../../State"
 
 export function validDay(symbol: string, state: Readonly<State>, startIndex: number, endIndex: number): boolean {
+	let result = false
 	if (state.value.length == startIndex)
-		return symbol <= "3" && symbol >= "0"
+		result = symbol <= "3" && symbol >= "0"
 	else if (state.value.length == endIndex) {
 		if (
 			state.value.substring(startIndex, startIndex + 1) == "2" ||
 			state.value.substring(startIndex, startIndex + 1) == "1"
 		)
-			return symbol <= "9" && symbol >= "0"
+			result = symbol <= "9" && symbol >= "0"
 		else if (state.value.substring(startIndex, startIndex + 1) == "0")
-			return symbol <= "9" && symbol >= "1"
+			result = symbol <= "9" && symbol >= "1"
 		else
-			return symbol == "1" || symbol == "0"
+			result = symbol == "1" || symbol == "0"
 	}
-	return false
+	return result
 }
 
 export function validMonth(symbol: string, state: Readonly<State>, startIndex: number, endIndex: number): boolean {
+	let result = false
 	if (state.value.length == startIndex)
-		return symbol == "1" || symbol == "0"
+		result = symbol == "1" || symbol == "0"
 	else if (state.value.length == endIndex) {
 		if (state.value.substring(startIndex, startIndex + 1) != "1")
-			return symbol <= "9" && symbol >= "1"
+			result = symbol <= "9" && symbol >= "1"
 		else
-			return symbol < "3" && symbol >= "0"
+			result = symbol < "3" && symbol >= "0"
 	}
-	return false
+	return result
 }
 
 export function validYear(symbol: string, state: Readonly<State>, startIndex: number, endIndex: number): boolean {
@@ -46,34 +48,36 @@ export function validSymbol(
 }
 
 export function validFormat(symbol: string, state: Readonly<State>, format?: DateFormat | isoly.Locale): boolean {
+	let result: boolean
 	switch (format) {
 		case "dd/mm/YYYY":
-			return (
+			result =
 				validDay(symbol, state, 0, 1) ||
 				validSymbol(symbol, state, 2, 5, "/") ||
 				validMonth(symbol, state, 3, 4) ||
 				validYear(symbol, state, 6, 10)
-			)
+			break
 		case "dd.mm.YYYY":
-			return (
+			result =
 				validDay(symbol, state, 0, 1) ||
 				validSymbol(symbol, state, 2, 5, ".") ||
 				validMonth(symbol, state, 3, 4) ||
 				validYear(symbol, state, 6, 10)
-			)
+			break
 		case "mm/dd/YYYY":
-			return (
+			result =
 				validDay(symbol, state, 3, 4) ||
 				validSymbol(symbol, state, 2, 5, "/") ||
 				validMonth(symbol, state, 0, 1) ||
 				validYear(symbol, state, 6, 10)
-			)
+			break
 		default:
-			return (
+			result =
 				validDay(symbol, state, 8, 9) ||
 				validSymbol(symbol, state, 4, 7, "-") ||
 				validMonth(symbol, state, 5, 6) ||
 				validYear(symbol, state, 0, 4)
-			)
+			break
 	}
+	return result
 }
