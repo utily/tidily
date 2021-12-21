@@ -147,24 +147,29 @@ function validDate(date: string, format?: DateFormat | isoly.Locale): boolean {
 	let year: number
 	let month: number
 	let day: number
+	let result: boolean
 	switch (format) {
 		case "dd/mm/YYYY":
 		case "dd.mm.YYYY":
 			year = parseInt(date.substring(6, 10))
 			month = parseInt(date.substring(3, 5))
 			day = parseInt(date.substring(0, 2))
-			return year && month && day ? day > 0 && daysPerMonth(year, month) >= day : false
+			result = year && month && day ? day > 0 && daysPerMonth(year, month) >= day : false
+			break
 		case "mm/dd/YYYY":
 			year = parseInt(date.substring(6, 10))
 			month = parseInt(date.substring(0, 2))
 			day = parseInt(date.substring(3, 5))
-			return year && month && day ? day > 0 && daysPerMonth(year, month) >= day : false
+			result = year && month && day ? day > 0 && daysPerMonth(year, month) >= day : false
+			break
 		default:
 			year = parseInt(date.substring(0, 4))
 			month = parseInt(date.substring(5, 7))
 			day = parseInt(date.substring(8, 10))
-			return year && month && day ? day > 0 && daysPerMonth(year, month) >= day : false
+			result = year && month && day ? day > 0 && daysPerMonth(year, month) >= day : false
+			break
 	}
+	return result
 }
 function daysPerMonth(year: number, month: number): 28 | 29 | 30 | 31 {
 	let result: 28 | 29 | 30 | 31
