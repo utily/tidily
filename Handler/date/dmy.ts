@@ -56,3 +56,4 @@ class Handler extends Base {
 }
 register("dd.mm.YYYY", () => new Handler("."))
 register("dd/mm/YYYY", () => new Handler("/"))
+register("dd-mm-YYYY", () => new Handler("-"))
