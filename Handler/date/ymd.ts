@@ -31,7 +31,7 @@ class Handler extends Base {
 		}
 		return {
 			...result,
-			type: "date",
+			type: "text",
 			length: [0, 10],
 			pattern: new RegExp(["^\\d{4}", "(0[1-9]|1[012])", "(0[1-9]|[12][0-9]|3[01])$"].join(this.seperator)),
 		}
