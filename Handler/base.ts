@@ -22,7 +22,10 @@ export function get(
 	country?: isoly.CountryCode.Alpha2
 ): (Converter<string> & Formatter) | undefined
 export function get(type: "price", currency: isoly.Currency): (Converter<number> & Formatter) | undefined
-export function get<T>(type: "date", format?: DateFormat | isoly.Locale): (Converter<Date> & Formatter) | undefined
+export function get<T>(
+	type: "date",
+	format?: DateFormat | isoly.Locale
+): (Converter<isoly.Date> & Formatter) | undefined
 export function get<T>(type: Type, ...argument: any[]): (Converter<T> & Formatter) | undefined
 export function get<T>(type: Type, ...argument: any[]): (Converter<T> & Formatter) | undefined {
 	const create = handlers[type]
