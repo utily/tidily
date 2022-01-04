@@ -1,11 +1,11 @@
 import * as isoly from "isoly"
 import { Converter } from "../Converter"
+import { DateFormat } from "../DateFormat"
 import { Formatter } from "../Formatter"
 import { Settings } from "../Settings"
 import { State } from "../State"
 import { StateEditor } from "../StateEditor"
 import { add } from "./base"
-import { formatDate } from "./date"
 
 class Handler implements Converter<string>, Formatter {
 	toString(data: isoly.DateTime | any): string {
@@ -63,3 +63,113 @@ class Handler implements Converter<string>, Formatter {
 	}
 }
 add("date-time", () => new Handler())
+
+export function formatDate(unformated: StateEditor, format?: DateFormat | isoly.Locale): StateEditor {
+	let result = unformated
+	switch (format) {
+		case "dd/mm/YYYY":
+		case "dd.mm.YYYY":
+			if (!validDate(result.value, format))
+				result = result.replace(
+					0,
+					10,
+					validDate("31" + result.value.substring(2, 10), format)
+						? "31" + result.value.substring(2, 10)
+						: validDate("30" + result.value.substring(2, 10), format)
+						? "30" + result.value.substring(2, 10)
+						: validDate("29" + result.value.substring(2, 10), format)
+						? "29" + result.value.substring(2, 10)
+						: validDate("28" + result.value.substring(2, 10), format)
+						? "28" + result.value.substring(2, 10)
+						: result.value
+				)
+
+			break
+		case "mm/dd/YYYY":
+			if (!validDate(result.value, format))
+				result = result.replace(
+					0,
+					10,
+					validDate(result.value.substring(0, 3) + "31" + result.value.substring(5, 10), format)
+						? result.value.substring(0, 3) + "31" + result.value.substring(5, 10)
+						: validDate(result.value.substring(0, 3) + "30" + result.value.substring(5, 10), format)
+						? result.value.substring(0, 3) + "30" + result.value.substring(5, 10)
+						: validDate(result.value.substring(0, 3) + "29" + result.value.substring(5, 10), format)
+						? result.value.substring(0, 3) + "29" + result.value.substring(5, 10)
+						: validDate(result.value.substring(0, 3) + "28" + result.value.substring(5, 10), format)
+						? result.value.substring(0, 3) + "28" + result.value.substring(5, 10)
+						: result.value
+				)
+
+			break
+		default:
+			if (unformated.value.length == 10) {
+				if (!validDate(result.value)) {
+					result = result.replace(
+						0,
+						10,
+						validDate(result.value.substring(0, 8) + "31")
+							? result.value.substring(0, 8) + "31"
+							: validDate(result.value.substring(0, 8) + "30")
+							? result.value.substring(0, 8) + "30"
+							: validDate(result.value.substring(0, 8) + "29")
+							? result.value.substring(0, 8) + "29"
+							: validDate(result.value.substring(0, 8) + "28")
+							? result.value.substring(0, 8) + "28"
+							: result.value
+					)
+					break
+				}
+				return unformated
+			}
+	}
+	return result
+}
+function validDate(date: string, format?: DateFormat | isoly.Locale): boolean {
+	let year: number
+	let month: number
+	let day: number
+	switch (format) {
+		case "dd/mm/YYYY":
+		case "dd.mm.YYYY":
+			year = parseInt(date.substring(6, 10))
+			month = parseInt(date.substring(3, 5))
+			day = parseInt(date.substring(0, 2))
+			return year && month && day ? day > 0 && daysPerMonth(year, month) >= day : false
+		case "mm/dd/YYYY":
+			year = parseInt(date.substring(6, 10))
+			month = parseInt(date.substring(0, 2))
+			day = parseInt(date.substring(3, 5))
+			return year && month && day ? day > 0 && daysPerMonth(year, month) >= day : false
+		default:
+			year = parseInt(date.substring(0, 4))
+			month = parseInt(date.substring(5, 7))
+			day = parseInt(date.substring(8, 10))
+			return year && month && day ? day > 0 && daysPerMonth(year, month) >= day : false
+	}
+}
+function daysPerMonth(year: number, month: number): 28 | 29 | 30 | 31 {
+	let result: 28 | 29 | 30 | 31
+	switch (month) {
+		case 1:
+		case 3:
+		case 5:
+		case 7:
+		case 8:
+		case 10:
+		case 12:
+		default:
+			result = 31
+			break
+		case 4:
+		case 6:
+		case 9:
+		case 11:
+			result = 30
+			break
+		case 2:
+			result = 28
+			break
+	}
+	return result
+}
