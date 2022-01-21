@@ -13,7 +13,7 @@ class Handler implements Converter<string>, Formatter {
 		return typeof value == "string" ? value : undefined
 	}
 	format(unformated: StateEditor): Readonly<State> & Settings {
-		return { ...unformated, type: "text", autocomplete: "cc-csc", length: [3, 3], pattern: /^\d{3}$/ }
+		return { ...unformated, type: "tel", autocomplete: "cc-csc", length: [3, 3], pattern: /^\d{3}$/ }
 	}
 	unformat(formated: StateEditor): Readonly<State> {
 		return formated
