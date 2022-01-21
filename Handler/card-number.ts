@@ -14,10 +14,9 @@ class Handler implements Converter<string>, Formatter {
 	}
 	format(unformated: StateEditor): Readonly<State> & Settings {
 		const issuer = getIssuer(unformated.value)
-		const result = unformated.map((symbol, index) => {
-			// console.log(index, ": ", symbol)
-			return (index != 0 && index % 4 == 0 && index + 1 < issuer.length[0] ? " " : "") + symbol
-		})
+		const result = unformated.map(
+			(symbol, index) => (index != 0 && index % 4 == 0 && index + 1 < issuer.length[0] ? " " : "") + symbol
+		)
 		return {
 			...result,
 			type: "text",
