@@ -28,4 +28,3 @@ class Handler implements Converter<string>, Formatter {
 	}
 }
 add("text", (settings?: any) => new Handler(settings || {}))
-add("email", (settings?: any) => new Handler(settings || {}))
