@@ -23,6 +23,8 @@ export namespace Action {
 	): Readonly<State> & Readonly<Settings> {
 		let result = State.copy(formatter.unformat(StateEditor.copy(state)))
 
+		if ((state as any).autocomplete == "cc-exp" && /^\d\d \/$/g.test(state.value))
+			action?.key && (action.key = "Backspace")
 		if (action) {
 			if (action.ctrlKey || action.metaKey) {
 				if (action.key == "a")

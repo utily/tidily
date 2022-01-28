@@ -8,6 +8,12 @@ describe("card-number", () => {
 		const result = Action.apply(handler, { value: "", selection: { start: 0, end: 0 } }, { key: "1" })
 		expect(result).toMatchObject({ value: "1", selection: { start: 1, end: 1 } })
 	})
+	it("Dont format with extra space", () => {
+		let result = { value: "", selection: { start: 0, end: 0 } }
+		for (const character of "42424242")
+			result = Action.apply(handler, result, { key: character })
+		expect(result).toMatchObject({ value: "4242 4242", selection: { start: 9, end: 9 } })
+	})
 	it("key event full visa number", () => {
 		let result = { value: "", selection: { start: 0, end: 0 } }
 		for (const character of "4242424242424242")
