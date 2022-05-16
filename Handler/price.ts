@@ -13,7 +13,7 @@ class Handler implements Converter<number>, Formatter {
 	}
 	fromString(value: string): number | undefined {
 		const result = typeof value == "string" ? Number.parseFloat(value) : undefined
-		return result && !isNaN(result) ? result : undefined
+		return result != undefined && !isNaN(result) ? result : undefined
 	}
 	format(unformated: StateEditor): Readonly<State> & Settings {
 		let separator = unformated.value && unformated.value.includes(".") ? unformated.value.indexOf(".") : undefined
