@@ -6,7 +6,7 @@ export class StateEditor implements Readonly<State> {
 	readonly selection: Readonly<Selection>
 	private constructor(state: Readonly<State>) {
 		this.value = state.value
-		this.selection = { start: state.selection.start, end: state.selection.end, direction: state.selection.direction }
+		this.selection = { start: state.selection?.start, end: state.selection?.end, direction: state.selection?.direction }
 	}
 
 	get(index: number, length = 1): string {

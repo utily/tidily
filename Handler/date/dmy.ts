@@ -10,13 +10,13 @@ class Handler extends Base {
 		super(seperator)
 	}
 	toString(data: isoly.Date | any): string {
-		return data.length == 10
+		return data?.length == 10
 			? [data.substring(8, 10), data.substring(5, 7), data.substring(0, 4)].join(this.seperator)
 			: ""
 	}
 	fromString(value: string): isoly.Date | undefined {
 		const result =
-			value.length == 8 ? `${value.substring(4, 8)}-${value.substring(2, 4)}-${value.substring(0, 2)}` : undefined
+			value?.length == 8 ? `${value.substring(4, 8)}-${value.substring(2, 4)}-${value.substring(0, 2)}` : undefined
 		return isoly.Date.is(result) ? result : undefined
 	}
 	format(unformatted: StateEditor): Readonly<State> & Settings {
