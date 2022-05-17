@@ -14,7 +14,7 @@ class Handler extends Base {
 	}
 	fromString(value: string): isoly.Date | undefined {
 		const result =
-			value.length == 8 ? `${value.substring(0, 4)}-${value.substring(4, 6)}-${value.substring(6, 8)}` : undefined
+			value?.length == 8 ? `${value.substring(0, 4)}-${value.substring(4, 6)}-${value.substring(6, 8)}` : undefined
 		return isoly.Date.is(result) ? result : undefined
 	}
 	format(unformatted: StateEditor): Readonly<State> & Settings {

@@ -10,7 +10,7 @@ class Handler extends Base {
 		super(seperator)
 	}
 	toString(data: isoly.Date | any): string {
-		return data.length == 10
+		return data?.length == 10
 			? [data.substring(5, 7), data.substring(8, 10), data.substring(0, 4)].join(this.seperator)
 			: ""
 	}
