@@ -52,7 +52,7 @@
     "clean": "rm -rf dist node_modules coverage"
   },
   "dependencies": {
-    "isoly": "0.0.39"
+    "isoly": "0.1.28"
   },
   "devDependencies": {
     "@types/jest": "^26.0.0",
