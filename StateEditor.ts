@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-this-alias */
 import { Selection } from "./Selection"
 import { State } from "./State"
 
@@ -83,7 +84,6 @@ export class StateEditor implements Readonly<State> {
 		return this.value.length >= end ? this.delete(end, this.value.length) : this
 	}
 	pad(length: number, padding: string, index: number): StateEditor {
-		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		let result: StateEditor = this
 		while (length > result.value.length + padding.length)
 			result = result.insert(index, padding)
@@ -98,7 +98,6 @@ export class StateEditor implements Readonly<State> {
 		return this.pad(length, padding, 0)
 	}
 	map(mapping: (symbol: string, index: number) => string): StateEditor {
-		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		let result: StateEditor = this
 		let j = 0
 		for (let i = 0; i < this.value.length; i++) {
