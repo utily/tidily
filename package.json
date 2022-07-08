@@ -1,8 +1,8 @@
 {
 	"name": "tidily",
-	"version": "0.0.51",
+	"version": "0.0.52",
 	"description": "Library for formatting strings both during input and also for pure presentation.",
-  "author": "Utily Contributors",
+	"author": "Utily Contributors",
 	"license": "MIT",
 	"repository": "https://github.com/utily/tidily",
 	"bugs": {
@@ -53,10 +53,9 @@
 		"prepare": "npm run build",
 		"clean": "rimraf dist node_modules coverage"
 	},
-	  "dependencies": {
+	"dependencies": {
 		"isoly": "0.0.39"
 	},
-
 	"devDependencies": {
 		"@types/jest": "^28.1.4",
 		"@typescript-eslint/eslint-plugin": "5.30.5",
