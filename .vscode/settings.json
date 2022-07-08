@@ -2,6 +2,7 @@
 	"files.exclude": {
 		".*": true,
 		"*.json": true,
+		"CODEOWNERS": true,
 		"dist": true,
 		"README.md": true,
 		"LICENSE": true,
@@ -9,6 +10,7 @@
 		"node_modules": true,
 		"*.code-workspace": true
 	},
+	"files.insertFinalNewline": true,
 	"editor.tabSize": 2,
 	"editor.detectIndentation": false,
 	"editor.insertSpaces": false,
@@ -22,5 +24,22 @@
 	"eslint.lintTask.enable": true,
 	"javascript.format.enable": false,
 	"typescript.format.enable": false,
-	"files.insertFinalNewline": true
+	"cSpell.words": [
+		"authly",
+		"cloudly",
+		"cryptly",
+		"flagly",
+		"gracely",
+		"isoly",
+		"langly",
+		"paramly",
+		"persistly",
+		"selectivly",
+		"servly",
+		"servly-azure",
+		"smoothly",
+		"tidily",
+		"transactly",
+		"uply"
+	]
 }
