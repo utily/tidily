@@ -29,6 +29,7 @@ export class StateEditor implements Readonly<State> {
 		let result: StateEditor | undefined
 		if (typeof start == "string" && typeof end == "string") {
 			let s: number
+			// eslint-disable-next-line @typescript-eslint/no-this-alias
 			result = this
 			while ((s = result.value.search(start)) > -1)
 				result = result.replace(s, s + start.length, end)
@@ -69,9 +70,11 @@ export class StateEditor implements Readonly<State> {
 	delete(start: number | string, end?: number): StateEditor {
 		let result: StateEditor
 		if (!this.value)
+			// eslint-disable-next-line @typescript-eslint/no-this-alias
 			result = this
 		else if (typeof start == "string") {
 			let s: number
+			// eslint-disable-next-line @typescript-eslint/no-this-alias
 			result = this
 			while ((s = result.value.search(start)) > -1)
 				result = result.delete(s, s + start.length)
