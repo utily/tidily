@@ -6,15 +6,15 @@ import { Settings } from "../../Settings"
 import { State } from "../../State"
 import { StateEditor } from "../../StateEditor"
 import { add } from "../base"
-import { Seperator } from "./Seperator"
+import { Separator } from "./Separator"
 
 export abstract class Base implements Converter<string>, Formatter {
-	constructor(readonly seperator: Seperator) {}
+	constructor(readonly separator: Separator) {}
 	abstract toString(data: isoly.Date | any): string
 	abstract fromString(value: string): isoly.Date | undefined
 	abstract format(unformatted: StateEditor): Readonly<State> & Settings
-	unformat(formated: StateEditor): Readonly<State> {
-		return formated.delete(this.seperator)
+	unformat(formatted: StateEditor): Readonly<State> {
+		return formatted.delete(this.separator)
 	}
 	abstract allowed(symbol: string, state: Readonly<State>): boolean
 	protected daysInMonth(value: string): number {

@@ -3,11 +3,11 @@ import { Settings } from "../../Settings"
 import { State } from "../../State"
 import { StateEditor } from "../../StateEditor"
 import { Base, register } from "./Base"
-import { Seperator } from "./Seperator"
+import { Separator } from "./Separator"
 
 class Handler extends Base {
-	constructor(seperator: Seperator) {
-		super(seperator)
+	constructor(separator: Separator) {
+		super(separator)
 	}
 	toString(data: isoly.Date | any): string {
 		return typeof data != "string" ? "" : data
@@ -20,11 +20,11 @@ class Handler extends Base {
 	format(unformatted: StateEditor): Readonly<State> & Settings {
 		let result = unformatted
 		if (result.value.length > 3) {
-			result = result.insert(4, this.seperator)
+			result = result.insert(4, this.separator)
 			if (result.get(5, 1) > "1")
 				result = result.insert(5, "0")
 			if (result.value.length > 6) {
-				result = result.insert(7, this.seperator)
+				result = result.insert(7, this.separator)
 				if (result.get(8, 1) > this.daysInMonth(unformatted.value).toString().substring(0, 1))
 					result = result.insert(8, "0")
 			}
@@ -33,7 +33,7 @@ class Handler extends Base {
 			...result,
 			type: "text",
 			length: [0, 10],
-			pattern: new RegExp(["^\\d{4}", "(0[1-9]|1[012])", "(0[1-9]|[12][0-9]|3[01])$"].join(this.seperator)),
+			pattern: new RegExp(["^\\d{4}", "(0[1-9]|1[012])", "(0[1-9]|[12][0-9]|3[01])$"].join(this.separator)),
 		}
 	}
 	allowed(symbol: string, state: Readonly<State>): boolean {
