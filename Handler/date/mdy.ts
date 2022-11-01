@@ -3,15 +3,15 @@ import { Settings } from "../../Settings"
 import { State } from "../../State"
 import { StateEditor } from "../../StateEditor"
 import { Base, register } from "./Base"
-import { Seperator } from "./Seperator"
+import { Separator } from "./Separator"
 
 class Handler extends Base {
-	constructor(seperator: Seperator) {
-		super(seperator)
+	constructor(separator: Separator) {
+		super(separator)
 	}
 	toString(data: isoly.Date | any): string {
 		return data?.length == 10
-			? [data.substring(5, 7), data.substring(8, 10), data.substring(0, 4)].join(this.seperator)
+			? [data.substring(5, 7), data.substring(8, 10), data.substring(0, 4)].join(this.separator)
 			: ""
 	}
 	fromString(value: string): isoly.Date | undefined {
@@ -24,16 +24,16 @@ class Handler extends Base {
 		if (result.get(0, 1) > "1")
 			result = result.insert(0, "0")
 		if (result.value.length > 1)
-			result = result.insert(2, this.seperator)
+			result = result.insert(2, this.separator)
 		if (result.get(3, 1) > (result.get(0, 2) == "02" ? "2" : "3"))
 			result = result.insert(3, "0")
 		if (result.value.length > 4)
-			result = result.insert(5, this.seperator)
+			result = result.insert(5, this.separator)
 		return {
 			...result,
 			type: "text",
 			length: [0, 10],
-			pattern: new RegExp(["^(0[1-9]|1[012])", "(0[1-9]|[12][0-9]|3[01])", "\\d{4}$"].join(this.seperator)),
+			pattern: new RegExp(["^(0[1-9]|1[012])", "(0[1-9]|[12][0-9]|3[01])", "\\d{4}$"].join(this.separator)),
 		}
 	}
 	allowed(symbol: string, state: Readonly<State>): boolean {
