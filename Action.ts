@@ -1,6 +1,6 @@
 import { Direction } from "./Direction"
 import { Formatter } from "./Formatter"
-import { getAdjecentWordBreakIndex } from "./getAdjecentWordBreakIndex"
+import { getAdjacentWordBreakIndex } from "./getAdjacentWordBreakIndex"
 import { Selection } from "./Selection"
 import { Settings } from "./Settings"
 import { State } from "./State"
@@ -60,7 +60,7 @@ export namespace Action {
 	function ctrlArrow(formatter: Formatter, state: Readonly<State>, action: Action): Readonly<State> {
 		let cursorPosition = Selection.getCursor(state.selection)
 		let stalkPosition = Selection.getStalker(state.selection)
-		cursorPosition = getAdjecentWordBreakIndex(
+		cursorPosition = getAdjacentWordBreakIndex(
 			state.value,
 			cursorPosition,
 			action.key == "ArrowLeft" ? "backward" : "forward"
@@ -82,7 +82,7 @@ export namespace Action {
 	}
 	function ctrlBackspaceDelete(formatter: Formatter, state: Readonly<State>, action: Action): Readonly<State> {
 		const cursorPosition = Selection.getCursor(state.selection)
-		const adjecentIndex = getAdjecentWordBreakIndex(
+		const adjacentIndex = getAdjacentWordBreakIndex(
 			state.value,
 			cursorPosition,
 			action.key == "Backspace" ? "backward" : "forward"
@@ -92,8 +92,8 @@ export namespace Action {
 				StateEditor.copy({
 					...state,
 					selection: {
-						start: Math.min(cursorPosition, adjecentIndex),
-						end: Math.max(cursorPosition, adjecentIndex),
+						start: Math.min(cursorPosition, adjacentIndex),
+						end: Math.max(cursorPosition, adjacentIndex),
 						direction: "none",
 					},
 				})

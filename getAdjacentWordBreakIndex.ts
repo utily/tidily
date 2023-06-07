@@ -21,7 +21,7 @@ function getBackwardWordBreakIndex(str: string, index: number, wordRegex: RegExp
 	return result
 }
 
-export function getAdjecentWordBreakIndex(str: string, index: number, direction: "backward" | "forward"): number {
+export function getAdjacentWordBreakIndex(str: string, index: number, direction: "backward" | "forward"): number {
 	const wordRegex = /([\wåäöüéáúíóßðœøæñµçþ_]+|[@-]+)/gi
 	return direction == "backward"
 		? getBackwardWordBreakIndex(str, index, wordRegex)
