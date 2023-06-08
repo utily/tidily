@@ -46,4 +46,4 @@ jobs:
         with:
           node-version: 16
           cache: 'npm'
-      - run: npm audit
+      - run: npm audit --production

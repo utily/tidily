@@ -51,6 +51,12 @@ export namespace Action {
 		return formatter.format(StateEditor.copy(result))
 	}
 
+	export function paste(formatter: Formatter, state: Readonly<State>, pasted: string) {
+		const result = State.copy(formatter.unformat(StateEditor.copy(state)))
+		replace(result, pasted)
+		return formatter.format(StateEditor.copy(result))
+	}
+
 	function ctrlArrow(formatter: Formatter, state: Readonly<State>, action: Action): Readonly<State> {
 		let cursorPosition = Selection.getCursor(state.selection)
 		let stalkPosition = Selection.getStalker(state.selection)
