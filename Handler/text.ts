@@ -20,11 +20,8 @@ class Handler implements Converter<string>, Formatter {
 		return formated
 	}
 	allowed(symbol: string, state: Readonly<State>): boolean {
-		return (
-			this.settings.length == undefined ||
-			this.settings.length[1] == undefined ||
-			state.value.length < this.settings.length[1]
-		)
+		const [, maxLength] = this.settings.length ?? []
+		return maxLength == undefined || state.value.length <= maxLength
 	}
 }
 add("text", (settings?: any) => new Handler(settings || {}))

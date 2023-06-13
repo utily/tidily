@@ -39,9 +39,8 @@ const handlers: { [format in DateFormat]?: () => Converter<string> & Formatter }
 export function register(format: DateFormat, create: () => Converter<string> & Formatter) {
 	handlers[format] = create
 }
-add("date", (parameters?: any[]) => {
-	const argument = parameters && parameters.length > 0 ? parameters[0] : undefined
-	const format = DateFormat.is(argument) ? argument : DateFormat.fromLocale(argument)
+add("date", (dateFormatOrLocale: DateFormat | isoly.Locale) => {
+	const format = DateFormat.is(dateFormatOrLocale) ? dateFormatOrLocale : DateFormat.fromLocale(dateFormatOrLocale)
 	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 	const create = handlers[format] ?? handlers["YYYY-mm-dd"]! // assume that fallback format always exists
 	return create()

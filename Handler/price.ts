@@ -62,4 +62,4 @@ class Handler implements Converter<number>, Formatter {
 		return (symbol >= "0" && symbol <= "9") || (symbol == "." && !state.value.includes("."))
 	}
 }
-add("price", (argument?: any[]) => new Handler(argument && argument.length > 0 ? argument[0] : undefined))
+add("price", (argument?: isoly.Currency) => new Handler(argument))

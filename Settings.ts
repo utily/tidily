@@ -75,6 +75,7 @@ export interface Settings {
 		| "impp"
 		| "url"
 		| "photo"
+	/** minLength, maxLength */
 	readonly length?: [number | undefined, number | undefined]
 	readonly pattern?: RegExp
 	readonly classes?: string[]

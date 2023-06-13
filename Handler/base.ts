@@ -2,12 +2,13 @@ import * as isoly from "isoly"
 import { Converter } from "../Converter"
 import { DateFormat } from "../DateFormat"
 import { Formatter } from "../Formatter"
+import { Handler } from "../HandlerInterface"
 import { StateEditor } from "../StateEditor"
 import { Type } from "../Type"
 
 const handlers: { [type: string]: ((argument?: any[]) => Converter<any> & Formatter) | undefined } = {}
-export function add(type: Type, create: (argument?: any[]) => Converter<any> & Formatter): void {
-	handlers[type] = create
+export function add<T>(type: Type, create: (...argument: any[]) => Handler<T>): void {
+	handlers[type] = create as any
 }
 
 export function get(
@@ -23,10 +24,10 @@ export function get(
 ): (Converter<string> & Formatter) | undefined
 export function get(type: "price", currency: isoly.Currency): (Converter<number> & Formatter) | undefined
 export function get(type: "date", format?: DateFormat | isoly.Locale): (Converter<isoly.Date> & Formatter) | undefined
-export function get<T>(type: Type, ...argument: any[]): (Converter<T> & Formatter) | undefined
-export function get<T>(type: Type, ...argument: any[]): (Converter<T> & Formatter) | undefined {
+export function get<T>(type: Type, ...parameters: any[]): (Converter<T> & Formatter) | undefined
+export function get<T>(type: Type, ...parameters: any[]): (Converter<T> & Formatter) | undefined {
 	const create = handlers[type]
-	return create && create(argument)
+	return create && create(...parameters)
 }
 export function format(data: string, type: "card-csc" | "card-number" | "email" | "password" | "text"): string
 export function format(data: [number, number], type: "card-expires"): string

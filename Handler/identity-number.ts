@@ -35,4 +35,4 @@ class Handler implements Converter<string>, Formatter {
 		return state.value.length < 13 && symbol >= "0" && symbol <= "9"
 	}
 }
-add("identity-number", (argument?: any[]) => new Handler(argument && argument.length > 0 ? argument[0] : undefined))
+add("identity-number", (country?: isoly.CountryCode.Alpha2) => new Handler(country))

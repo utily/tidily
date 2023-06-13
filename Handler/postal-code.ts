@@ -32,4 +32,4 @@ class Handler implements Converter<string>, Formatter {
 		return state.value.length <= 5 && symbol >= "0" && symbol <= "9"
 	}
 }
-add("postal-code", (argument?: any[]) => new Handler(argument && argument.length > 0 ? argument[0] : undefined))
+add("postal-code", (argument?: isoly.CountryCode.Alpha2) => new Handler(argument))
