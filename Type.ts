@@ -4,6 +4,7 @@ export type Type =
 	| "card-number"
 	| "date"
 	| "date-time"
+	| "date-range"
 	| "divisor"
 	| "email"
 	| "identity-number"
