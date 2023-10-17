@@ -17,6 +17,12 @@ class Handler extends Base {
 			value?.length == 8 ? `${value.substring(0, 4)}-${value.substring(4, 6)}-${value.substring(6, 8)}` : undefined
 		return isoly.Date.is(result) ? result : undefined
 	}
+	private daysInMonth(value: string): number {
+		const firstOfMonth = `${value.substring(0, 4)}-${value.substring(4, 6)}-01`
+		return isoly.Date.is(firstOfMonth)
+			? +isoly.Date.lastOfMonth(`${value.substring(0, 4)}-${value.substring(4, 6)}-01`).substring(8, 10)
+			: 31
+	}
 	format(unformatted: StateEditor): Readonly<State> & Settings {
 		let result = unformatted
 		if (result.value.length > 3) {
