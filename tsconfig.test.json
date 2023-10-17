@@ -1,7 +1,9 @@
 {
 	"compilerOptions": {
-		"target": "es6",
-		"module": "commonjs",
+		"target": "ES2020",
+		"module": "ES2020",
+		"allowJs": true,
+		"esModuleInterop": true,
 		"noImplicitAny": true,
 		"removeComments": true,
 		"preserveConstEnums": true,
@@ -9,19 +11,9 @@
 		"noImplicitThis": true,
 		"strictNullChecks": true,
 		"sourceMap": true,
-		"outDir": "dist",
+		"outDir": "dist/mjs",
 		"moduleResolution": "node",
 		"resolveJsonModule": true,
-		"plugins": [
-			{
-			"name": "typescript-tslint-plugin",
-			"alwaysShowRuleFailuresAsWarnings": false,
-			"ignoreDefinitionFiles": true,
-			"configFile": "tslint.json",
-			"suppressWhileTypeErrorsPresent": false,
-			"mockTypeScriptVersion": false
-			}
-		]
 	},
 	"typeAcquisition": {
 		"enable": true
