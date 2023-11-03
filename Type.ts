@@ -5,6 +5,7 @@ export type Type =
 	| "date"
 	| "date-time"
 	| "divisor"
+	| "duration"
 	| "email"
 	| "identity-number"
 	| "password"
