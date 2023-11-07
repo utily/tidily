@@ -5,22 +5,22 @@ import { State } from "../State"
 import { StateEditor } from "../StateEditor"
 import { add } from "./base"
 
-function toDuration(hours: number): [number, number] {
+function toDuration(hours: number): { hours: number; minutes: number } {
 	const h = Math.floor(hours)
-	return [h, Math.floor((hours - h) * 60)]
+	return { hours: h, minutes: Math.floor((hours - h) * 60) }
 }
-function fromDuration(hours: number, minutes: number): number {
-	return hours + (minutes * 100) / 60
-}
+// function fromDuration(hours: number, minutes: number): number {
+// 	return hours + (minutes * 100) / 60
+// }
 
-class Handler implements Converter<number>, Formatter {
+class Handler implements Converter<{ hours: number; minutes: number }>, Formatter {
 	toString(data: number | string | any): string {
 		const duration = typeof data == "number" && toDuration(data)
-		return duration ? data[0].toString() + ":" + data[1].toString().padStart(2, "0") : ""
+		return duration ? duration.hours.toString() + ":" + duration.minutes.toString().padStart(2, "0") : ""
 	}
-	fromString(value: string): number | undefined {
+	fromString(value: string): { hours: number; minutes: number } | undefined {
 		const splitted = typeof value == "string" && value.split(":", 2).map(Number.parseInt)
-		return splitted ? fromDuration(splitted[0], splitted[1]) : undefined
+		return splitted ? { hours: splitted[0], minutes: splitted[1] } : undefined
 	}
 	format(unformatted: StateEditor): Readonly<State> & Settings {
 		const result = unformatted
