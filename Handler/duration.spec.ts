@@ -4,7 +4,7 @@ import { get } from "./index"
 
 describe("duration", () => {
 	const handler = get("duration") as Formatter
-	it("key event first key 1", () => {
+	it("Key event first key 1", () => {
 		const result = Action.apply(handler, { value: "", selection: { start: 0, end: 0 } }, { key: "1" })
 		expect(result).toMatchObject({ value: "1", selection: { start: 1, end: 1 } })
 	})
@@ -24,9 +24,14 @@ describe("duration", () => {
 		const result = Action.apply(handler, { value: "12:6", selection: { start: 4, end: 4 } }, { key: "0" })
 		expect(result).toMatchObject({ value: "12:6", selection: { start: 4, end: 4 } })
 	})
-	it("key event backspace", () => {
+	it("Key event backspace", () => {
 		let result = { value: "12:34", selection: { start: 5, end: 5 } }
 		result = Action.apply(handler, result, { key: "Backspace" })
 		expect(result).toMatchObject({ value: "12:3", selection: { start: 4, end: 4 } })
+	})
+	it("Add letter", () => {
+		let result = { value: "", selection: { start: 0, end: 0 } }
+		result = Action.apply(handler, result, { key: "f" })
+		expect(result).toMatchObject({ value: "", selection: { start: 0, end: 0 } })
 	})
 })

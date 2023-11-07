@@ -29,7 +29,7 @@ class Handler implements Converter<{ hours: number; minutes: number }>, Formatte
 	allowed(symbol: string, state: Readonly<State>): boolean {
 		const substring = state.value.slice(0, state.selection.start) + symbol + state.value.slice(state.selection.end + 1)
 		const matchResult = substring.match(/^\d*:{0,1}[0-5]{0,1}[0-9]{0,1}$/)
-		return matchResult !== null && ((symbol >= "0" && symbol <= "9") || symbol == ":")
+		return matchResult !== null
 	}
 }
 add("duration", () => new Handler())
