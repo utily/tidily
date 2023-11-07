@@ -16,7 +16,17 @@ describe("duration", () => {
 		const result = Action.apply(handler, { value: "12:", selection: { start: 3, end: 3 } }, { key: "3" })
 		expect(result).toMatchObject({ value: "12:3", selection: { start: 4, end: 4 } })
 	})
-	
-
-
+	it("Add too many minutes", () => {
+		const result = Action.apply(handler, { value: "12:23", selection: { start: 5, end: 5 } }, { key: "3" })
+		expect(result).toMatchObject({ value: "12:23", selection: { start: 5, end: 5 } })
+	})
+	it("Add 60 minutes", () => {
+		const result = Action.apply(handler, { value: "12:6", selection: { start: 4, end: 4 } }, { key: "0" })
+		expect(result).toMatchObject({ value: "12:6", selection: { start: 4, end: 4 } })
+	})
+	it("key event backspace", () => {
+		let result = { value: "12:34", selection: { start: 5, end: 5 } }
+		result = Action.apply(handler, result, { key: "Backspace" })
+		expect(result).toMatchObject({ value: "12:3", selection: { start: 4, end: 4 } })
+	})
 })
