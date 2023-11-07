@@ -9,9 +9,6 @@ function toDuration(hours: number): { hours: number; minutes: number } {
 	const h = Math.floor(hours)
 	return { hours: h, minutes: Math.floor((hours - h) * 60) }
 }
-// function fromDuration(hours: number, minutes: number): number {
-// 	return hours + (minutes * 100) / 60
-// }
 
 class Handler implements Converter<{ hours: number; minutes: number }>, Formatter {
 	toString(data: number | string | any): string {
@@ -24,13 +21,15 @@ class Handler implements Converter<{ hours: number; minutes: number }>, Formatte
 	}
 	format(unformatted: StateEditor): Readonly<State> & Settings {
 		const result = unformatted
-		return { ...result, type: "tel", pattern: /^\d*:\d\d$/ }
+		return { ...result, type: "tel", pattern: /^\d*:{0,1}[0-5]{0,1}[0-9]{0,1}$/ }
 	}
 	unformat(formatted: StateEditor): Readonly<State> {
 		return formatted
 	}
 	allowed(symbol: string, state: Readonly<State>): boolean {
-		return (symbol >= "0" && symbol <= "9") || symbol == ":"
+		const substring = state.value.slice(0, state.selection.start) + symbol + state.value.slice(state.selection.end + 1)
+		const matchResult = substring.match(/^\d*:{0,1}[0-5]{0,1}[0-9]{0,1}$/)
+		return matchResult !== null && ((symbol >= "0" && symbol <= "9") || symbol == ":")
 	}
 }
 add("duration", () => new Handler())
