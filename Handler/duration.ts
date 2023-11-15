@@ -22,7 +22,7 @@ class Handler implements Converter<{ hours: number; minutes: number }>, Formatte
 	format(unformatted: StateEditor): Readonly<State> & Settings {
 		let result = unformatted
 		if (result.value.length > 0)
-			result = result.append(" h")
+			result = result.suffix(" h")
 		return { ...result, type: "tel", pattern: /^\d*:{0,1}[0-5]{0,1}[0-9]{0,1}(\sh{0,1}){0,1}$/ }
 	}
 	unformat(formatted: StateEditor): Readonly<State> {
