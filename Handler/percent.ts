@@ -12,16 +12,16 @@ class Handler implements Converter<number>, Formatter {
 	fromString(value: string): number | undefined {
 		return typeof value != "string" || !Number.parseFloat(value) ? undefined : Number.parseFloat(value) / 100
 	}
-	format(unformated: StateEditor): Readonly<State> & Settings {
+	format(unformatted: StateEditor): Readonly<State> & Settings {
 		return {
-			...(unformated.value ? unformated.suffix(" %") : unformated),
+			...(unformatted.value ? unformatted.suffix(" %") : unformatted),
 			type: "text",
 			length: [3, undefined],
 			pattern: /^\d+(.\d)? %+$/,
 		}
 	}
-	unformat(formated: StateEditor): Readonly<State> {
-		return formated.delete(" %")
+	unformat(formatted: StateEditor): Readonly<State> {
+		return formatted.delete(" %")
 	}
 	allowed(symbol: string, state: Readonly<State>): boolean {
 		return (symbol >= "0" && symbol <= "9") || (symbol == "." && !state.value.includes("."))

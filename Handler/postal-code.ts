@@ -14,9 +14,9 @@ class Handler implements Converter<string>, Formatter {
 	fromString(value: string): string | undefined {
 		return typeof value == "string" ? value : undefined
 	}
-	format(unformated: StateEditor): Readonly<State> & Settings {
+	format(unformatted: StateEditor): Readonly<State> & Settings {
 		const result =
-			!unformated.value.includes(" ") && unformated.value.length >= 4 ? unformated.insert(3, " ") : unformated
+			!unformatted.value.includes(" ") && unformatted.value.length >= 4 ? unformatted.insert(3, " ") : unformatted
 		return {
 			...result.truncate(6),
 			type: "text",
@@ -25,8 +25,8 @@ class Handler implements Converter<string>, Formatter {
 			pattern: /^\d{3} \d{2}$/,
 		}
 	}
-	unformat(formated: StateEditor): Readonly<State> {
-		return formated.delete(" ")
+	unformat(formatted: StateEditor): Readonly<State> {
+		return formatted.delete(" ")
 	}
 	allowed(symbol: string, state: Readonly<State>): boolean {
 		return state.value.length <= 5 && symbol >= "0" && symbol <= "9"

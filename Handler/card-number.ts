@@ -12,9 +12,9 @@ class Handler implements Converter<string>, Formatter {
 	fromString(value: string): string | undefined {
 		return typeof value == "string" ? value : undefined
 	}
-	format(unformated: StateEditor): Readonly<State> & Settings {
-		const issuer = getIssuer(unformated.value)
-		const result = unformated.map(
+	format(unformatted: StateEditor): Readonly<State> & Settings {
+		const issuer = getIssuer(unformatted.value)
+		const result = unformatted.map(
 			(symbol, index) => (index != 0 && index % 4 == 0 && index + 1 < issuer.length[0] ? " " : "") + symbol
 		)
 		return {
@@ -26,8 +26,8 @@ class Handler implements Converter<string>, Formatter {
 			classes: ["issuer-" + issuer.icon],
 		}
 	}
-	unformat(formated: StateEditor): Readonly<State> {
-		return formated.delete(" ")
+	unformat(formatted: StateEditor): Readonly<State> {
+		return formatted.delete(" ")
 	}
 	allowed(symbol: string, state: Readonly<State>): boolean {
 		const issuer = getIssuer(state.value)
