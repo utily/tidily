@@ -16,16 +16,16 @@ class Handler implements Converter<[number, number]>, Formatter {
 			? [Number.parseInt(value.slice(0, 2)), Number.parseInt(value.slice(2))]
 			: undefined
 	}
-	format(unformated: StateEditor): Readonly<State> & Settings {
-		let result = unformated
-		if (unformated.value.length > 0 && !unformated.is(0, "0", "1"))
+	format(unformatted: StateEditor): Readonly<State> & Settings {
+		let result = unformatted
+		if (unformatted.value.length > 0 && !unformatted.is(0, "0", "1"))
 			result = result.prepend("0")
 		if (result.value.length > 1)
 			result = result.insert(2, " / ")
 		return { ...result, type: "tel", autocomplete: "cc-exp", length: [7, 7], pattern: /^(0[1-9]|1[012]) \/ \d\d$/ }
 	}
-	unformat(formated: StateEditor): Readonly<State> {
-		return formated.delete(" / ")
+	unformat(formatted: StateEditor): Readonly<State> {
+		return formatted.delete(" / ")
 	}
 	allowed(symbol: string, state: Readonly<State>): boolean {
 		return state.value.length < 4 && symbol >= "0" && symbol <= "9"
