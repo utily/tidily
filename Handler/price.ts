@@ -15,10 +15,10 @@ class Handler implements Converter<number>, Formatter {
 		const result = typeof value == "string" ? Number.parseFloat(value) : undefined
 		return result != undefined && !isNaN(result) ? result : undefined
 	}
-	format(unformated: StateEditor): Readonly<State> & Settings {
-		let separator = unformated.value && unformated.value.includes(".") ? unformated.value.indexOf(".") : undefined
+	format(unformatted: StateEditor): Readonly<State> & Settings {
+		let separator = unformatted.value && unformatted.value.includes(".") ? unformatted.value.indexOf(".") : undefined
 		let result =
-			unformated.value == "NaN" ? unformated.replace(0, unformated.value.length, "") : StateEditor.copy(unformated)
+			unformatted.value == "NaN" ? unformatted.replace(0, unformatted.value.length, "") : StateEditor.copy(unformatted)
 		if (separator == 0) {
 			result = result.prepend("0")
 			separator++
@@ -55,8 +55,8 @@ class Handler implements Converter<number>, Formatter {
 			pattern: new RegExp("^(\\d{0,3})( \\d{3})*(\\.\\d+)?" + (this.currency ? " " + this.currency : "") + "$"),
 		}
 	}
-	unformat(formated: StateEditor): Readonly<State> {
-		return this.currency ? formated.delete(" ").delete("" + this.currency) : formated.delete(" ")
+	unformat(formatted: StateEditor): Readonly<State> {
+		return this.currency ? formatted.delete(" ").delete("" + this.currency) : formatted.delete(" ")
 	}
 	allowed(symbol: string, state: Readonly<State>): boolean {
 		return (symbol >= "0" && symbol <= "9") || (symbol == "." && !state.value.includes("."))

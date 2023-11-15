@@ -12,11 +12,11 @@ class Handler implements Converter<string>, Formatter {
 	fromString(value: string): string | undefined {
 		return typeof value == "string" ? value : undefined
 	}
-	format(unformated: StateEditor): Readonly<State> & Settings {
-		return { ...unformated, type: "password", autocomplete: "current-password" }
+	format(unformatted: StateEditor): Readonly<State> & Settings {
+		return { ...unformatted, type: "password", autocomplete: "current-password" }
 	}
-	unformat(formated: StateEditor): Readonly<State> {
-		return formated
+	unformat(formatted: StateEditor): Readonly<State> {
+		return formatted
 	}
 	allowed(symbol: string, state: Readonly<State>): boolean {
 		return true

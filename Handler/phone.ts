@@ -13,8 +13,8 @@ class Handler implements Converter<string>, Formatter {
 	fromString(value: string): string | undefined {
 		return typeof value == "string" ? value : undefined
 	}
-	format(unformated: StateEditor): Readonly<State> & Settings {
-		let result = unformated
+	format(unformatted: StateEditor): Readonly<State> & Settings {
+		let result = unformatted
 		if (result.value.startsWith("+")) {
 			for (const country of phonePrefix)
 				if (result.value.startsWith(country.countryCode))
@@ -72,8 +72,8 @@ class Handler implements Converter<string>, Formatter {
 		}
 		return { ...result, type: "text", autocomplete: "tel" }
 	}
-	unformat(formated: StateEditor): Readonly<State> {
-		return formated.delete(" ").delete("-")
+	unformat(formatted: StateEditor): Readonly<State> {
+		return formatted.delete(" ").delete("-")
 	}
 	allowed(symbol: string, state: Readonly<State>): boolean {
 		return (

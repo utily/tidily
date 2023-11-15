@@ -14,11 +14,11 @@ class Handler implements Converter<string>, Formatter {
 	fromString(value: string): string | undefined {
 		return typeof value == "string" ? value : undefined
 	}
-	format(unformated: StateEditor): Readonly<State> & Settings {
-		let result = unformated
+	format(unformatted: StateEditor): Readonly<State> & Settings {
+		let result = unformatted
 		const year = new Date().getFullYear().toString()
-		if (unformated.value.length > 1 && unformated.get(0, 2) != "19" && unformated.get(0, 2) != "20")
-			result = result.prepend(unformated.get(0, 2) > year.substr(2, 2) ? "19" : "20")
+		if (unformatted.value.length > 1 && unformatted.get(0, 2) != "19" && unformatted.get(0, 2) != "20")
+			result = result.prepend(unformatted.get(0, 2) > year.substr(2, 2) ? "19" : "20")
 		if (result.value.length >= 8)
 			result = result.insert(8, "-")
 		return {
@@ -28,8 +28,8 @@ class Handler implements Converter<string>, Formatter {
 			pattern: /^\d{6,8}-\d{4}$/,
 		}
 	}
-	unformat(formated: StateEditor): Readonly<State> {
-		return formated.delete("-")
+	unformat(formatted: StateEditor): Readonly<State> {
+		return formatted.delete("-")
 	}
 	allowed(symbol: string, state: Readonly<State>): boolean {
 		return state.value.length < 13 && symbol >= "0" && symbol <= "9"

@@ -13,11 +13,11 @@ class Handler implements Converter<string>, Formatter {
 	fromString(value: string): string | undefined {
 		return typeof value == "string" ? value : undefined
 	}
-	format(unformated: StateEditor): Readonly<State> & Settings {
-		return { ...unformated, ...this.settings, type: "text", autocomplete: "email" }
+	format(unformatted: StateEditor): Readonly<State> & Settings {
+		return { ...unformatted, ...this.settings, type: "text", autocomplete: "email" }
 	}
-	unformat(formated: StateEditor): Readonly<State> {
-		return formated
+	unformat(formatted: StateEditor): Readonly<State> {
+		return formatted
 	}
 	allowed(symbol: string, state: Readonly<State>): boolean {
 		return (

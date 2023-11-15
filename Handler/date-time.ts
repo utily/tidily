@@ -21,8 +21,8 @@ class Handler implements Converter<string>, Formatter {
 			: result + fillerDate.substring(result.length, fillerDate.length)
 		return isoly.DateTime.is(result) ? result : undefined
 	}
-	format(unformated: StateEditor): Readonly<State> & Settings {
-		let result = formatDate(unformated)
+	format(unformatted: StateEditor): Readonly<State> & Settings {
+		let result = formatDate(unformatted)
 		if (result.match(/^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])[\d:.-]$/))
 			result = result.insert(10, " ")
 		if (result.match(/^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01]) 3$/))
@@ -52,8 +52,8 @@ class Handler implements Converter<string>, Formatter {
 			pattern: /^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01]) ([0-1]\d|2[0-3])(:[0-5]\d){2}$/,
 		}
 	}
-	unformat(formated: StateEditor): Readonly<State> {
-		return formated
+	unformat(formatted: StateEditor): Readonly<State> {
+		return formatted
 	}
 	allowed(symbol: string, state: Readonly<State>): boolean {
 		return (
@@ -64,8 +64,8 @@ class Handler implements Converter<string>, Formatter {
 }
 add("date-time", () => new Handler())
 
-export function formatDate(unformated: StateEditor, format?: DateFormat | isoly.Locale): StateEditor {
-	let result = unformated
+export function formatDate(unformatted: StateEditor, format?: DateFormat | isoly.Locale): StateEditor {
+	let result = unformatted
 	switch (format) {
 		case "dd/mm/YYYY":
 		case "dd.mm.YYYY":
@@ -103,7 +103,7 @@ export function formatDate(unformated: StateEditor, format?: DateFormat | isoly.
 
 			break
 		default:
-			if (unformated.value.length == 10) {
+			if (unformatted.value.length == 10) {
 				if (!validDate(result.value)) {
 					result = result.replace(
 						0,
@@ -120,7 +120,7 @@ export function formatDate(unformated: StateEditor, format?: DateFormat | isoly.
 					)
 					break
 				}
-				return unformated
+				return unformatted
 			}
 	}
 	return result
