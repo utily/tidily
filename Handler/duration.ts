@@ -16,7 +16,7 @@ class Handler implements Converter<{ hours: number; minutes: number }>, Formatte
 		return duration ? duration.hours.toString() + ":" + duration.minutes.toString().padStart(2, "0") : ""
 	}
 	fromString(value: string): { hours: number; minutes: number } | undefined {
-		const splitted = typeof value == "string" && value.split(":", 2).map(Number.parseInt)
+		const splitted = typeof value == "string" && value.split(":", 2).map(value => Number.parseInt(value))
 		return splitted ? { hours: splitted[0], minutes: splitted[1] } : undefined
 	}
 	format(unformatted: StateEditor): Readonly<State> & Settings {
