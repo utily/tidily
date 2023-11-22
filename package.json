@@ -1,6 +1,6 @@
 {
 	"name": "tidily",
-	"version": "0.0.58",
+	"version": "0.0.59",
 	"description": "Library for formatting strings both during input and also for pure presentation.",
 	"author": "Utily Contributors",
 	"license": "MIT",
