@@ -1,9 +1,9 @@
 import { Action } from "../Action"
-import { Formatter } from "../Formatter"
 import { get } from "./index"
 
 describe("duration", () => {
-	const handler = get("duration") as Formatter
+	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+	const handler = get<{ hours?: number; minutes?: number }>("duration")!
 	it("Key event first key 1", () => {
 		const result = Action.apply(handler, { value: "", selection: { start: 0, end: 0 } }, { key: "1" })
 		expect(result).toMatchObject({ value: "1 h", selection: { start: 1, end: 1 } })
@@ -33,5 +33,26 @@ describe("duration", () => {
 		let result = { value: "", selection: { start: 0, end: 0 } }
 		result = Action.apply(handler, result, { key: "f" })
 		expect(result).toMatchObject({ value: "", selection: { start: 0, end: 0 } })
+	})
+	it("starting with :", () => {
+		let result = { value: "", selection: { start: 1, end: 1 } }
+		result = Action.apply(handler, result, { key: ":" })
+		expect(result).toMatchObject({ value: "0: h", selection: { start: 3, end: 3 } })
+	})
+	it("toString", () => {
+		expect(handler.toString({})).toEqual("0:00")
+		expect(handler.toString({ hours: 25 })).toEqual("25:00")
+		expect(handler.toString({ minutes: 30 })).toEqual("0:30")
+		expect(handler.toString({ minutes: 3 })).toEqual("0:03")
+		expect(handler.toString({ hours: 8, minutes: 5 })).toEqual("8:05")
+	})
+	it("fromString", () => {
+		expect(handler.fromString("0:0")).toEqual({ hours: 0, minutes: 0 })
+		expect(handler.fromString("")).toEqual({ hours: 0, minutes: 0 })
+		expect(handler.fromString(":")).toEqual({ hours: 0, minutes: 0 })
+		expect(handler.fromString(":0")).toEqual({ hours: 0, minutes: 0 })
+		expect(handler.fromString("0")).toEqual({ hours: 0, minutes: 0 })
+		expect(handler.fromString("3:30")).toEqual({ hours: 3, minutes: 30 })
+		expect(handler.fromString("3:3")).toEqual({ hours: 3, minutes: 3 })
 	})
 })
