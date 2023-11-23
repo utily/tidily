@@ -5,7 +5,7 @@ import { State } from "../State"
 import { StateEditor } from "../StateEditor"
 import { add } from "./base"
 
-class Handler implements Converter<{ hours?: number; minutes?: number } | undefined>, Formatter {
+class Handler implements Converter<{ hours: number; minutes: number } | undefined>, Formatter {
 	private pattern: RegExp
 	constructor(readonly unit = "h") {
 		this.unit = ` ${unit.trim()}`
@@ -15,15 +15,15 @@ class Handler implements Converter<{ hours?: number; minutes?: number } | undefi
 			.join("")
 		this.pattern = new RegExp(`^\\d*:{0,1}[0-5]{0,1}[0-9]{0,1}${suffix}$`)
 	}
-	toString(data: { hours?: number; minutes?: number } | undefined): string {
+	toString(data: { hours: number; minutes: number } | undefined): string {
 		return `${data?.hours?.toString(10) ?? "0"}:${data?.minutes?.toString(10).padStart(2, "0") ?? "00"}`
 	}
-	fromString(value: string): { hours?: number; minutes?: number } | undefined {
+	fromString(value: string): { hours: number; minutes: number } | undefined {
 		const splitted = typeof value == "string" && value.split(":", 2).map(value => Number.parseInt(value))
 		return splitted
 			? {
-					...(Number.isFinite(splitted[0]) && { hours: splitted[0] }),
-					...(Number.isFinite(splitted[1]) && { minutes: splitted[1] }),
+					hours: !splitted[0] || !Number.isFinite(splitted[0]) ? 0 : splitted[0],
+					minutes: !splitted[1] || !Number.isFinite(splitted[1]) ? 0 : splitted[1],
 			  }
 			: undefined
 	}
