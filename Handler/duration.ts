@@ -44,4 +44,4 @@ class Handler implements Converter<{ hours?: number; minutes?: number } | undefi
 		return !!nextValue.match(this.pattern)
 	}
 }
-add("duration", () => new Handler())
+add("duration", (argument: any[]) => new Handler(...argument))
