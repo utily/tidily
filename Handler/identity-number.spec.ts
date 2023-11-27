@@ -1,6 +1,6 @@
 import { Action } from "../Action"
 import { Formatter } from "../Formatter"
-import { get } from "./index"
+import { format, get } from "./index"
 
 describe("identity-number", () => {
 	const handler = get("identity-number") as Formatter
@@ -17,5 +17,8 @@ describe("identity-number", () => {
 		for (const character of "85050512345")
 			result = Action.apply(handler, result, { key: character })
 		expect(result).toMatchObject({ value: "19850505-1234", selection: { start: 13, end: 13 } })
+	})
+	it("format", () => {
+		expect(format("85050512345", "identity-number")).toEqual("19850505-1234")
 	})
 })

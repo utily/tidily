@@ -1,6 +1,6 @@
 import { Action } from "../Action"
 import { Formatter } from "../Formatter"
-import { get } from "./index"
+import { format, get } from "./index"
 
 describe("postal-code", () => {
 	const handler = get("postal-code") as Formatter
@@ -29,5 +29,8 @@ describe("postal-code", () => {
 		let result = { value: "123 4", selection: { start: 5, end: 5 } }
 		result = Action.apply(handler, result, { key: "Backspace" })
 		expect(result).toMatchObject({ value: "123", selection: { start: 3, end: 3 } })
+	})
+	it("format", () => {
+		expect(format("12345", "postal-code")).toEqual("123 45")
 	})
 })

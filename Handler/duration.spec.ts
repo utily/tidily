@@ -1,9 +1,13 @@
 import { Action } from "../Action"
-import { get } from "./index"
+import { format, get } from "./index"
 
 describe("duration", () => {
 	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-	const handler = get<{ hours?: number; minutes?: number }>("duration")!
+	const handler = get<{ hours?: number; minutes?: number }>("duration", " h")!
+	it("format", () => {
+		expect(format({ hours: 1, minutes: 30 }, "duration", "h")).toEqual("1:30h")
+		expect(format({ hours: 1, minutes: 30 }, "duration", "")).toEqual("1:30")
+	})
 	it("Key event first key 1", () => {
 		const result = Action.apply(handler, { value: "", selection: { start: 0, end: 0 } }, { key: "1" })
 		expect(result).toMatchObject({ value: "1 h", selection: { start: 1, end: 1 } })

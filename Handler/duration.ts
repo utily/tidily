@@ -7,13 +7,12 @@ import { add } from "./base"
 
 class Handler implements Converter<{ hours: number; minutes: number } | undefined>, Formatter {
 	private pattern: RegExp
-	constructor(readonly unit = "h") {
-		this.unit = ` ${unit.trim()}`
-		const suffix = this.unit
+	constructor(readonly suffix: string = "h") {
+		const pattern = this.suffix
 			.split("")
 			.map(symbol => symbol + "{0,1}")
 			.join("")
-		this.pattern = new RegExp(`^\\d*:{0,1}[0-5]{0,1}[0-9]{0,1}${suffix}$`)
+		this.pattern = new RegExp(`^\\d*:{0,1}[0-5]{0,1}[0-9]{0,1}${pattern}$`)
 	}
 	toString(data: { hours: number; minutes: number } | undefined): string {
 		return `${data?.hours?.toString(10) ?? "0"}:${data?.minutes?.toString(10).padStart(2, "0") ?? "00"}`
@@ -32,15 +31,15 @@ class Handler implements Converter<{ hours: number; minutes: number } | undefine
 		if (result.value.match(/^:/))
 			result = result.prepend("0")
 		if (result.value.length > 0)
-			result = result.suffix(this.unit)
+			result = result.suffix(this.suffix)
 		return { ...result, type: "tel", pattern: /^\d*:{0,1}[0-5]{0,1}[0-9]{0,1}(\sh{0,1}){0,1}$/ }
 	}
 	unformat(formatted: StateEditor): Readonly<State> {
-		return formatted.delete(this.unit)
+		return formatted.delete(this.suffix)
 	}
 	allowed(symbol: string, state: Readonly<State>): boolean {
 		const nextValue =
-			state.value.slice(0, state.selection.start) + symbol + state.value.slice(state.selection.end) + this.unit
+			state.value.slice(0, state.selection.start) + symbol + state.value.slice(state.selection.end) + this.suffix
 		return !!nextValue.match(this.pattern)
 	}
 }
