@@ -42,7 +42,7 @@ export function format(
 export function format(data: number, type: "price", currency: isoly.Currency): string
 export function format(data: any, type: Type, ...argument: any[]): string
 export function format(data: any, type: Type, ...argument: any[]): string {
-	const handler = get(type, argument)
+	const handler = get(type, ...argument)
 	return handler
 		? handler.format(StateEditor.modify(handler.toString(typeof data == "string" ? parse(data, type, argument) : data)))
 				.value
