@@ -76,7 +76,7 @@ export class StateEditor implements Readonly<State> {
 			let s: number
 			// eslint-disable-next-line @typescript-eslint/no-this-alias
 			result = this
-			while ((s = result.value.indexOf(start)) > -1)
+			while (start && (s = result.value.indexOf(start)) > -1)
 				result = result.delete(s, s + start.length)
 		} else
 			result = this.replace(start, end || start + 1, "")
