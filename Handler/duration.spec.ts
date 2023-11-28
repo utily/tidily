@@ -12,6 +12,9 @@ describe("duration", () => {
 		const result = Action.apply(handler, { value: "", selection: { start: 0, end: 0 } }, { key: "1" })
 		expect(result).toMatchObject({ value: "1 h", selection: { start: 1, end: 1 } })
 	})
+	it("no unit", () => {
+		expect(format({ hours: 1, minutes: 30 }, "duration", "")).toEqual("1:30")
+	})
 	it("1: + 1 => 1:1", () => {
 		const result = Action.apply(handler, { value: "1:", selection: { start: 2, end: 2 } }, { key: "1" })
 		expect(result).toMatchObject({ value: "1:1 h", selection: { start: 3, end: 3 } })
