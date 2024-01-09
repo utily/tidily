@@ -43,7 +43,7 @@ class Handler implements Converter<{ hours: number; minutes: number } | undefine
 		let result = unformatted
 		if (result.value.match(/^[.,:]/))
 			result = result.prepend("0")
-		return { ...result, type: "tel", pattern: /^\d*:{0,1}[0-5]{0,1}[0-9]{0,1}(\sh{0,1}){0,1}$/ }
+		return { ...result, type: "tel", pattern: this.pattern }
 	}
 	unformat(formatted: StateEditor): Readonly<State> {
 		if (formatted.value.includes(".") || formatted.value.includes(","))
