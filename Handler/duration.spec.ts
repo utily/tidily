@@ -5,36 +5,36 @@ describe("duration", () => {
 	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 	const handler = get<{ hours?: number; minutes?: number }>("duration", " h")!
 	it("format", () => {
-		expect(format({ hours: 1, minutes: 30 }, "duration", "h")).toEqual("1:30h")
-		expect(format({ hours: 1, minutes: 30 }, "duration", "")).toEqual("1:30")
+		expect(format({ hours: 1, minutes: 30 }, "duration")).toEqual("1:30")
+		expect(format({ hours: 1, minutes: 30 }, "duration")).toEqual("1:30")
 	})
 	it("Key event first key 1", () => {
 		const result = Action.apply(handler, { value: "", selection: { start: 0, end: 0 } }, { key: "1" })
-		expect(result).toMatchObject({ value: "1 h", selection: { start: 1, end: 1 } })
+		expect(result).toMatchObject({ value: "1", selection: { start: 1, end: 1 } })
 	})
 	it("no unit", () => {
 		expect(format({ hours: 1, minutes: 30 }, "duration", "")).toEqual("1:30")
 	})
 	it("1: + 1 => 1:1", () => {
 		const result = Action.apply(handler, { value: "1:", selection: { start: 2, end: 2 } }, { key: "1" })
-		expect(result).toMatchObject({ value: "1:1 h", selection: { start: 3, end: 3 } })
+		expect(result).toMatchObject({ value: "1:1", selection: { start: 3, end: 3 } })
 	})
 	it("12: + 3 => 12:3", () => {
 		const result = Action.apply(handler, { value: "12:", selection: { start: 3, end: 3 } }, { key: "3" })
-		expect(result).toMatchObject({ value: "12:3 h", selection: { start: 4, end: 4 } })
+		expect(result).toMatchObject({ value: "12:3", selection: { start: 4, end: 4 } })
 	})
 	it("Add too many minutes", () => {
 		const result = Action.apply(handler, { value: "12:23", selection: { start: 5, end: 5 } }, { key: "3" })
-		expect(result).toMatchObject({ value: "12:23 h", selection: { start: 5, end: 5 } })
+		expect(result).toMatchObject({ value: "12:23", selection: { start: 5, end: 5 } })
 	})
 	it("Add 60 minutes", () => {
 		const result = Action.apply(handler, { value: "12:6", selection: { start: 4, end: 4 } }, { key: "0" })
-		expect(result).toMatchObject({ value: "12:6 h", selection: { start: 4, end: 4 } })
+		expect(result).toMatchObject({ value: "12:6", selection: { start: 4, end: 4 } })
 	})
 	it("Key event backspace", () => {
 		let result = { value: "12:34", selection: { start: 5, end: 5 } }
 		result = Action.apply(handler, result, { key: "Backspace" })
-		expect(result).toMatchObject({ value: "12:3 h", selection: { start: 4, end: 4 } })
+		expect(result).toMatchObject({ value: "12:3", selection: { start: 4, end: 4 } })
 	})
 	it("Add letter", () => {
 		let result = { value: "", selection: { start: 0, end: 0 } }
@@ -44,7 +44,7 @@ describe("duration", () => {
 	it("starting with :", () => {
 		let result = { value: "", selection: { start: 1, end: 1 } }
 		result = Action.apply(handler, result, { key: ":" })
-		expect(result).toMatchObject({ value: "0: h", selection: { start: 3, end: 3 } })
+		expect(result).toMatchObject({ value: "0:", selection: { start: 3, end: 3 } })
 	})
 	it("toString", () => {
 		expect(handler.toString({})).toEqual("0:00")
