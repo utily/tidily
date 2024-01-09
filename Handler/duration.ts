@@ -23,7 +23,7 @@ class Handler implements Converter<{ hours: number; minutes: number } | undefine
 				  }
 				: undefined
 		} else if (this.decimal) {
-			const splittedString = "string" && value.split(".", 2)
+			const splittedString = "string" && value.split(/[,.]/, 2) //here
 			if (splittedString) {
 				splittedString[1] = splittedString[1].length == 1 ? splittedString[1] + "0" : splittedString[1]
 			}
@@ -31,7 +31,10 @@ class Handler implements Converter<{ hours: number; minutes: number } | undefine
 			result = splitted
 				? {
 						hours: !splitted[0] || !Number.isFinite(splitted[0]) ? 0 : splitted[0],
-						minutes: !splitted[1] || !(0 <= splitted[1] && splitted[1] < 100) ? 0 : (splitted[1] / 100) * 60,
+						minutes:
+							!splitted[1] || !(0 <= splitted[1] && splitted[1] < 100)
+								? 0
+								: +(((splitted[1] / 100) * 60) % 1).toFixed(7),
 				  }
 				: undefined
 		}
