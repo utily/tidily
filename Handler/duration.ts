@@ -59,7 +59,6 @@ class Handler implements Converter<{ hours: number; minutes: number } | undefine
 		return formatted
 	}
 	allowed(symbol: string, state: Readonly<State>): boolean {
-		console.log("allowed function")
 		const nextValue = state.value.slice(0, state.selection.start) + symbol + state.value.slice(state.selection.end)
 		return !!nextValue.match(this.pattern)
 	}
