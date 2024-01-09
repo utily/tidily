@@ -6,20 +6,16 @@ import { StateEditor } from "../StateEditor"
 import { add } from "./base"
 
 class Handler implements Converter<{ hours: number; minutes: number } | undefined>, Formatter {
-	private pattern: RegExp
+	// 									  normal time		  						 | 	decimal time
+	private pattern = /(^\d*:{0,1}[0-5]{0,1}[0-9]{0,1}$|^\d*[.,]{0,1}[0-9]{0,2}$)/
 	private decimal: boolean
-	constructor() {
-		this.pattern = new RegExp(`^\\d*:{0,1}[0-5]{0,1}[0-9]{0,1}$|^\\d*\\.{0,1}[0-9]{0,2}$`)
-		// normal time												|		decimal time
-		// ^\\d*:{0,1}[0-5]{0,1}[0-9]{0,1}$   |   ^\\d*\\.{0,1}[0-9]{0,2}$
-	}
 	toString(data: { hours: number; minutes: number } | undefined): string {
 		return `${data?.hours?.toString(10) ?? "0"}:${data?.minutes?.toString(10).padStart(2, "0") ?? "00"}`
 	}
 	fromString(value: string): { hours: number; minutes: number } | undefined {
 		let result: undefined | { hours: number; minutes: number }
 		if (!this.decimal) {
-			const splitted = typeof value == "string" && value.split(":", 2).map(value => Number.parseInt(value))
+			const splitted = value.split(":", 2).map(value => Number.parseInt(value))
 			result = splitted
 				? {
 						hours: !splitted[0] || !Number.isFinite(splitted[0]) ? 0 : splitted[0],
@@ -27,7 +23,7 @@ class Handler implements Converter<{ hours: number; minutes: number } | undefine
 				  }
 				: undefined
 		} else if (this.decimal) {
-			const splittedString = typeof value == "string" && value.split(".", 2)
+			const splittedString = "string" && value.split(".", 2)
 			if (splittedString) {
 				splittedString[1] = splittedString[1].length == 1 ? splittedString[1] + "0" : splittedString[1]
 			}
@@ -35,7 +31,7 @@ class Handler implements Converter<{ hours: number; minutes: number } | undefine
 			result = splitted
 				? {
 						hours: !splitted[0] || !Number.isFinite(splitted[0]) ? 0 : splitted[0],
-						minutes: !splitted[1] || splitted[1] < 100 ? (splitted[1] / 100) * 60 : splitted[1],
+						minutes: !splitted[1] || !(0 <= splitted[1] && splitted[1] < 100) ? 0 : (splitted[1] / 100) * 60,
 				  }
 				: undefined
 		}
@@ -43,16 +39,12 @@ class Handler implements Converter<{ hours: number; minutes: number } | undefine
 	}
 	format(unformatted: StateEditor): Readonly<State> & Settings {
 		let result = unformatted
-		if (this.decimal) {
-			const time = result.value.match("(^\\d*)\\.([0-9]{0,2}$)")
-			if (time?.length == 1)
-				result = result.prepend("0")
-		} else if (result.value.match(/^:/))
+		if (result.value.match(/^[.,:]/))
 			result = result.prepend("0")
 		return { ...result, type: "tel", pattern: /^\d*:{0,1}[0-5]{0,1}[0-9]{0,1}(\sh{0,1}){0,1}$/ }
 	}
 	unformat(formatted: StateEditor): Readonly<State> {
-		if (formatted.value.includes(".")) {
+		if (formatted.value.includes(".") || formatted.value.includes(",")) {
 			this.decimal = true
 		} else
 			this.decimal = false
