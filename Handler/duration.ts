@@ -24,9 +24,9 @@ class Handler implements Converter<{ hours: number; minutes: number } | undefine
 				: undefined
 		} else if (this.decimal) {
 			const splittedString = value.split(/[,.]/, 2) //here
-			if (splittedString) {
+			if (splittedString)
 				splittedString[1] = splittedString[1].length == 1 ? splittedString[1] + "0" : splittedString[1]
-			}
+
 			const splitted = splittedString ? splittedString.map(value => Number.parseInt(value)) : undefined
 			result = splitted
 				? {
@@ -47,9 +47,9 @@ class Handler implements Converter<{ hours: number; minutes: number } | undefine
 		return { ...result, type: "tel", pattern: /^\d*:{0,1}[0-5]{0,1}[0-9]{0,1}(\sh{0,1}){0,1}$/ }
 	}
 	unformat(formatted: StateEditor): Readonly<State> {
-		if (formatted.value.includes(".") || formatted.value.includes(",")) {
+		if (formatted.value.includes(".") || formatted.value.includes(","))
 			this.decimal = true
-		} else
+		else
 			this.decimal = false
 		return formatted
 	}
