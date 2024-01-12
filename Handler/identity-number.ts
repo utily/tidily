@@ -8,7 +8,7 @@ import { add } from "./base"
 
 class Handler implements Converter<string>, Formatter {
 	constructor(readonly country: isoly.CountryCode.Alpha2 | undefined) {}
-	toString(data: string | any): string {
+	toString(data?: string | unknown): string {
 		return typeof data == "string" ? data : ""
 	}
 	fromString(value: string): string | undefined {

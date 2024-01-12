@@ -6,7 +6,7 @@ import { StateEditor } from "../StateEditor"
 import { add } from "./base"
 
 class Handler implements Converter<number | [number, number]>, Formatter {
-	toString(data: number | [number, number] | string | any): string {
+	toString(data?: number | [number, number] | string | unknown): string {
 		return Array.isArray(data) && data.length == 2 && typeof data[0] == "number" && typeof data[1] == "number"
 			? data[0].toString() + " / " + data[1].toString()
 			: typeof data == "number"

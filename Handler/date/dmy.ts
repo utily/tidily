@@ -9,8 +9,8 @@ class Handler extends Base {
 	constructor(separator: Separator) {
 		super(separator)
 	}
-	toString(data: isoly.Date | any): string {
-		return data?.length == 10
+	toString(data?: isoly.Date | unknown): string {
+		return isoly.Date.is(data) && data.length == 10
 			? [data.substring(8, 10), data.substring(5, 7), data.substring(0, 4)].join(this.separator)
 			: ""
 	}

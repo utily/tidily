@@ -8,7 +8,7 @@ import { StateEditor } from "../StateEditor"
 import { add } from "./base"
 
 class Handler implements Converter<string>, Formatter {
-	toString(data: isoly.DateTime | any): string {
+	toString(data?: isoly.DateTime | unknown): string {
 		return typeof data == "string" ? data : ""
 	}
 	fromString(value: string): isoly.DateTime | undefined {
