@@ -6,7 +6,7 @@ import { StateEditor } from "../StateEditor"
 import { add } from "./base"
 
 class Handler implements Converter<number>, Formatter {
-	toString(data: number | any): string {
+	toString(data?: number | unknown): string {
 		return data && typeof data == "number" ? (data * 100).toString() : ""
 	}
 	fromString(value: string): number | undefined {

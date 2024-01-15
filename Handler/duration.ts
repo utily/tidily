@@ -1,3 +1,4 @@
+import { isoly } from "isoly"
 import { Converter } from "../Converter"
 import { Formatter } from "../Formatter"
 import { Settings } from "../Settings"
@@ -9,8 +10,10 @@ class Handler implements Converter<{ hours: number; minutes: number } | undefine
 	// 									  normal time		  						 | 	decimal time
 	private pattern = /(^\d*:{0,1}[0-5]{0,1}[0-9]{0,1}$|^\d*[.,]{0,1}[0-9]{0,2}$)/
 	private decimal: boolean
-	toString(data: { hours: number; minutes: number } | undefined): string {
-		return `${data?.hours?.toString(10) ?? "0"}:${data?.minutes?.toString(10).padStart(2, "0") ?? "00"}`
+	toString(data?: { hours: number; minutes: number } | unknown): string {
+		return !isoly.TimeSpan.is(data)
+			? ""
+			: `${data?.hours?.toString(10) ?? "0"}:${data?.minutes?.toString(10).padStart(2, "0") ?? "00"}`
 	}
 	fromString(value: string): { hours: number; minutes: number } | undefined {
 		let result: undefined | { hours: number; minutes: number }

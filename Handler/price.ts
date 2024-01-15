@@ -8,7 +8,7 @@ import { add } from "./base"
 
 class Handler implements Converter<number>, Formatter {
 	constructor(readonly currency: isoly.Currency | undefined) {}
-	toString(data: number | any): string {
+	toString(data?: number | unknown): string {
 		return typeof data == "number" ? (isNaN(data) ? "" : data.toString()) : ""
 	}
 	fromString(value: string): number | undefined {

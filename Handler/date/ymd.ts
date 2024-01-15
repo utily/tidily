@@ -9,7 +9,7 @@ class Handler extends Base {
 	constructor(separator: Separator) {
 		super(separator)
 	}
-	toString(data: isoly.Date | any): string {
+	toString(data?: isoly.Date | unknown): string {
 		return typeof data != "string" ? "" : data
 	}
 	fromString(value: string): isoly.Date | undefined {
