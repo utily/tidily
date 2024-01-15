@@ -6,36 +6,33 @@ import { State } from "../State"
 import { StateEditor } from "../StateEditor"
 import { add } from "./base"
 
-type Duration = Pick<isoly.TimeSpan, "hours" | "minutes"> | undefined
-
-class Handler implements Converter<Duration>, Formatter {
+class Handler implements Converter<isoly.TimeSpan>, Formatter {
+	private separator = ":"
 	private patterns = {
 		//           hours |    "normal" minutes     | decimal minutes
 		allowed: /^-?\d*(?::{0,1}[0-5]{0,1}[0-9]{0,1}|[.,]{0,1}[0-9]{0,2})$/,
-		//      sign | hours |   sep   | minutes
 		extract: /^(-?)(\d*)([:,.]{0,1})([0-9]{0,2})$/,
+		zeros: /^(-?)(0+)(?:[1-9]|0[,.:]?)/,
 	}
-	private separator = ":"
-	toString(data?: { hours: number; minutes: number } | unknown): string {
-		console.log("toString", structuredClone(data))
+	toString(data?: isoly.TimeSpan | unknown): string {
 		let result: string
 		if (!isoly.TimeSpan.is(data))
 			result = ""
 		else {
 			const span = isoly.TimeSpan.normalize(data)
-			if (this.separator == ":")
+			if (!span.minutes && !span.hours)
+				result = ""
+			else if (this.separator == ":")
 				result = `${!span.hours ? "" : span.hours.toString(10)}:${
-					!span.minutes ? "" : Math.abs(span.minutes).toString()
+					!span.minutes ? "" : Math.abs(span.minutes).toString(10)
 				}`
 			else
-				result = (+isoly.TimeSpan.toHours(span).toFixed(2)).toString()
+				result = (+isoly.TimeSpan.toHours(span).toFixed(2) || "").toString()
 		}
-		console.log("toString result:", result)
 		return result
 	}
-	fromString(value: string): Duration | undefined {
-		console.log("fromString", structuredClone(value))
-		let result: undefined | Duration
+	fromString(value: string): isoly.TimeSpan | undefined {
+		let result: undefined | isoly.TimeSpan
 		const match = value.match(this.patterns.extract)
 		if (!match)
 			result = undefined
@@ -58,32 +55,32 @@ class Handler implements Converter<Duration>, Formatter {
 				})
 			}
 		}
-		console.log("fromString result:", result)
 		return result
 	}
 	format(unformatted: StateEditor): Readonly<State> & Settings {
-		console.log("format", structuredClone(unformatted.value))
 		let result = unformatted
-		const [, negative, hours] = unformatted.match(this.patterns.extract) ?? []
-		if (!hours)
+		const [, negative, hours, separator] = unformatted.match(this.patterns.extract) ?? []
+		if (!hours && separator)
 			result = result.insert(negative ? 1 : 0, "0")
-		console.log("format result:", result)
+		const match = result.match(this.patterns.zeros)
+		if (match) {
+			const [, negative, zeros] = match
+			if (zeros) {
+				const offset = negative ? 1 : 0
+				result = result.delete(offset, zeros.length + offset)
+			}
+		}
 		return { ...result, type: "tel", pattern: this.patterns.allowed }
 	}
 	unformat(formatted: StateEditor): Readonly<State> {
-		console.log("unformat", structuredClone(formatted.value))
 		const [, , , separator] = formatted.match(this.patterns.extract) ?? []
 		if (separator)
 			this.separator = separator
-		console.log("unformat result:", formatted.value)
 		return formatted
 	}
 	allowed(symbol: string, state: Readonly<State>): boolean {
-		console.log("allowed", structuredClone(state.value))
 		const nextValue = state.value.slice(0, state.selection.start) + symbol + state.value.slice(state.selection.end)
-		const result = !!nextValue.search(this.patterns.allowed)
-		console.log("allowed result:", result)
-		return result
+		return !!nextValue.match(this.patterns.allowed)
 	}
 }
 add("duration", () => new Handler())
