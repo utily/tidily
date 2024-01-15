@@ -1,19 +1,32 @@
+import { isoly } from "isoly"
 import { Action } from "../Action"
+import { StateEditor } from "../StateEditor"
 import { format, get } from "./index"
 
 describe("duration", () => {
 	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-	const handler = get<{ hours?: number; minutes?: number }>("duration", " h")!
+	const handler = get<isoly.TimeSpan>("duration")!
 	it("format", () => {
 		expect(format({ hours: 1, minutes: 30 }, "duration")).toEqual("1:30")
 		expect(format({ hours: 1, minutes: 30 }, "duration")).toEqual("1:30")
+		expect(handler.format(StateEditor.modify("0.12")).value).toEqual("0.12")
+		expect(handler.format(StateEditor.modify("-0.12")).value).toEqual("-0.12")
+		expect(handler.format(StateEditor.modify("-00.12")).value).toEqual("-0.12")
+		expect(handler.format(StateEditor.modify("-001")).value).toEqual("-1")
+		expect(handler.format(StateEditor.modify("-0")).value).toEqual("-0")
+		expect(handler.format(StateEditor.modify("01")).value).toEqual("1")
+		expect(handler.format(StateEditor.modify("000")).value).toEqual("0")
+		expect(handler.format(StateEditor.modify("00")).value).toEqual("0")
+		expect(handler.format(StateEditor.modify(",1")).value).toEqual("0,1")
+		expect(handler.format(StateEditor.modify(".1")).value).toEqual("0.1")
+		expect(handler.format(StateEditor.modify(":1")).value).toEqual("0:1")
+		expect(handler.format(StateEditor.modify("-,1")).value).toEqual("-0,1")
+		expect(handler.format(StateEditor.modify("-.1")).value).toEqual("-0.1")
+		expect(handler.format(StateEditor.modify("-:1")).value).toEqual("-0:1")
 	})
 	it("Key event first key 1", () => {
 		const result = Action.apply(handler, { value: "", selection: { start: 0, end: 0 } }, { key: "1" })
 		expect(result).toMatchObject({ value: "1", selection: { start: 1, end: 1 } })
-	})
-	it("no unit", () => {
-		expect(format({ hours: 1, minutes: 30 }, "duration", "")).toEqual("1:30")
 	})
 	it("1: + 1 => 1:1", () => {
 		const result = Action.apply(handler, { value: "1:", selection: { start: 2, end: 2 } }, { key: "1" })
@@ -47,19 +60,23 @@ describe("duration", () => {
 		expect(result).toMatchObject({ value: "0:", selection: { start: 3, end: 3 } })
 	})
 	it("toString", () => {
-		expect(handler.toString({})).toEqual("0:00")
-		expect(handler.toString({ hours: 25 })).toEqual("25:00")
-		expect(handler.toString({ minutes: 30 })).toEqual("0:30")
-		expect(handler.toString({ minutes: 3 })).toEqual("0:03")
-		expect(handler.toString({ hours: 8, minutes: 5 })).toEqual("8:05")
+		expect(handler.toString({})).toEqual("")
+		expect(handler.toString({ hours: 25 })).toEqual("25:")
+		expect(handler.toString({ minutes: 30 })).toEqual(":30")
+		expect(handler.toString({ minutes: 3 })).toEqual(":3")
+		expect(handler.toString({ hours: 8, minutes: 5 })).toEqual("8:5")
 	})
 	it("fromString", () => {
-		expect(handler.fromString("0:0")).toEqual({ hours: 0, minutes: 0 })
-		expect(handler.fromString("")).toEqual({ hours: 0, minutes: 0 })
-		expect(handler.fromString(":")).toEqual({ hours: 0, minutes: 0 })
-		expect(handler.fromString(":0")).toEqual({ hours: 0, minutes: 0 })
-		expect(handler.fromString("0")).toEqual({ hours: 0, minutes: 0 })
+		expect(handler.fromString("0:0")).toEqual({})
+		expect(handler.fromString("")).toEqual({})
+		expect(handler.fromString(":")).toEqual({})
+		expect(handler.fromString(":0")).toEqual({})
+		expect(handler.fromString("0")).toEqual({})
 		expect(handler.fromString("3:30")).toEqual({ hours: 3, minutes: 30 })
 		expect(handler.fromString("3:3")).toEqual({ hours: 3, minutes: 3 })
+		expect(handler.fromString("1,5")).toEqual({ hours: 1, minutes: 30 })
+		expect(handler.fromString("-1,5")).toEqual({ hours: -1, minutes: -30 })
+		expect(handler.fromString("1.5")).toEqual({ hours: 1, minutes: 30 })
+		expect(handler.fromString("-1.5")).toEqual({ hours: -1, minutes: -30 })
 	})
 })

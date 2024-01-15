@@ -6,58 +6,81 @@ import { State } from "../State"
 import { StateEditor } from "../StateEditor"
 import { add } from "./base"
 
-class Handler implements Converter<{ hours: number; minutes: number } | undefined>, Formatter {
-	// 									  normal time		  						 | 	decimal time
-	private pattern = /(^\d*:{0,1}[0-5]{0,1}[0-9]{0,1}$|^\d*[.,]{0,1}[0-9]{0,2}$)/
-	private decimal: boolean
-	toString(data?: { hours: number; minutes: number } | unknown): string {
-		return !isoly.TimeSpan.is(data)
-			? ""
-			: `${data?.hours?.toString(10) ?? "0"}:${data?.minutes?.toString(10).padStart(2, "0") ?? "00"}`
+class Handler implements Converter<isoly.TimeSpan>, Formatter {
+	private separator = ":"
+	private patterns = {
+		//           hours |    "normal" minutes     | decimal minutes
+		allowed: /^-?\d*(?::{0,1}[0-5]{0,1}[0-9]{0,1}|[.,]{0,1}[0-9]{0,2})$/,
+		extract: /^(-?)(\d*)([:,.]{0,1})([0-9]{0,2})$/,
+		zeros: /^(-?)(0+)(?:[1-9]|0[,.:]?)/,
 	}
-	fromString(value: string): { hours: number; minutes: number } | undefined {
-		let result: undefined | { hours: number; minutes: number }
-		if (!this.decimal) {
-			const splitted = value.split(":", 2).map(value => Number.parseInt(value))
-			result = splitted
-				? {
-						hours: !splitted[0] || !Number.isFinite(splitted[0]) ? 0 : splitted[0],
-						minutes: !splitted[1] || !Number.isFinite(splitted[1]) ? 0 : splitted[1],
-				  }
-				: undefined
-		} else if (this.decimal) {
-			const splittedString = value.split(/[,.]/, 2)
-			if (splittedString)
-				splittedString[1] = splittedString[1].length == 1 ? splittedString[1] + "0" : splittedString[1]
-			const splitted = splittedString ? splittedString.map(value => Number.parseInt(value)) : undefined
-			result = splitted
-				? {
-						hours: !splitted[0] || !Number.isFinite(splitted[0]) ? 0 : splitted[0],
-						minutes:
-							!splitted[1] || !(0 <= splitted[1] && splitted[1] < 100)
-								? 0
-								: +(((splitted[1] / 100) * 60) % 1).toFixed(7),
-				  }
-				: undefined
+	toString(data?: isoly.TimeSpan | unknown): string {
+		let result: string
+		if (!isoly.TimeSpan.is(data))
+			result = ""
+		else {
+			const span = isoly.TimeSpan.normalize(data)
+			if (!span.minutes && !span.hours)
+				result = ""
+			else if (this.separator == ":")
+				result = `${!span.hours ? "" : span.hours.toString(10)}:${
+					!span.minutes ? "" : Math.abs(span.minutes).toString(10)
+				}`
+			else
+				result = (+isoly.TimeSpan.toHours(span).toFixed(2) || "").toString()
+		}
+		return result
+	}
+	fromString(value: string): isoly.TimeSpan | undefined {
+		let result: undefined | isoly.TimeSpan
+		const match = value.match(this.patterns.extract)
+		if (!match)
+			result = undefined
+		else {
+			const [value, negative, hours, separator, minutes] = match
+			this.separator = separator
+			if (separator == ":") {
+				const parsed = {
+					hours: parseInt(hours),
+					minutes: parseInt(minutes),
+				}
+				result = isoly.TimeSpan.normalize({
+					hours: !Number.isFinite(parsed.hours) ? 0 : parsed.hours,
+					minutes: !Number.isFinite(parsed.minutes) ? 0 : negative ? parsed.minutes * -1 : parsed.minutes,
+				})
+			} else {
+				const hours = parseFloat(value.replace(",", "."))
+				result = isoly.TimeSpan.normalize({
+					hours: !Number.isFinite(hours) ? 0 : hours,
+				})
+			}
 		}
 		return result
 	}
 	format(unformatted: StateEditor): Readonly<State> & Settings {
 		let result = unformatted
-		if (result.value.match(/^[.,:]/))
-			result = result.prepend("0")
-		return { ...result, type: "tel", pattern: this.pattern }
+		const [, negative, hours, separator] = unformatted.match(this.patterns.extract) ?? []
+		if (!hours && separator)
+			result = result.insert(negative ? 1 : 0, "0")
+		const match = result.match(this.patterns.zeros)
+		if (match) {
+			const [, negative, zeros] = match
+			if (zeros) {
+				const offset = negative ? 1 : 0
+				result = result.delete(offset, zeros.length + offset)
+			}
+		}
+		return { ...result, type: "tel", pattern: this.patterns.allowed }
 	}
 	unformat(formatted: StateEditor): Readonly<State> {
-		if (formatted.value.includes(".") || formatted.value.includes(","))
-			this.decimal = true
-		else
-			this.decimal = false
+		const [, , , separator] = formatted.match(this.patterns.extract) ?? []
+		if (separator)
+			this.separator = separator
 		return formatted
 	}
 	allowed(symbol: string, state: Readonly<State>): boolean {
 		const nextValue = state.value.slice(0, state.selection.start) + symbol + state.value.slice(state.selection.end)
-		return !!nextValue.match(this.pattern)
+		return !!nextValue.match(this.patterns.allowed)
 	}
 }
 add("duration", () => new Handler())
