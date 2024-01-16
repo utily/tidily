@@ -103,5 +103,6 @@ describe("duration", () => {
 		expect(handler.fromString("-1,5")).toEqual({ hours: -1, minutes: -30 })
 		expect(handler.fromString("1.5")).toEqual({ hours: 1, minutes: 30 })
 		expect(handler.fromString("-1.5")).toEqual({ hours: -1, minutes: -30 })
+		expect(handler.fromString("-1:30")).toEqual({ hours: -1, minutes: -30 })
 	})
 })
