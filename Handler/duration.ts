@@ -22,12 +22,14 @@ class Handler implements Converter<isoly.TimeSpan>, Formatter {
 			const span = isoly.TimeSpan.normalize(data)
 			if (!span.minutes && !span.hours)
 				result = ""
-			else if (this.separator == ":")
-				result = `${!span.hours ? "" : span.hours.toString(10)}:${
-					!span.minutes ? "" : Math.abs(span.minutes).toString(10)
-				}`
+			else if (this.separator != ":")
+				result = (+isoly.TimeSpan.toHours(span).toFixed(2) || "").toString(10)
+			else if (span.hours && !span.minutes)
+				result = span.hours.toString(10)
+			else if (!span.hours && span.minutes)
+				result = `${span.minutes < 0 ? "-" : ""}0:${Math.abs(span.minutes).toString(10)}`
 			else
-				result = (+isoly.TimeSpan.toHours(span).toFixed(2) || "").toString()
+				result = `${span.hours?.toString(10)}:${Math.abs(span.minutes ?? 0).toString(10)}`
 		}
 		return result
 	}

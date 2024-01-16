@@ -23,6 +23,31 @@ describe("duration", () => {
 		expect(handler.format(StateEditor.modify("-,1")).value).toEqual("-0,1")
 		expect(handler.format(StateEditor.modify("-.1")).value).toEqual("-0.1")
 		expect(handler.format(StateEditor.modify("-:1")).value).toEqual("-0:1")
+		expect(handler.format(StateEditor.modify("0:03")).value).toEqual("0:03")
+	})
+	it("smoothly", () => {
+		function smoothlyFormat(value: string) {
+			return handler.format(
+				StateEditor.copy(
+					handler.unformat(
+						StateEditor.copy({
+							value: value,
+							selection: { start: value.length, end: value.length, direction: "none" },
+						})
+					)
+				)
+			)
+		}
+		function smoothlyNewState(value: isoly.TimeSpan) {
+			return smoothlyFormat(handler.toString(value))
+		}
+		expect(smoothlyFormat("0:03").value).toEqual("0:03")
+		expect(smoothlyNewState({ hours: 30 }).value).toEqual("30")
+		expect(smoothlyNewState({ minutes: 30 }).value).toEqual("0:30")
+		expect(smoothlyNewState({ hours: 30, minutes: 30 }).value).toEqual("30:30")
+		expect(smoothlyNewState({ hours: -30, minutes: 30 }).value).toEqual("-29:30")
+		expect(smoothlyNewState({ hours: 30, minutes: -30 }).value).toEqual("29:30")
+		expect(smoothlyNewState({ hours: -30, minutes: -30 }).value).toEqual("-30:30")
 	})
 	it("Key event first key 1", () => {
 		const result = Action.apply(handler, { value: "", selection: { start: 0, end: 0 } }, { key: "1" })
@@ -61,9 +86,9 @@ describe("duration", () => {
 	})
 	it("toString", () => {
 		expect(handler.toString({})).toEqual("")
-		expect(handler.toString({ hours: 25 })).toEqual("25:")
-		expect(handler.toString({ minutes: 30 })).toEqual(":30")
-		expect(handler.toString({ minutes: 3 })).toEqual(":3")
+		expect(handler.toString({ hours: 25 })).toEqual("25")
+		expect(handler.toString({ minutes: 30 })).toEqual("0:30")
+		expect(handler.toString({ minutes: 3 })).toEqual("0:3")
 		expect(handler.toString({ hours: 8, minutes: 5 })).toEqual("8:5")
 	})
 	it("fromString", () => {
