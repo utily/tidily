@@ -46,9 +46,10 @@ class Handler implements Converter<isoly.TimeSpan>, Formatter {
 					hours: parseInt(hours),
 					minutes: parseInt(minutes),
 				}
+				const multiplicand = negative ? -1 : 1
 				result = isoly.TimeSpan.normalize({
-					hours: !Number.isFinite(parsed.hours) ? 0 : parsed.hours,
-					minutes: !Number.isFinite(parsed.minutes) ? 0 : negative ? parsed.minutes * -1 : parsed.minutes,
+					hours: !Number.isFinite(parsed.hours) ? 0 : parsed.hours * multiplicand,
+					minutes: !Number.isFinite(parsed.minutes) ? 0 : parsed.minutes * multiplicand,
 				})
 			} else {
 				const hours = parseFloat(value.replace(",", "."))
