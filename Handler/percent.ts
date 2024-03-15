@@ -7,10 +7,11 @@ import { add } from "./base"
 
 class Handler implements Converter<number>, Formatter {
 	toString(data?: number | unknown): string {
-		return data && typeof data == "number" ? (data * 100).toString() : ""
+		return typeof data == "number" ? (data * 100).toString() : ""
 	}
 	fromString(value: string): number | undefined {
-		return typeof value != "string" || !Number.parseFloat(value) ? undefined : Number.parseFloat(value) / 100
+		const parsedFloat = typeof value == "string" ? Number.parseFloat(value) : undefined
+		return typeof parsedFloat == "number" && !Number.isNaN(parsedFloat) ? parsedFloat / 100 : undefined
 	}
 	format(unformatted: StateEditor): Readonly<State> & Settings {
 		return {
