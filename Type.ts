@@ -8,6 +8,7 @@ export type Type =
 	| "duration"
 	| "email"
 	| "identity-number"
+	| "integer"
 	| "password"
 	| "percent"
 	| "phone"
