@@ -100,6 +100,12 @@ export class StateEditor implements Readonly<State> {
 	padStart(length: number, padding: string): StateEditor {
 		return this.pad(length, padding, 0)
 	}
+	toLower(): StateEditor {
+		return this.map(symbol => symbol.toLowerCase())
+	}
+	toUpper(): StateEditor {
+		return this.map(symbol => symbol.toUpperCase())
+	}
 	map(mapping: (symbol: string, index: number) => string): StateEditor {
 		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		let result: StateEditor = this
