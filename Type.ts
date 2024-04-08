@@ -13,6 +13,7 @@ export type Type =
 	| "identifier-camel"
 	| "identifier-attribute"
 	| "identity-number"
+	| "integer"
 	| "password"
 	| "percent"
 	| "phone"
