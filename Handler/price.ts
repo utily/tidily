@@ -1,4 +1,4 @@
-import * as isoly from "isoly"
+import { isoly } from "isoly"
 import { Converter } from "../Converter"
 import { Formatter } from "../Formatter"
 import { Settings } from "../Settings"
@@ -16,21 +16,18 @@ class Handler implements Converter<number>, Formatter {
 		return result != undefined && !isNaN(result) ? result : undefined
 	}
 	format(unformatted: StateEditor): Readonly<State> & Settings {
-		let separator = unformatted.value && unformatted.value.includes(".") ? unformatted.value.indexOf(".") : undefined
 		let result =
 			unformatted.value == "NaN" ? unformatted.replace(0, unformatted.value.length, "") : StateEditor.copy(unformatted)
+		if (!result.value.includes(".") && this.currency && Math.abs(Number.parseFloat(result.value)) > 0)
+			result = result.suffix(".0")
+		let separator = result.value && result.value.includes(".") ? result.value.indexOf(".") : undefined
 		if (separator == 0) {
 			result = result.prepend("0")
 			separator++
 		}
 		if (separator != undefined) {
 			const adjust =
-				separator +
-				1 +
-				(!this.currency || isoly.Currency.decimalDigits(this.currency) == undefined
-					? 2
-					: isoly.Currency.decimalDigits(this.currency) ?? 2) -
-				result.value.length
+				separator + 1 + ((this.currency && isoly.Currency.decimalDigits(this.currency)) ?? 2) - result.value.length
 			result = adjust < 0 ? result.truncate(result.value.length + adjust) : result.suffix("0".repeat(adjust))
 		} else
 			separator = result.value.length

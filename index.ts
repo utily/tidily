@@ -10,3 +10,4 @@ import { StateEditor } from "./StateEditor"
 import { Type } from "./Type"
 
 export { Action, Converter, Direction, Formatter, Selection, Settings, State, StateEditor, Type, get, format, parse }
+export * as tidily from "./tidily"
