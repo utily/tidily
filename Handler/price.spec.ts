@@ -5,6 +5,10 @@ describe("price", () => {
 		expect(tidily.format(212, "price", "USD")).toBe("212.00 USD")
 		expect(tidily.format(212.0, "price", "USD")).toBe("212.00 USD")
 	})
+	it("does not add decimals", () => {
+		expect(tidily.format(212, "price", "ISK")).toBe("212 ISK")
+		expect(tidily.format(212.0, "price", "XPD")).toBe("212 XPD")
+	})
 	const handler = tidily.get("price", "SEK") as tidily.Formatter
 	const noCurrencyHandler = tidily.get("price") as tidily.Formatter
 	it("key event first key 1", () => {

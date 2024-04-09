@@ -18,7 +18,8 @@ class Handler implements Converter<number>, Formatter {
 	format(unformatted: StateEditor): Readonly<State> & Settings {
 		let result =
 			unformatted.value == "NaN" ? unformatted.replace(0, unformatted.value.length, "") : StateEditor.copy(unformatted)
-		if (!result.value.includes(".") && this.currency && Math.abs(Number.parseFloat(result.value)) > 0)
+		const decimals = this.currency && isoly.Currency.decimalDigits(this.currency)
+		if (!result.value.includes(".") && decimals && Math.abs(Number.parseFloat(result.value)) > 0)
 			result = result.suffix(".0")
 		let separator = result.value && result.value.includes(".") ? result.value.indexOf(".") : undefined
 		if (separator == 0) {
@@ -26,8 +27,7 @@ class Handler implements Converter<number>, Formatter {
 			separator++
 		}
 		if (separator != undefined) {
-			const adjust =
-				separator + 1 + ((this.currency && isoly.Currency.decimalDigits(this.currency)) ?? 2) - result.value.length
+			const adjust = separator + 1 + (decimals ?? 2) - result.value.length
 			result = adjust < 0 ? result.truncate(result.value.length + adjust) : result.suffix("0".repeat(adjust))
 		} else
 			separator = result.value.length
