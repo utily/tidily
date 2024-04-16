@@ -9,8 +9,8 @@ describe("price", () => {
 		expect(tidily.format(212, "price", "ISK")).toBe("212 ISK")
 		expect(tidily.format(212.0, "price", "XPD")).toBe("212 XPD")
 	})
-	const handler = tidily.get("price", "SEK") as tidily.Formatter
-	const noCurrencyHandler = tidily.get("price") as tidily.Formatter
+	const handler = tidily.get("price", "SEK") as tidily.Converter<"string" | unknown> & tidily.Formatter
+	const noCurrencyHandler = tidily.get("price") as tidily.Converter<"string" | unknown> & tidily.Formatter
 	it("key event first key 1", () => {
 		const result = tidily.Action.apply(handler, { value: "", selection: { start: 0, end: 0 } }, { key: "1" })
 		expect(result).toMatchObject({ value: "1.00 SEK", selection: { start: 1, end: 1 } })
@@ -69,5 +69,15 @@ describe("price", () => {
 		result = tidily.Action.apply(handler, result, { key: "Backspace" })
 		expect(result).toMatchObject({ value: "0 SEK", selection: { start: 1, end: 1 } })
 		expect(result.pattern?.test("0 SEK")).toEqual(true)
+	})
+	it("toString", () => {
+		expect(handler.toString(7111)).toEqual("7111")
+		expect(handler.toString(undefined)).toEqual("")
+		expect(noCurrencyHandler.toString(undefined)).toEqual("")
+	})
+	it("fromString", () => {
+		expect(handler.fromString("07111")).toEqual(7111)
+		expect(handler.fromString("")).toEqual(undefined)
+		expect(noCurrencyHandler.fromString("")).toEqual(undefined)
 	})
 })

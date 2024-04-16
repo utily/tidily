@@ -14,7 +14,7 @@ class Handler implements Converter<string>, Formatter {
 		return typeof data == "string" ? data : ""
 	}
 	fromString(value: string): string | undefined {
-		return typeof value == "string" ? value : undefined
+		return typeof value == "string" && !!value ? value : undefined
 	}
 	split(unformatted: StateEditor): StateEditor {
 		let previousSymbol: string

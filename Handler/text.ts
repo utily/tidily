@@ -11,7 +11,7 @@ class Handler implements Converter<string>, Formatter {
 		return typeof data == "string" ? data : ""
 	}
 	fromString(value: string): string | undefined {
-		return typeof value == "string" ? value : undefined
+		return typeof value == "string" && !!value ? value : undefined
 	}
 	format(unformatted: StateEditor): Readonly<State> & Settings {
 		return { ...unformatted, type: "text", ...this.settings }

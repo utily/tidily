@@ -1,9 +1,10 @@
 import { Action } from "../Action"
+import { Converter } from "../Converter"
 import { Formatter } from "../Formatter"
 import { format, get } from "./index"
 
 describe("postal-code", () => {
-	const handler = get("postal-code") as Formatter
+	const handler = get("postal-code") as Converter<"string" | unknown> & Formatter
 	it("key event first key", () => {
 		const result = Action.apply(handler, { value: "", selection: { start: 0, end: 0 } }, { key: "1" })
 		expect(result).toMatchObject({ value: "1", selection: { start: 1, end: 1 } })
@@ -32,5 +33,13 @@ describe("postal-code", () => {
 	})
 	it("format", () => {
 		expect(format("12345", "postal-code")).toEqual("123 45")
+	})
+	it("toString", () => {
+		expect(handler.toString("07111")).toEqual("07111")
+		expect(handler.toString(undefined)).toEqual("")
+	})
+	it("fromString", () => {
+		expect(handler.fromString("07111")).toEqual("07111")
+		expect(handler.fromString("")).toEqual(undefined)
 	})
 })
