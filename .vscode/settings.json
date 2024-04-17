@@ -43,5 +43,6 @@
 		"transactly",
 		"unformat",
 		"uply"
-	]
+	],
+	"jest.runMode": "on-demand",
 }

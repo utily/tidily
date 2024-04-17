@@ -1,9 +1,10 @@
 import { Action } from "../Action"
+import { Converter } from "../Converter"
 import { Formatter } from "../Formatter"
 import { get } from "./index"
 
 describe("phone", () => {
-	const handler = get("phone") as Formatter
+	const handler = get("phone") as Converter<"string" | unknown> & Formatter
 	it("key event first key 1", () => {
 		const result = Action.apply(handler, { value: "", selection: { start: 0, end: 0 } }, { key: "1" })
 		expect(result).toMatchObject({ value: "1", selection: { start: 1, end: 1 } })
@@ -35,5 +36,13 @@ describe("phone", () => {
 		let result = { value: "+468", selection: { start: 4, end: 4 } }
 		result = Action.apply(handler, result, { key: "Backspace" })
 		expect(result).toMatchObject({ value: "+46", selection: { start: 3, end: 3 } })
+	})
+	it("toString", () => {
+		expect(handler.toString("07111")).toEqual("07111")
+		expect(handler.toString(undefined)).toEqual("")
+	})
+	it("fromString", () => {
+		expect(handler.fromString("07111")).toEqual("07111")
+		expect(handler.fromString("")).toEqual(undefined)
 	})
 })

@@ -1,9 +1,10 @@
 import { Action } from "../Action"
+import { Converter } from "../Converter"
 import { Formatter } from "../Formatter"
 import { get } from "./index"
 
 describe("text", () => {
-	const handler = get("text") as Formatter
+	const handler = get("text") as Converter<"string" | unknown> & Formatter
 	it("Enter character", () => {
 		const result = Action.apply(handler, { value: "", selection: { start: 0, end: 0 } }, { key: "a" })
 		expect(result).toMatchObject({ value: "a", selection: { start: 1, end: 1 } })
@@ -177,5 +178,11 @@ describe("text", () => {
 			value: "This sentence",
 			selection: { start: 4, end: 4 },
 		})
+	})
+	it("toString", () => {
+		expect(handler.toString(undefined)).toEqual("")
+	})
+	it("fromString", () => {
+		expect(handler.fromString("")).toEqual(undefined)
 	})
 })

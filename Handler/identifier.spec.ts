@@ -1,12 +1,15 @@
 import { Action } from "../Action"
+import { Converter } from "../Converter"
 import { Formatter } from "../Formatter"
 import { get } from "./index"
 
 describe("identifier", () => {
-	const codeHandler = get("identifier-code") as Formatter
+	const codeHandler = get("identifier-code") as Converter<"string" | unknown> & Formatter
 	it("sentence to code", () => {
 		const result = Action.apply(codeHandler, { value: "Lille John och -robin h00d", selection: { start: 0, end: 0 } })
 		expect(result).toMatchObject({ value: "lillejohnochrobinh00d", selection: { start: 0, end: 0 } })
+		expect(codeHandler.toString(undefined)).toEqual("")
+		expect(codeHandler.fromString("")).toEqual(undefined)
 	})
 	const camelHandler = get("identifier-camel") as Formatter
 	it("sentence to camel", () => {
