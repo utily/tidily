@@ -42,5 +42,4 @@ describe("identifier", () => {
 		})
 		expect(result).toMatchObject({ value: "lille-john-och-robin-h00d", selection: { start: 0, end: 0 } })
 	})
-
 })
