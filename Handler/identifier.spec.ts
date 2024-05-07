@@ -6,14 +6,20 @@ import { get } from "./index"
 describe("identifier", () => {
 	const codeHandler = get("identifier-code") as Converter<"string" | unknown> & Formatter
 	it("sentence to code", () => {
-		const result = Action.apply(codeHandler, { value: "/9 Lille John och -robin h00d", selection: { start: 0, end: 0 } })
+		const result = Action.apply(codeHandler, {
+			value: "/9 Lille John och -robin h00d",
+			selection: { start: 0, end: 0 },
+		})
 		expect(result).toMatchObject({ value: "9lillejohnochrobinh00d", selection: { start: 0, end: 0 } })
 		expect(codeHandler.toString(undefined)).toEqual("")
 		expect(codeHandler.fromString("")).toEqual(undefined)
 	})
 	const camelHandler = get("identifier-camel") as Formatter
 	it("sentence to camel", () => {
-		const result = Action.apply(camelHandler, { value: "90Doe Lille// John och -robin h00d", selection: { start: 0, end: 0 } })
+		const result = Action.apply(camelHandler, {
+			value: "90Doe Lille// John och -robin h00d",
+			selection: { start: 0, end: 0 },
+		})
 		expect(result).toMatchObject({ value: "doeLilleJohnOchRobinH00d", selection: { start: 0, end: 0 } })
 	})
 	const pascalHandler = get("identifier-pascal") as Formatter
