@@ -17,23 +17,38 @@ class Handler implements Converter<string>, Formatter {
 		return typeof value == "string" && !!value ? value : undefined
 	}
 	split(unformatted: StateEditor): StateEditor {
-		let previousSymbol: string
+		let firstAllowedSymbol: boolean
+		let previousAllowedSymbol = ""
 		return unformatted
 			.map((symbol, index) => {
 				const newSymbol =
-					index !== 0 && symbol === symbol.toUpperCase() && isNaN(+symbol) && previousSymbol !== " "
+					index !== 0 &&
+					symbol === symbol.toUpperCase() &&
+					isNaN(+symbol) &&
+					previousAllowedSymbol !== " " &&
+					this.isSymbolAllowed(symbol) &&
+					firstAllowedSymbol
 						? " " + symbol
-						: (symbol === "_" || symbol === "-") && previousSymbol !== " "
+						: (symbol === "_" || symbol === "-") && previousAllowedSymbol !== " "
 						? " "
-						: symbol === " " && previousSymbol === " "
+						: (symbol === " " && previousAllowedSymbol === " ") ||
+						  !this.isSymbolAllowed(symbol) ||
+						  (!firstAllowedSymbol && !this.isSymbolLetter(symbol) && this.mode !== "code")
 						? ""
 						: symbol
-				previousSymbol = symbol
+				!firstAllowedSymbol && (firstAllowedSymbol = this.isSymbolLetter(symbol))
+				this.isSymbolAllowed(symbol) && (previousAllowedSymbol = symbol)
 				return newSymbol
 			})
 			.toLower()
 			.delete("-")
 			.delete("_")
+	}
+	isSymbolLetter(symbol: string) {
+		return (symbol >= "a" && symbol <= "z") || (symbol >= "A" && symbol <= "Z")
+	}
+	isSymbolAllowed(symbol: string) {
+		return this.isSymbolLetter(symbol) || (symbol >= "0" && symbol <= "9") || symbol === " "
 	}
 	format(unformatted: StateEditor): Readonly<State> & Settings {
 		const alignedString = this.split(unformatted)
@@ -55,10 +70,8 @@ class Handler implements Converter<string>, Formatter {
 					.delete(" ")
 				break
 			case "snake":
-				result = alignedString.replace(" ", "_").toLower()
-				break
 			case "attribute":
-				result = alignedString.replace(" ", "-").toLower()
+				result = alignedString.replace(" ", this.mode === "snake" ? "_" : "-")
 				break
 			default:
 				result = unformatted
@@ -70,8 +83,7 @@ class Handler implements Converter<string>, Formatter {
 	}
 	allowed(symbol: string, state: Readonly<State>): boolean {
 		return (
-			(symbol >= "A" && symbol <= "Z") ||
-			(symbol >= "a" && symbol <= "z") ||
+			this.isSymbolLetter(symbol) ||
 			(symbol >= "0" && symbol <= "9" && (this.mode == "code" || state.value.length > 0)) ||
 			(symbol == "_" && this.mode == "snake" && state.value.length > 0) ||
 			(symbol == "-" && this.mode == "attribute" && state.value.length > 0)
