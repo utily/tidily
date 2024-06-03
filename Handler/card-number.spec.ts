@@ -41,7 +41,7 @@ describe("card-number", () => {
 		let result = { value: "", selection: { start: 0, end: 0 } }
 		for (const character of "344242424242424999")
 			result = Action.apply(handler, result, { key: character })
-		expect(result.value).toMatch(/^3[47][0-9]{2}\s[0-9]{4}\s[0-9]{4}\s[0-9]{3}$/)
+		expect(result.value).toMatch(/^3[47][0-9]{2}\s[0-9]{6}\s[0-9]{5}$/)
 	})
 	it("matches dankort format", () => {
 		let result = { value: "", selection: { start: 0, end: 0 } }
@@ -53,7 +53,7 @@ describe("card-number", () => {
 		let result = { value: "", selection: { start: 0, end: 0 } }
 		for (const character of "38042424242424999")
 			result = Action.apply(handler, result, { key: character })
-		expect(result.value).toMatch(/^3(?:0[0-5]|[68][0-9])[0-9]\s[0-9]{4}\s[0-9]{4}\s[0-9]{2}$/)
+		expect(result.value).toMatch(/^3(?:0[0-5]|[68][0-9])[0-9]\s[0-9]{6}\s[0-9]{4}$/)
 	})
 	it("matches discover format", () => {
 		let result = { value: "", selection: { start: 0, end: 0 } }
