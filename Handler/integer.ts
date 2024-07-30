@@ -16,7 +16,7 @@ class Handler implements Converter<number>, Formatter {
 	format(unformatted: StateEditor): Readonly<State> & Settings {
 		return {
 			...unformatted,
-			type: "number",
+			type: "tel",
 			length: [3, undefined],
 			pattern: /^[0-9]+$/,
 		}
