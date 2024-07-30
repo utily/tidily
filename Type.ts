@@ -7,6 +7,7 @@ export type Type =
 	| "divisor"
 	| "duration"
 	| "email"
+	| "hex-color"
 	| "identifier-code"
 	| "identifier-pascal"
 	| "identifier-snake"

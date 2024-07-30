@@ -15,6 +15,7 @@ import "./phone"
 import "./postal-code"
 import "./price"
 import "./text"
+import "./hex-color"
 import { format, get, parse } from "./base"
 
 export { get, format, parse }
