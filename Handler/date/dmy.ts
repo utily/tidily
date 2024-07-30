@@ -20,7 +20,7 @@ class Handler extends Base {
 		return isoly.Date.is(result) ? result : undefined
 	}
 	format(unformatted: StateEditor): Readonly<State> & Settings {
-		let result = unformatted
+		let result = unformatted.delete(this.separator)
 		if (result.get(0, 1) > "3")
 			result = result.insert(0, "0")
 		if (result.value.length > 1)

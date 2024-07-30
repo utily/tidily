@@ -24,7 +24,7 @@ class Handler extends Base {
 			: 31
 	}
 	format(unformatted: StateEditor): Readonly<State> & Settings {
-		let result = unformatted
+		let result = unformatted.delete(this.separator)
 		if (result.value.length > 3) {
 			result = result.insert(4, this.separator)
 			if (result.get(5, 1) > "1")

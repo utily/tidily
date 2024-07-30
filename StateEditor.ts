@@ -10,7 +10,7 @@ export class StateEditor implements Readonly<State> {
 	}
 
 	get(index: number, length = 1): string {
-		return this.value.substr(index, length)
+		return this.value.substring(index, index + length)
 	}
 	is(index: number, ...character: string[]) {
 		const c = this.get(index)
