@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { isoly } from "isoly"
 import { Action } from "../../Action"
-import { get } from "../index"
+import { format, get } from "../index"
 
 describe("Date handler", () => {
 	const handlers = { gb: get("date", "en-GB"), us: get("date", "en-US"), standard: get("date") }
@@ -14,5 +15,12 @@ describe("Date handler", () => {
 		for (const character of "1230202012")
 			result = Action.apply(handlers.us!, result, { key: character })
 		expect(result).toMatchObject({ value: "12/30/2020", selection: { start: 10, end: 10 } })
+	})
+	it.only.each([
+		["2024-11-21", "sv-SE", "2024-11-21"],
+		["2024-01-31", "en-GB", "31/01/2024"],
+		["2024-07-04", "en-US", "07/04/2024"],
+	] as [isoly.Date, isoly.Locale, string][])("format", (date, locale, formattedDate) => {
+		expect(format(date, "date", locale)).toEqual(formattedDate)
 	})
 })

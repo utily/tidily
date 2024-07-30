@@ -18,7 +18,7 @@ class Handler implements Converter<string>, Formatter {
 		let result = unformatted
 		const year = new Date().getFullYear().toString()
 		if (unformatted.value.length > 1 && unformatted.get(0, 2) != "19" && unformatted.get(0, 2) != "20")
-			result = result.prepend(unformatted.get(0, 2) > year.substr(2, 2) ? "19" : "20")
+			result = result.prepend(unformatted.get(0, 2) > year.substring(2, 4) ? "19" : "20")
 		if (result.value.length >= 8)
 			result = result.insert(8, "-")
 		return {
