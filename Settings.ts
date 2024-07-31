@@ -75,6 +75,7 @@ export interface Settings {
 		| "impp"
 		| "url"
 		| "photo"
+	readonly inputmode?: "none" | "text" | "decimal" | "numeric" | "tel" | "search" | "email" | "url"
 	readonly length?: [number | undefined, number | undefined]
 	readonly pattern?: RegExp
 	readonly classes?: string[]
