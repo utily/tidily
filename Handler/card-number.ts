@@ -19,7 +19,8 @@ class Handler implements Converter<string>, Formatter {
 		)
 		return {
 			...result,
-			type: "tel",
+			type: "text",
+			inputmode: "numeric",
 			autocomplete: "cc-number",
 			length: issuer.length.slice(1) as [number | undefined, number | undefined],
 			pattern: issuer.verification,

@@ -48,6 +48,7 @@ class Handler implements Converter<number>, Formatter {
 		return {
 			...result,
 			type: "text",
+			inputmode: "numeric",
 			length: [3, undefined],
 			pattern: new RegExp("^(\\d{0,3})( \\d{3})*(\\.\\d+)?" + (this.currency ? " " + this.currency : "") + "$"),
 		}
