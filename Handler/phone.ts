@@ -70,7 +70,7 @@ class Handler implements Converter<string>, Formatter {
 				}
 			}
 		}
-		return { ...result, type: "text", autocomplete: "tel" }
+		return { ...result, type: "tel", autocomplete: "tel" }
 	}
 	unformat(formatted: StateEditor): Readonly<State> {
 		return formatted.delete(" ").delete("-")

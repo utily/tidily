@@ -22,7 +22,14 @@ class Handler implements Converter<[number, number]>, Formatter {
 			result = result.prepend("0")
 		if (result.value.length > 1)
 			result = result.insert(2, " / ")
-		return { ...result, type: "tel", autocomplete: "cc-exp", length: [7, 7], pattern: /^(0[1-9]|1[012]) \/ \d\d$/ }
+		return {
+			...result,
+			type: "text",
+			inputmode: "numeric",
+			autocomplete: "cc-exp",
+			length: [7, 7],
+			pattern: /^(0[1-9]|1[012]) \/ \d\d$/,
+		}
 	}
 	unformat(formatted: StateEditor): Readonly<State> {
 		return formatted.delete(" / ")
