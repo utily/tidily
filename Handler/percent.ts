@@ -19,7 +19,7 @@ class Handler implements Converter<number>, Formatter {
 			type: "text",
 			inputmode: "numeric",
 			length: [3, undefined],
-			pattern: /^\d+(.\d)? %+$/,
+			pattern: /^\d+(.\d+)? %+$/,
 		}
 	}
 	unformat(formatted: StateEditor): Readonly<State> {
