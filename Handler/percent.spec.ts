@@ -34,6 +34,8 @@ describe("percent", () => {
 	})
 	it("toString", () => {
 		expect(handler.toString(1)).toEqual("100")
+		expect(handler.toString(0.14)).toEqual("14")
+		expect(handler.toString(0.123456789)).toEqual("12.3456789")
 		expect(handler.toString(0.5)).toEqual("50")
 		expect(handler.toString(0.25)).toEqual("25")
 		expect(handler.toString(0)).toEqual("0")
@@ -41,6 +43,8 @@ describe("percent", () => {
 	})
 	it("fromString", () => {
 		expect(handler.fromString("100")).toEqual(1)
+		expect(handler.fromString("14")).toEqual(0.14)
+		expect(handler.fromString("50")).toEqual(0.5)
 		expect(handler.fromString("50")).toEqual(0.5)
 		expect(handler.fromString("25")).toEqual(0.25)
 		expect(handler.fromString("0")).toEqual(0)
