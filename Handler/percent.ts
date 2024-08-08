@@ -7,7 +7,7 @@ import { add } from "./base"
 
 class Handler implements Converter<number>, Formatter {
 	toString(data?: number | unknown): string {
-		return typeof data == "number" ? (data * 100).toString() : ""
+		return typeof data == "number" ? (data * 100).toFixed(data.toString().split(".")[1]?.length - 2) : ""
 	}
 	fromString(value: string): number | undefined {
 		const parsedFloat = typeof value == "string" ? Number.parseFloat(value) : undefined
