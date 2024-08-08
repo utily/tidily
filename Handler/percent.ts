@@ -7,7 +7,12 @@ import { add } from "./base"
 
 class Handler implements Converter<number>, Formatter {
 	toString(data?: number | unknown): string {
-		return typeof data == "number" ? (data * 100).toFixed(data.toString().split(".")[1]?.length - 2) : ""
+		let result = ""
+		if (typeof data == "number") {
+			const decimals = data.toString().split(".")[1]?.length ?? 2
+			result = (data * 100).toFixed(!decimals || decimals <= 1 ? 0 : decimals - 2)
+		}
+		return result
 	}
 	fromString(value: string): number | undefined {
 		const parsedFloat = typeof value == "string" ? Number.parseFloat(value) : undefined
