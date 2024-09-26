@@ -1,4 +1,3 @@
-import { Currency } from "isoly"
 import { tidily } from "../index"
 
 describe("price", () => {

@@ -15,6 +15,11 @@ class Handler implements Converter<number>, Formatter {
 		const result = typeof value == "string" ? Number.parseFloat(value) : undefined
 		return result != undefined && !isNaN(result) ? result : undefined
 	}
+	// TODO - add autofill function that would give a preview of how it would autocomplete
+	// E.g.
+	// Input written "123.0" autofill with "0 EUR"
+	// or for Date
+	// Input written "202" autofill "Y-MM-DD"
 	partialFormat(unformatted: StateEditor): Readonly<State> & Settings {
 		let result =
 			unformatted.value == "NaN" ? unformatted.replace(0, unformatted.value.length, "") : StateEditor.copy(unformatted)
