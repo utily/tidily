@@ -12,6 +12,7 @@ class Handler implements Converter<string>, Formatter {
 	fromString(value: string): string | undefined {
 		return value ? "#" + value : undefined
 	}
+	partialFormat = this.format
 	format(unformatted: StateEditor): Readonly<State> & Settings {
 		const result = unformatted.delete("#")
 		return {

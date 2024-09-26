@@ -50,6 +50,7 @@ class Handler implements Converter<string>, Formatter {
 	isSymbolAllowed(symbol: string) {
 		return this.isSymbolLetter(symbol) || (symbol >= "0" && symbol <= "9") || symbol === " "
 	}
+	partialFormat = this.format
 	format(unformatted: StateEditor): Readonly<State> & Settings {
 		const alignedString = this.split(unformatted)
 		let result: StateEditor

@@ -48,6 +48,27 @@ export function format(data: any, type: Type, ...argument: any[]): string {
 				.value
 		: ""
 }
+export function partialFormat(data: string, type: "card-csc" | "card-number" | "email" | "password" | "text"): string
+export function partialFormat(data: [number, number], type: "card-expires"): string
+export function partialFormat(data: isoly.Date, type: "date", format?: DateFormat | isoly.Locale): string
+export function partialFormat(data: isoly.DateTime, type: "date-time"): string
+export function partialFormat(data: number | [number, number], type: "divisor"): string
+export function partialFormat(data: number, type: "percent"): string
+export function partialFormat(
+	data: string,
+	type: "identity-number" | "phone" | "postal-code",
+	country?: isoly.CountryCode.Alpha2
+): string
+export function partialFormat(data: number, type: "price", currency: isoly.Currency): string
+export function partialFormat(data: any, type: Type, ...argument: any[]): string
+export function partialFormat(data: any, type: Type, ...argument: any[]): string {
+	const handler = get(type, ...argument)
+	return handler
+		? handler.partialFormat(
+				StateEditor.modify(handler.toString(typeof data == "string" ? parse(data, type, argument) : data))
+		  ).value
+		: ""
+}
 export function parse(
 	value: string,
 	type: "card-csc" | "card-number" | "email" | "password" | "text"

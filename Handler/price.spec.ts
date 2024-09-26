@@ -1,3 +1,4 @@
+import { Currency } from "isoly"
 import { tidily } from "../index"
 
 describe("price", () => {
@@ -80,13 +81,14 @@ describe("price", () => {
 		expect(handler.fromString("")).toEqual(undefined)
 		expect(noCurrencyHandler.fromString("")).toEqual(undefined)
 	})
-
-	it("format", () => {
-		const result = tidily.format(1, "price", "EUR")
-		tidily.format("0", "price", "EUR")
-		tidily.format("0.1", "price", "EUR")
-		tidily.format("0.9", "price", "EUR")
-		tidily.format("9000", "price", "EUR")
-		expect(result).toEqual("1.00 EUR")
+	it.each([
+		["EUR", "1", "1 EUR", "1.00 EUR"],
+		["EUR", "0", "0 EUR", "0 EUR"],
+		["EUR", "0.1", "0.1 EUR", "0.10 EUR"],
+		["EUR", "0.9", "0.9 EUR", "0.90 EUR"],
+		["EUR", "9000", "9 000 EUR", "9 000.00 EUR"],
+	])("format and partialFormat", (currency: string, data: string, partialFormatted: string, formatted: string) => {
+		expect(tidily.partialFormat(data, "price", currency)).toEqual(partialFormatted)
+		expect(tidily.format(data, "price", currency)).toEqual(formatted)
 	})
 })

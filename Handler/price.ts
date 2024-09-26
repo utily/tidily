@@ -15,17 +15,34 @@ class Handler implements Converter<number>, Formatter {
 		const result = typeof value == "string" ? Number.parseFloat(value) : undefined
 		return result != undefined && !isNaN(result) ? result : undefined
 	}
+	partialFormat(unformatted: StateEditor): Readonly<State> & Settings {
+		let result =
+			unformatted.value == "NaN" ? unformatted.replace(0, unformatted.value.length, "") : StateEditor.copy(unformatted)
+
+		result = this.addThousandSeparators(result)
+
+		if (result.match(/^[0\s]{2,}$/))
+			result = result.replace(0, result.value.length, "0")
+		else if (result.match(/^[0\s]{2,}(\s\w{3}){1}$/))
+			result = result.replace(0, result.value.length - 4, "0")
+
+		result = this.appendCurrency(result)
+		return {
+			...result,
+			type: "text",
+			inputmode: "numeric",
+			length: [3, undefined],
+			pattern: new RegExp("^(\\d{0,3})( \\d{3})*(\\.\\d+)?" + (this.currency ? " " + this.currency : "") + "$"),
+		}
+	}
 	format(unformatted: StateEditor): Readonly<State> & Settings {
 		let result =
 			unformatted.value == "NaN" ? unformatted.replace(0, unformatted.value.length, "") : StateEditor.copy(unformatted)
-		const decimals = this.currency && isoly.Currency.decimalDigits(this.currency)
 
-		console.log("a", JSON.stringify(result.value))
+		const decimals = this.currency && isoly.Currency.decimalDigits(this.currency)
 
 		if (!result.value.includes(".") && decimals && Math.abs(Number.parseFloat(result.value)) > 0)
 			result = result.suffix(".0")
-
-		console.log("b", JSON.stringify(result.value))
 
 		// Add 0 if e.i. ".10"
 		let separatorIndex = result.value && result.value.includes(".") ? result.value.indexOf(".") : undefined
@@ -33,28 +50,20 @@ class Handler implements Converter<number>, Formatter {
 			result = result.prepend("0")
 			separatorIndex++
 		}
-		console.log("c", JSON.stringify(result.value))
 		// add fill decimals with zeros
 		if (separatorIndex != undefined) {
 			const adjust = separatorIndex + 1 + (decimals ?? 2) - result.value.length
 			result = adjust < 0 ? result.truncate(result.value.length + adjust) : result.suffix("0".repeat(adjust))
 		}
 
-		console.log("d", JSON.stringify(result.value))
-
 		result = this.addThousandSeparators(result)
-
-		console.log("e", JSON.stringify(result.value))
 
 		if (result.match(/^[0\s]{2,}$/))
 			result = result.replace(0, result.value.length, "0")
 		else if (result.match(/^[0\s]{2,}(\s\w{3}){1}$/))
 			result = result.replace(0, result.value.length - 4, "0")
 
-		console.log("f", JSON.stringify(result.value))
-
 		result = this.appendCurrency(result)
-		console.log("g", JSON.stringify(result.value))
 		return {
 			...result,
 			type: "text",

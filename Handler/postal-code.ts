@@ -14,6 +14,7 @@ class Handler implements Converter<string>, Formatter {
 	fromString(value: string): string | undefined {
 		return typeof value == "string" && !!value ? value : undefined
 	}
+	partialFormat = this.format
 	format(unformatted: StateEditor): Readonly<State> & Settings {
 		const result =
 			!unformatted.value.includes(" ") && unformatted.value.length >= 4 ? unformatted.insert(3, " ") : unformatted
