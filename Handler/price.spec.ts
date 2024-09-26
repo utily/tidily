@@ -80,4 +80,13 @@ describe("price", () => {
 		expect(handler.fromString("")).toEqual(undefined)
 		expect(noCurrencyHandler.fromString("")).toEqual(undefined)
 	})
+
+	it("format", () => {
+		const result = tidily.format(1, "price", "EUR")
+		tidily.format("0", "price", "EUR")
+		tidily.format("0.1", "price", "EUR")
+		tidily.format("0.9", "price", "EUR")
+		tidily.format("9000", "price", "EUR")
+		expect(result).toEqual("1.00 EUR")
+	})
 })

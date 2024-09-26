@@ -19,32 +19,42 @@ class Handler implements Converter<number>, Formatter {
 		let result =
 			unformatted.value == "NaN" ? unformatted.replace(0, unformatted.value.length, "") : StateEditor.copy(unformatted)
 		const decimals = this.currency && isoly.Currency.decimalDigits(this.currency)
+
+		console.log("a", JSON.stringify(result.value))
+
 		if (!result.value.includes(".") && decimals && Math.abs(Number.parseFloat(result.value)) > 0)
 			result = result.suffix(".0")
-		let separator = result.value && result.value.includes(".") ? result.value.indexOf(".") : undefined
-		if (separator == 0) {
+
+		console.log("b", JSON.stringify(result.value))
+
+		// Add 0 if e.i. ".10"
+		let separatorIndex = result.value && result.value.includes(".") ? result.value.indexOf(".") : undefined
+		if (separatorIndex == 0) {
 			result = result.prepend("0")
-			separator++
+			separatorIndex++
 		}
-		if (separator != undefined) {
-			const adjust = separator + 1 + (decimals ?? 2) - result.value.length
+		console.log("c", JSON.stringify(result.value))
+		// add fill decimals with zeros
+		if (separatorIndex != undefined) {
+			const adjust = separatorIndex + 1 + (decimals ?? 2) - result.value.length
 			result = adjust < 0 ? result.truncate(result.value.length + adjust) : result.suffix("0".repeat(adjust))
-		} else
-			separator = result.value.length
-		const spaces = separator <= 0 ? 0 : Math.ceil(separator / 3) - 1
-		for (let i = 0; i < spaces; i++) {
-			const position = separator - (spaces - i) * 3
-			result = result.insert(position, " ")
-			separator++
 		}
+
+		console.log("d", JSON.stringify(result.value))
+
+		result = this.addThousandSeparators(result)
+
+		console.log("e", JSON.stringify(result.value))
+
 		if (result.match(/^[0\s]{2,}$/))
 			result = result.replace(0, result.value.length, "0")
 		else if (result.match(/^[0\s]{2,}(\s\w{3}){1}$/))
 			result = result.replace(0, result.value.length - 4, "0")
-		result =
-			this.currency && (result.value.length > 1 || (result.value.length == 1 && result.value.charAt(0) != "."))
-				? result.suffix(" " + this.currency)
-				: result
+
+		console.log("f", JSON.stringify(result.value))
+
+		result = this.appendCurrency(result)
+		console.log("g", JSON.stringify(result.value))
 		return {
 			...result,
 			type: "text",
@@ -53,6 +63,24 @@ class Handler implements Converter<number>, Formatter {
 			pattern: new RegExp("^(\\d{0,3})( \\d{3})*(\\.\\d+)?" + (this.currency ? " " + this.currency : "") + "$"),
 		}
 	}
+
+	addThousandSeparators(state: StateEditor) {
+		let separatorIndex = state.value.includes(".") ? state.value.indexOf(".") : state.value.length
+		const spaces = separatorIndex <= 0 ? 0 : Math.ceil(separatorIndex / 3) - 1
+		for (let i = 0; i < spaces; i++) {
+			const position = separatorIndex - (spaces - i) * 3
+			state = state.insert(position, " ")
+			separatorIndex++
+		}
+		return state
+	}
+
+	appendCurrency(state: StateEditor) {
+		return this.currency && (state.value.length > 1 || (state.value.length == 1 && state.value.charAt(0) != "."))
+			? state.suffix(" " + this.currency)
+			: state
+	}
+
 	unformat(formatted: StateEditor): Readonly<State> {
 		return this.currency ? formatted.delete(" ").delete("" + this.currency) : formatted.delete(" ")
 	}
