@@ -20,6 +20,9 @@ class Handler implements Converter<number>, Formatter {
 	// Input written "123.0" autofill with "0 EUR"
 	// or for Date
 	// Input written "202" autofill "Y-MM-DD"
+	// Name suggestions:
+	// autofill, complete, fillMissing, suggestMissing - these imply that it will fill the rest with is wrong for date
+	// formatRest, supplement, leftover, remaining, remainder, missing - something like this
 	partialFormat(unformatted: StateEditor): Readonly<State> & Settings {
 		let result =
 			unformatted.value == "NaN" ? unformatted.replace(0, unformatted.value.length, "") : StateEditor.copy(unformatted)
