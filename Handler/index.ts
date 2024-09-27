@@ -16,6 +16,6 @@ import "./postal-code"
 import "./price"
 import "./text"
 import "./hex-color"
-import { format, get, parse, partialFormat } from "./base"
+import { format, get, parse } from "./base"
 
-export { get, format, partialFormat, parse }
+export { get, format, parse }

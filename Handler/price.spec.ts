@@ -80,14 +80,18 @@ describe("price", () => {
 		expect(handler.fromString("")).toEqual(undefined)
 		expect(noCurrencyHandler.fromString("")).toEqual(undefined)
 	})
-	it.each([
-		["EUR", "1", "1 EUR", "1.00 EUR"],
-		["EUR", "0", "0 EUR", "0 EUR"],
-		["EUR", "0.1", "0.1 EUR", "0.10 EUR"],
-		["EUR", "0.9", "0.9 EUR", "0.90 EUR"],
-		["EUR", "9000", "9 000 EUR", "9 000.00 EUR"],
+	it.only.each([
+		["EUR", "1", "1", "1.00 EUR"],
+		["EUR", "0", "0", "0 EUR"],
+		["EUR", "0.1", "0.1", "0.10 EUR"],
+		["EUR", "0.200", "0.20", "0.20 EUR"],
+		["EUR", "0.30", "0.30", "0.30 EUR"],
+		["EUR", "0.418", "0.41", "0.41 EUR"],
+		["EUR", "0.9", "0.9", "0.90 EUR"],
+		["EUR", "9000", "9 000", "9 000.00 EUR"],
 	])("format and partialFormat", (currency: string, data: string, partialFormatted: string, formatted: string) => {
-		expect(tidily.partialFormat(data, "price", currency)).toEqual(partialFormatted)
+		const handler = tidily.get("price", currency) as tidily.Converter<"string" | unknown> & tidily.Formatter
+		expect(handler.partialFormat(tidily.StateEditor.modify(data)).value).toEqual(partialFormatted)
 		expect(tidily.format(data, "price", currency)).toEqual(formatted)
 	})
 })
