@@ -24,10 +24,9 @@ class Handler implements Converter<number>, Formatter {
 	// autofill, complete, fillMissing, suggestMissing - these imply that it will fill the rest with is wrong for date
 	// formatRest, supplement, leftover, remaining, remainder, missing - something like this
 	formattedRemainder(unformatted: StateEditor) {
-		let result = StateEditor.copy(unformatted)
-
-		result = this.appendCurrency(result)
-		return result
+		const partial = this.partialFormat(unformatted)
+		const full = this.format(unformatted)
+		return full.value.slice(partial.value.length)
 	}
 
 	partialFormat(unformatted: StateEditor): Readonly<State> & Settings {

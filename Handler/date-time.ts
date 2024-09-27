@@ -21,6 +21,7 @@ class Handler implements Converter<string>, Formatter {
 			: result + fillerDate.substring(result.length, fillerDate.length)
 		return isoly.DateTime.is(result) ? result : undefined
 	}
+	formattedRemainder = () => ""
 	partialFormat = this.format
 	format(unformatted: StateEditor): Readonly<State> & Settings {
 		let result = formatDate(unformatted)

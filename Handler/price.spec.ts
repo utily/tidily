@@ -80,7 +80,7 @@ describe("price", () => {
 		expect(handler.fromString("")).toEqual(undefined)
 		expect(noCurrencyHandler.fromString("")).toEqual(undefined)
 	})
-	it.only.each([
+	it.each([
 		["EUR", "1", "1", "1.00 EUR"],
 		["EUR", "0", "0", "0 EUR"],
 		["EUR", "0.1", "0.1", "0.10 EUR"],
