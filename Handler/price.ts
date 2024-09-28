@@ -15,20 +15,11 @@ class Handler implements Converter<number>, Formatter {
 		const result = typeof value == "string" ? Number.parseFloat(value) : undefined
 		return result != undefined && !isNaN(result) ? result : undefined
 	}
-	// TODO - add autofill function that would give a preview of how it would autocomplete
-	// E.g.
-	// Input written "123.0" autofill with "0 EUR"
-	// or for Date
-	// Input written "202" autofill "Y-MM-DD"
-	// Name suggestions:
-	// autofill, complete, fillMissing, suggestMissing - these imply that it will fill the rest with is wrong for date
-	// formatRest, supplement, leftover, remaining, remainder, missing - something like this
 	formattedRemainder(unformatted: StateEditor) {
 		const partial = this.partialFormat(unformatted)
 		const full = this.format(unformatted)
 		return full.value.slice(partial.value.length)
 	}
-
 	partialFormat(unformatted: StateEditor): Readonly<State> & Settings {
 		let result =
 			unformatted.value == "NaN" ? unformatted.replace(0, unformatted.value.length, "") : StateEditor.copy(unformatted)
