@@ -53,13 +53,11 @@ class Handler implements Converter<number>, Formatter {
 			pattern: new RegExp("^(\\d{0,3})( \\d{3})*(\\.\\d+)?" + (this.currency ? " " + this.currency : "") + "$"),
 		}
 	}
-
 	forceDecimalZero(state: StateEditor, decimals?: number) {
 		if (!state.value.includes(".") && decimals && Math.abs(Number.parseFloat(state.value)) > 0)
 			state = state.suffix(".0")
 		return state
 	}
-
 	addLeadingIntegerZero(state: StateEditor) {
 		let separatorIndex = state.value && state.value.includes(".") ? state.value.indexOf(".") : undefined
 		if (separatorIndex == 0) {
@@ -68,7 +66,6 @@ class Handler implements Converter<number>, Formatter {
 		}
 		return state
 	}
-
 	fillDecimalsIfPresent(state: StateEditor, decimals: number | undefined, zeroHandling: "fillAndLimit" | "onlyLimit") {
 		const separatorIndex = state.value.indexOf(".")
 		if (separatorIndex != -1) {
@@ -85,7 +82,6 @@ class Handler implements Converter<number>, Formatter {
 		}
 		return state
 	}
-
 	truncateIntegerZeros(state: StateEditor) {
 		if (state.match(/^[0\s]{2,}$/))
 			state = state.replace(0, state.value.length, "0")
@@ -93,7 +89,6 @@ class Handler implements Converter<number>, Formatter {
 			state = state.replace(0, state.value.length - 4, "0")
 		return state
 	}
-
 	addThousandSeparators(state: StateEditor) {
 		let separatorIndex = state.value.includes(".") ? state.value.indexOf(".") : state.value.length
 		const spaces = separatorIndex <= 0 ? 0 : Math.ceil(separatorIndex / 3) - 1
@@ -104,13 +99,11 @@ class Handler implements Converter<number>, Formatter {
 		}
 		return state
 	}
-
 	appendCurrency(state: StateEditor) {
 		return this.currency && (state.value.length > 1 || (state.value.length == 1 && state.value.charAt(0) != "."))
 			? state.suffix(" " + this.currency)
 			: state
 	}
-
 	unformat(formatted: StateEditor): Readonly<State> {
 		return this.currency ? formatted.delete(" ").delete("" + this.currency) : formatted.delete(" ")
 	}
