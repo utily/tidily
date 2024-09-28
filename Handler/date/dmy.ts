@@ -19,6 +19,7 @@ class Handler extends Base {
 			value?.length == 8 ? `${value.substring(4, 8)}-${value.substring(2, 4)}-${value.substring(0, 2)}` : undefined
 		return isoly.Date.is(result) ? result : undefined
 	}
+	formatString = `DD${this.separator}MM${this.separator}YYYY`
 	format(unformatted: StateEditor): Readonly<State> & Settings {
 		let result = unformatted.delete(this.separator)
 		if (result.get(0, 1) > "3")
