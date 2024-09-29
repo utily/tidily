@@ -18,7 +18,6 @@ class Handler implements Converter<number>, Formatter {
 		const parsedFloat = typeof value == "string" ? Number.parseFloat(value) : undefined
 		return typeof parsedFloat == "number" && !Number.isNaN(parsedFloat) ? parsedFloat / 100 : undefined
 	}
-	formattedRemainder = () => ""
 	partialFormat = this.format
 	format(unformatted: StateEditor): Readonly<State> & Settings {
 		return {

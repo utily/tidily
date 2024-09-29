@@ -60,7 +60,6 @@ class Handler implements Converter<isoly.TimeSpan>, Formatter {
 		}
 		return result
 	}
-	formattedRemainder = () => ""
 	partialFormat = this.format
 	format(unformatted: StateEditor): Readonly<State> & Settings {
 		let result = unformatted

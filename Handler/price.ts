@@ -15,11 +15,6 @@ class Handler implements Converter<number>, Formatter {
 		const result = typeof value == "string" ? Number.parseFloat(value) : undefined
 		return result != undefined && !isNaN(result) ? result : undefined
 	}
-	formattedRemainder(unformatted: StateEditor) {
-		const partial = this.partialFormat(unformatted)
-		const full = this.format(unformatted)
-		return full.value.slice(partial.value.length)
-	}
 	partialFormat(unformatted: StateEditor): Readonly<State> & Settings {
 		let result =
 			unformatted.value == "NaN" ? unformatted.replace(0, unformatted.value.length, "") : StateEditor.copy(unformatted)
@@ -29,6 +24,7 @@ class Handler implements Converter<number>, Formatter {
 		result = this.addThousandSeparators(result)
 		return {
 			...result,
+			remainder: this.format(unformatted).value.slice(result.value.length),
 			type: "text",
 			inputmode: "numeric",
 			length: [3, undefined],
@@ -70,15 +66,12 @@ class Handler implements Converter<number>, Formatter {
 		const separatorIndex = state.value.indexOf(".")
 		if (separatorIndex != -1) {
 			const adjust = separatorIndex + 1 + (decimals ?? 2) - state.value.length
-			console.log({ separatorIndex, decimals, valueLength: state.value.length })
-			console.log("adjust", adjust, state.value)
 			state =
 				adjust < 0
 					? state.truncate(state.value.length + adjust)
 					: zeroHandling == "fillAndLimit"
 					? state.suffix("0".repeat(adjust))
 					: state
-			console.log("adjusted", adjust, state.value)
 		}
 		return state
 	}

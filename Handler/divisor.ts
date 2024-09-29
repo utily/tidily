@@ -20,7 +20,6 @@ class Handler implements Converter<number | [number, number]>, Formatter {
 			? Number.parseInt(value)
 			: undefined
 	}
-	formattedRemainder = () => ""
 	partialFormat = this.format
 	format(unformatted: StateEditor): Readonly<State> & Settings {
 		let result = unformatted

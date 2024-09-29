@@ -4,7 +4,6 @@ import { Settings } from "./Settings"
 import { State } from "./State"
 import { StateEditor } from "./StateEditor"
 export interface Formatter {
-	formattedRemainder(data: StateEditor): string
 	partialFormat(data: StateEditor, format?: DateFormat | isoly.Locale): Readonly<State> & Settings
 	format(data: StateEditor, format?: DateFormat | isoly.Locale): Readonly<State> & Settings
 	unformat(value: StateEditor, format?: DateFormat | isoly.Locale): Readonly<State>

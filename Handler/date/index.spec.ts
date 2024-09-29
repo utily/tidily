@@ -34,8 +34,8 @@ describe("Date handler", () => {
 		["en-US", "07/", "DD/YYYY"],
 		["en-US", "07/04/177", "Y"],
 		["en-US", "07/04/1776", ""],
-	] as [isoly.Locale, string, string][])("formatRemaining", (locale, date, remainder) => {
+	] as [isoly.Locale, string, string][])("partialFormat remainder", (locale, date, remainder) => {
 		const handler = get("date", locale)
-		expect(handler?.formattedRemainder(tidily.StateEditor.modify(date))).toEqual(remainder)
+		expect(handler?.partialFormat(tidily.StateEditor.modify(date)).remainder).toEqual(remainder)
 	})
 })

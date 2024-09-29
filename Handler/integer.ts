@@ -13,7 +13,6 @@ class Handler implements Converter<number>, Formatter {
 		const parsed = typeof value == "string" ? Number.parseInt(value) : undefined
 		return typeof parsed == "number" && !Number.isNaN(parsed) ? parsed : undefined
 	}
-	formattedRemainder = () => ""
 	partialFormat = this.format
 	format(unformatted: StateEditor): Readonly<State> & Settings {
 		return {
