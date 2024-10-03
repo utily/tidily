@@ -12,6 +12,14 @@ export abstract class Base implements Converter<string>, Formatter {
 	constructor(readonly separator: Separator) {}
 	abstract toString(data: isoly.Date | any): string
 	abstract fromString(value: string): isoly.Date | undefined
+	abstract formatString: string
+	partialFormat(unformatted: StateEditor): Readonly<State> & Settings {
+		const formatted = this.format(unformatted)
+		return {
+			...formatted,
+			remainder: this.formatString.slice(formatted.value.length),
+		}
+	}
 	abstract format(unformatted: StateEditor): Readonly<State> & Settings
 	unformat(formatted: StateEditor): Readonly<State> {
 		return formatted.delete(this.separator)

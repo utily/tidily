@@ -15,36 +15,32 @@ class Handler implements Converter<number>, Formatter {
 		const result = typeof value == "string" ? Number.parseFloat(value) : undefined
 		return result != undefined && !isNaN(result) ? result : undefined
 	}
+	partialFormat(unformatted: StateEditor): Readonly<State> & Settings {
+		let result =
+			unformatted.value == "NaN" ? unformatted.replace(0, unformatted.value.length, "") : StateEditor.copy(unformatted)
+		const decimals = this.currency && isoly.Currency.decimalDigits(this.currency)
+		result = this.fillDecimalsIfPresent(result, decimals, "onlyLimit")
+		result = this.truncateIntegerZeros(result)
+		result = this.addThousandSeparators(result)
+		return {
+			...result,
+			remainder: this.format(unformatted).value.slice(result.value.length),
+			type: "text",
+			inputmode: "numeric",
+			length: [3, undefined],
+			pattern: new RegExp("^(\\d{0,3})( \\d{3})*(\\.\\d+)?" + (this.currency ? " " + this.currency : "") + "$"),
+		}
+	}
 	format(unformatted: StateEditor): Readonly<State> & Settings {
 		let result =
 			unformatted.value == "NaN" ? unformatted.replace(0, unformatted.value.length, "") : StateEditor.copy(unformatted)
 		const decimals = this.currency && isoly.Currency.decimalDigits(this.currency)
-		if (!result.value.includes(".") && decimals && Math.abs(Number.parseFloat(result.value)) > 0)
-			result = result.suffix(".0")
-		let separator = result.value && result.value.includes(".") ? result.value.indexOf(".") : undefined
-		if (separator == 0) {
-			result = result.prepend("0")
-			separator++
-		}
-		if (separator != undefined) {
-			const adjust = separator + 1 + (decimals ?? 2) - result.value.length
-			result = adjust < 0 ? result.truncate(result.value.length + adjust) : result.suffix("0".repeat(adjust))
-		} else
-			separator = result.value.length
-		const spaces = separator <= 0 ? 0 : Math.ceil(separator / 3) - 1
-		for (let i = 0; i < spaces; i++) {
-			const position = separator - (spaces - i) * 3
-			result = result.insert(position, " ")
-			separator++
-		}
-		if (result.match(/^[0\s]{2,}$/))
-			result = result.replace(0, result.value.length, "0")
-		else if (result.match(/^[0\s]{2,}(\s\w{3}){1}$/))
-			result = result.replace(0, result.value.length - 4, "0")
-		result =
-			this.currency && (result.value.length > 1 || (result.value.length == 1 && result.value.charAt(0) != "."))
-				? result.suffix(" " + this.currency)
-				: result
+		result = this.forceDecimalZero(result, decimals)
+		result = this.addLeadingIntegerZero(result)
+		result = this.fillDecimalsIfPresent(result, decimals, "fillAndLimit")
+		result = this.truncateIntegerZeros(result)
+		result = this.addThousandSeparators(result)
+		result = this.appendCurrency(result)
 		return {
 			...result,
 			type: "text",
@@ -52,6 +48,54 @@ class Handler implements Converter<number>, Formatter {
 			length: [3, undefined],
 			pattern: new RegExp("^(\\d{0,3})( \\d{3})*(\\.\\d+)?" + (this.currency ? " " + this.currency : "") + "$"),
 		}
+	}
+	forceDecimalZero(state: StateEditor, decimals?: number) {
+		if (!state.value.includes(".") && decimals && Math.abs(Number.parseFloat(state.value)) > 0)
+			state = state.suffix(".0")
+		return state
+	}
+	addLeadingIntegerZero(state: StateEditor) {
+		let separatorIndex = state.value && state.value.includes(".") ? state.value.indexOf(".") : undefined
+		if (separatorIndex == 0) {
+			state = state.prepend("0")
+			separatorIndex++
+		}
+		return state
+	}
+	fillDecimalsIfPresent(state: StateEditor, decimals: number | undefined, zeroHandling: "fillAndLimit" | "onlyLimit") {
+		const separatorIndex = state.value.indexOf(".")
+		if (separatorIndex != -1) {
+			const adjust = separatorIndex + 1 + (decimals ?? 2) - state.value.length
+			state =
+				adjust < 0
+					? state.truncate(state.value.length + adjust)
+					: zeroHandling == "fillAndLimit"
+					? state.suffix("0".repeat(adjust))
+					: state
+		}
+		return state
+	}
+	truncateIntegerZeros(state: StateEditor) {
+		if (state.match(/^[0\s]{2,}$/))
+			state = state.replace(0, state.value.length, "0")
+		else if (state.match(/^[0\s]{2,}(\s\w{3}){1}$/))
+			state = state.replace(0, state.value.length - 4, "0")
+		return state
+	}
+	addThousandSeparators(state: StateEditor) {
+		let separatorIndex = state.value.includes(".") ? state.value.indexOf(".") : state.value.length
+		const spaces = separatorIndex <= 0 ? 0 : Math.ceil(separatorIndex / 3) - 1
+		for (let i = 0; i < spaces; i++) {
+			const position = separatorIndex - (spaces - i) * 3
+			state = state.insert(position, " ")
+			separatorIndex++
+		}
+		return state
+	}
+	appendCurrency(state: StateEditor) {
+		return this.currency && (state.value.length > 1 || (state.value.length == 1 && state.value.charAt(0) != "."))
+			? state.suffix(" " + this.currency)
+			: state
 	}
 	unformat(formatted: StateEditor): Readonly<State> {
 		return this.currency ? formatted.delete(" ").delete("" + this.currency) : formatted.delete(" ")

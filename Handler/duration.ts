@@ -60,6 +60,7 @@ class Handler implements Converter<isoly.TimeSpan>, Formatter {
 		}
 		return result
 	}
+	partialFormat = this.format
 	format(unformatted: StateEditor): Readonly<State> & Settings {
 		let result = unformatted
 		const [, negative, hours, separator] = unformatted.match(this.patterns.extract) ?? []

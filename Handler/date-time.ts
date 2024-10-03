@@ -21,6 +21,7 @@ class Handler implements Converter<string>, Formatter {
 			: result + fillerDate.substring(result.length, fillerDate.length)
 		return isoly.DateTime.is(result) ? result : undefined
 	}
+	partialFormat = this.format
 	format(unformatted: StateEditor): Readonly<State> & Settings {
 		let result = formatDate(unformatted)
 		if (result.match(/^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])[\d:.-]$/))

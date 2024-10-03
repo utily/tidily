@@ -23,6 +23,7 @@ class Handler extends Base {
 			? +isoly.Date.lastOfMonth(`${value.substring(0, 4)}-${value.substring(4, 6)}-01`).substring(8, 10)
 			: 31
 	}
+	formatString = `YYYY${this.separator}MM${this.separator}DD`
 	format(unformatted: StateEditor): Readonly<State> & Settings {
 		let result = unformatted.delete(this.separator)
 		if (result.value.length > 3) {

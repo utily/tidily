@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { isoly } from "isoly"
+import { tidily } from "../.."
 import { Action } from "../../Action"
 import { format, get } from "../index"
 
@@ -16,11 +17,25 @@ describe("Date handler", () => {
 			result = Action.apply(handlers.us!, result, { key: character })
 		expect(result).toMatchObject({ value: "12/30/2020", selection: { start: 10, end: 10 } })
 	})
-	it.only.each([
-		["2024-11-21", "sv-SE", "2024-11-21"],
-		["2024-01-31", "en-GB", "31/01/2024"],
-		["2024-07-04", "en-US", "07/04/2024"],
-	] as [isoly.Date, isoly.Locale, string][])("format", (date, locale, formattedDate) => {
+	it.each([
+		["sv-SE", "2024-11-21", "2024-11-21"],
+		["en-GB", "2024-01-31", "31/01/2024"],
+		["en-US", "2024-07-04", "07/04/2024"],
+	] as [isoly.Locale, isoly.Date, string][])("format", (locale, date, formattedDate) => {
 		expect(format(date, "date", locale)).toEqual(formattedDate)
+	})
+	it.each([
+		["sv-SE", "2", "YYY-MM-DD"],
+		["en-GB", "", "DD/MM/YYYY"],
+		["en-GB", "3", "D/MM/YYYY"],
+		["en-GB", "31/01/2024", ""],
+		["en-US", "", "MM/DD/YYYY"],
+		["en-US", "0", "M/DD/YYYY"],
+		["en-US", "07/", "DD/YYYY"],
+		["en-US", "07/04/177", "Y"],
+		["en-US", "07/04/1776", ""],
+	] as [isoly.Locale, string, string][])("partialFormat remainder", (locale, date, remainder) => {
+		const handler = get("date", locale)
+		expect(handler?.partialFormat(tidily.StateEditor.modify(date)).remainder).toEqual(remainder)
 	})
 })
