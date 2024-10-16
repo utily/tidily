@@ -51,9 +51,10 @@ describe("card-number", () => {
 	})
 	it("matches diners format", () => {
 		let result = { value: "", selection: { start: 0, end: 0 } }
-		for (const character of "38042424242424999")
+		for (const character of "3804123456789011111111111")
 			result = Action.apply(handler, result, { key: character })
-		expect(result.value).toMatch(/^3(?:0[0-5]|[68][0-9])[0-9]\s[0-9]{4}\s[0-9]{4}\s[0-9]{2}$/)
+		expect(result.value).toMatch(/^3(?:0[0-5]|[68][0-9])[0-9]\s[0-9]{6}\s[0-9]{4}$/)
+		expect(result.value).toEqual("3804 123456 7890")
 	})
 	it("matches discover format", () => {
 		let result = { value: "", selection: { start: 0, end: 0 } }
