@@ -6,8 +6,18 @@ import { State } from "../State"
 import { StateEditor } from "../StateEditor"
 import { add } from "./base"
 
+export interface PriceOptions {
+	currency?: isoly.Currency
+	toInteger?: boolean
+}
+
 class Handler implements Converter<number>, Formatter {
-	constructor(readonly currency: isoly.Currency | undefined) {}
+	readonly currency: isoly.Currency | undefined
+	readonly toInteger: boolean | undefined
+	constructor(options: PriceOptions | isoly.Currency | undefined) {
+		this.currency = options && typeof options == "object" ? options.currency : options
+		this.toInteger = options && typeof options == "object" ? options.toInteger : undefined
+	}
 	toString(data?: number | unknown): string {
 		return typeof data == "number" ? (isNaN(data) ? "" : data.toString()) : ""
 	}
@@ -35,7 +45,8 @@ class Handler implements Converter<number>, Formatter {
 		let result =
 			unformatted.value == "NaN" ? unformatted.replace(0, unformatted.value.length, "") : StateEditor.copy(unformatted)
 		const decimals = this.currency && isoly.Currency.decimalDigits(this.currency)
-		result = this.forceDecimalZero(result, decimals)
+		if (!this.toInteger)
+			result = this.forceDecimalZero(result, decimals)
 		result = this.addLeadingIntegerZero(result)
 		result = this.fillDecimalsIfPresent(result, decimals, "fillAndLimit")
 		result = this.truncateIntegerZeros(result)
@@ -50,7 +61,7 @@ class Handler implements Converter<number>, Formatter {
 		}
 	}
 	forceDecimalZero(state: StateEditor, decimals?: number) {
-		if (!state.value.includes(".") && decimals && Math.abs(Number.parseFloat(state.value)) > 0)
+		if (!state.value.includes(".") && decimals && (Math.abs(Number.parseFloat(state.value)) >= 0 || state.value == "0"))
 			state = state.suffix(".0")
 		return state
 	}
@@ -76,10 +87,9 @@ class Handler implements Converter<number>, Formatter {
 		return state
 	}
 	truncateIntegerZeros(state: StateEditor) {
-		if (state.match(/^[0\s]{2,}$/))
-			state = state.replace(0, state.value.length, "0")
-		else if (state.match(/^[0\s]{2,}(\s\w{3}){1}$/))
-			state = state.replace(0, state.value.length - 4, "0")
+		const match = state.match(/^[0\s]{2,}/)
+		if (match)
+			state = state.replace(0, match[0].length, "0")
 		return state
 	}
 	addThousandSeparators(state: StateEditor) {

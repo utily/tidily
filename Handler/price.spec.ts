@@ -62,12 +62,24 @@ describe("price", () => {
 	it("format from empty string", () => {
 		expect(tidily.format("", "price", "SEK")).toEqual("")
 	})
+	it.each([
+		["EUR", 1, "1.00 EUR", false],
+		["EUR", 1, "1 EUR", true],
+		["EUR", 1.5, "1.50 EUR", false],
+		["EUR", 1.5, "1.50 EUR", true],
+		["EUR", 0, "0.00 EUR", false],
+		["EUR", 0, "0 EUR", true],
+		["EUR", undefined, "", false],
+		["EUR", undefined, "", true],
+	])("format decimals", (currency: string, value: number | undefined, formatted: string, toInteger: boolean) => {
+		expect(tidily.format(value, "price", { currency, toInteger })).toEqual(formatted)
+	})
 	it('test for avoiding "0.00 SEK" -> "000 SEK"', () => {
 		let result: tidily.State & tidily.Settings = { value: "", selection: { start: 0, end: 0 }, type: "text" }
 		result = tidily.Action.apply(handler, result, { key: "." })
 		expect(result).toMatchObject({ value: "0.00 SEK", selection: { start: 2, end: 2 } })
 		result = tidily.Action.apply(handler, result, { key: "Backspace" })
-		expect(result).toMatchObject({ value: "0 SEK", selection: { start: 1, end: 1 } })
+		expect(result).toMatchObject({ value: "0.00 SEK", selection: { start: 1, end: 1 } })
 		expect(result.pattern?.test("0 SEK")).toEqual(true)
 	})
 	it("toString", () => {
@@ -81,22 +93,31 @@ describe("price", () => {
 		expect(noCurrencyHandler.fromString("")).toEqual(undefined)
 	})
 	it.each([
-		["EUR", "1", "1", ".00 EUR"],
-		["EUR", "0", "0", " EUR"],
-		["EUR", "0.1", "0.1", "0 EUR"],
-		["EUR", "0.200", "0.20", " EUR"],
-		["EUR", "0.30", "0.30", " EUR"],
-		["EUR", "0.418", "0.41", " EUR"],
-		["EUR", "0.9", "0.9", "0 EUR"],
-		["EUR", "9000", "9 000", ".00 EUR"],
+		["EUR", "1", "1", ".00 EUR", false],
+		["EUR", "1", "1", " EUR", true],
+		["EUR", "0", "0", ".00 EUR", false],
+		["EUR", "0", "0", " EUR", true],
+		["EUR", "0.1", "0.1", "0 EUR", false],
+		["EUR", "0.1", "0.1", "0 EUR", true],
+		["EUR", "0.200", "0.20", " EUR", false],
+		["EUR", "0.200", "0.20", " EUR", true],
+		["EUR", "0.30", "0.30", " EUR", false],
+		["EUR", "0.30", "0.30", " EUR", true],
+		["EUR", "0.418", "0.41", " EUR", false],
+		["EUR", "0.418", "0.41", " EUR", true],
+		["EUR", "0.9", "0.9", "0 EUR", false],
+		["EUR", "0.9", "0.9", "0 EUR", true],
+		["EUR", "9000", "9 000", ".00 EUR", false],
+		["EUR", "9000", "9 000", " EUR", true],
 	])(
-		"partialFormat, remainder and fully formatted",
-		(currency: string, data: string, partialFormattedString: string, remainder: string) => {
-			const handler = tidily.get("price", currency) as tidily.Converter<"string" | unknown> & tidily.Formatter
+		"partialFormat, remainder and fully formatted, toInteger",
+		(currency: string, data: string, partialFormattedString: string, remainder: string, toInteger: boolean) => {
+			const handler = tidily.get("price", { currency, toInteger }) as tidily.Converter<"string" | unknown> &
+				tidily.Formatter
 			const partialFormattedState = handler.partialFormat(tidily.StateEditor.modify(data))
 			expect(partialFormattedState.value).toEqual(partialFormattedString)
 			expect(partialFormattedState.remainder).toEqual(remainder)
-			expect(tidily.format(data, "price", currency)).toEqual(partialFormattedString + remainder)
+			expect(tidily.format(data, "price", { currency, toInteger })).toEqual(partialFormattedString + remainder)
 		}
 	)
 })

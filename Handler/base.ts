@@ -4,6 +4,7 @@ import { DateFormat } from "../DateFormat"
 import { Formatter } from "../Formatter"
 import { StateEditor } from "../StateEditor"
 import { Type } from "../Type"
+import { PriceOptions } from "./price"
 
 const handlers: { [type: string]: ((argument?: any[]) => Converter<any> & Formatter) | undefined } = {}
 export function add(type: Type, create: (argument?: any[]) => Converter<any> & Formatter): void {
@@ -21,7 +22,7 @@ export function get(
 	type: "identity-number" | "phone" | "postal-code",
 	country?: isoly.CountryCode.Alpha2
 ): (Converter<string> & Formatter) | undefined
-export function get(type: "price", currency: isoly.Currency): (Converter<number> & Formatter) | undefined
+export function get(type: "price", currency: isoly.Currency | PriceOptions): (Converter<number> & Formatter) | undefined
 export function get(type: "date", format?: DateFormat | isoly.Locale): (Converter<isoly.Date> & Formatter) | undefined
 export function get<T>(type: Type, ...argument: any[]): (Converter<T> & Formatter) | undefined
 export function get<T>(type: Type, ...argument: any[]): (Converter<T> & Formatter) | undefined {
@@ -39,7 +40,7 @@ export function format(
 	type: "identity-number" | "phone" | "postal-code",
 	country?: isoly.CountryCode.Alpha2
 ): string
-export function format(data: number, type: "price", currency: isoly.Currency): string
+export function format(data: number, type: "price", currency: isoly.Currency | PriceOptions): string
 export function format(data: any, type: Type, ...argument: any[]): string
 export function format(data: any, type: Type, ...argument: any[]): string {
 	const handler = get(type, ...argument)
