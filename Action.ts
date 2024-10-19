@@ -19,6 +19,7 @@ export namespace Action {
 	export function apply(
 		formatter: Formatter,
 		state: Readonly<State>,
+		formatted: "formatted" | "partial",
 		action?: Action
 	): Readonly<State> & Readonly<Settings> {
 		let result = State.copy(formatter.unformat(StateEditor.copy(state)))
@@ -48,13 +49,22 @@ export namespace Action {
 				formatter.allowed(action.key, result) && replace(result, action.key)
 			}
 		}
-		return formatter.format(StateEditor.copy(result))
+		return formatted == "formatted"
+			? formatter.format(StateEditor.copy(result))
+			: formatter.partialFormat(StateEditor.copy(result))
 	}
 
-	export function paste(formatter: Formatter, state: Readonly<State>, pasted: string) {
+	export function paste(
+		formatter: Formatter,
+		state: Readonly<State>,
+		formatted: "formatted" | "partial",
+		pasted: string
+	) {
 		const result = State.copy(formatter.unformat(StateEditor.copy(state)))
 		replace(result, pasted)
-		return formatter.format(StateEditor.copy(result))
+		return formatted == "formatted"
+			? formatter.format(StateEditor.copy(result))
+			: formatter.partialFormat(StateEditor.copy(result))
 	}
 
 	function ctrlArrow(formatter: Formatter, state: Readonly<State>, action: Action): Readonly<State> {
