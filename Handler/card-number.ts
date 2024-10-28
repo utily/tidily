@@ -48,12 +48,22 @@ interface CardIssuer {
 }
 function getIssuer(value: string): CardIssuer & { name: string } {
 	let result: CardIssuer & { name: string } = defaultIssuer
+	if (default14DigitIssuer.identification.test(value))
+		result = default14DigitIssuer
 	for (const key in issuers)
 		if (Object.prototype.hasOwnProperty.call(issuers, key) && issuers[key].identification.test(value)) {
 			result = { ...defaultIssuer, name: key, ...issuers[key] }
 			break
 		}
 	return result
+}
+const default14DigitIssuer: CardIssuer = {
+	name: "unknown14DigitIssuer",
+	verification: /^\d{4}\s\d{6}\s\d{4}$/,
+	spaceIndexes: [4, 10],
+	identification: /^\d{14}$/,
+	length: [14, 16, 16],
+	icon: "generic",
 }
 const defaultIssuer: CardIssuer = {
 	name: "unknown",
