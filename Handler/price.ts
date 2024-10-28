@@ -29,6 +29,7 @@ class Handler implements Converter<number>, Formatter {
 		let result =
 			unformatted.value == "NaN" ? unformatted.replace(0, unformatted.value.length, "") : StateEditor.copy(unformatted)
 		const decimals = this.currency && isoly.Currency.decimalDigits(this.currency)
+		result = this.addLeadingIntegerZero(result)
 		result = this.fillDecimalsIfPresent(result, decimals, "onlyLimit")
 		result = this.truncateIntegerZeros(result)
 		result = this.addThousandSeparators(result)
