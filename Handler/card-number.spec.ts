@@ -1,7 +1,7 @@
 import { Action } from "../Action"
 import { Converter } from "../Converter"
 import { Formatter } from "../Formatter"
-import { get } from "./index"
+import { format, get } from "./index"
 
 describe("card-number", () => {
 	const handler = get("card-number") as Converter<"string" | unknown> & Formatter
@@ -28,6 +28,9 @@ describe("card-number", () => {
 		expect(result).toMatchObject({ value: "1111 1200 0033 3345", selection: { start: 19, end: 19 } }) // 16 digits
 		result = Action.apply(handler, result, { key: "6" })
 		expect(result).toMatchObject({ value: "1111 1200 0033 3345", selection: { start: 19, end: 19 } }) // 17 digits - too long
+	})
+	it("format 14 digit number", () => {
+		expect(format("11111200003333", "card-number")).toEqual("1111 120000 3333")
 	})
 	it("key event full visa number", () => {
 		let result = { value: "", selection: { start: 0, end: 0 } }
