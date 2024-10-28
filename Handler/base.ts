@@ -5,6 +5,7 @@ import { Formatter } from "../Formatter"
 import { StateEditor } from "../StateEditor"
 import { Type } from "../Type"
 import { CardNumberOptions } from "./card-number/CardNumberOptions"
+import { PriceOptions } from "./price/PriceOptions"
 
 const handlers: { [type: string]: ((argument?: any[]) => Converter<any> & Formatter) | undefined } = {}
 export function add(type: Type, create: (argument?: any[]) => Converter<any> & Formatter): void {

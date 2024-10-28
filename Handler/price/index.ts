@@ -1,15 +1,11 @@
 import { isoly } from "isoly"
-import { Converter } from "../Converter"
-import { Formatter } from "../Formatter"
-import { Settings } from "../Settings"
-import { State } from "../State"
-import { StateEditor } from "../StateEditor"
-import { add } from "./base"
-
-export interface PriceOptions {
-	currency?: isoly.Currency
-	toInteger?: boolean
-}
+import { Converter } from "../../Converter"
+import { Formatter } from "../../Formatter"
+import { Settings } from "../../Settings"
+import { State } from "../../State"
+import { StateEditor } from "../../StateEditor"
+import { add } from "../base"
+import { PriceOptions } from "./PriceOptions"
 
 class Handler implements Converter<number>, Formatter {
 	readonly currency: isoly.Currency | undefined

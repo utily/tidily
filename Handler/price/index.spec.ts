@@ -1,4 +1,4 @@
-import { tidily } from "../index"
+import { tidily } from "../../index"
 
 describe("price", () => {
 	it("adds decimals", () => {
