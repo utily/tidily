@@ -24,8 +24,10 @@ describe("card-number", () => {
 		expect(result).toMatchObject({ value: "1111 120000 3333", selection: { start: 16, end: 16 } }) // 14 digits
 		result = Action.apply(handler, result, { key: "4" })
 		expect(result).toMatchObject({ value: "1111 1200 0033 334", selection: { start: 18, end: 18 } }) // 15 digits
-		// result = Action.apply(handler, result, { key: "5" })
-		// expect(result).toMatchObject({ value: "1111 1200 0033 3345", selection: { start: 19, end: 19 } }) // 16 digits
+		result = Action.apply(handler, result, { key: "5" })
+		expect(result).toMatchObject({ value: "1111 1200 0033 3345", selection: { start: 19, end: 19 } }) // 16 digits
+		result = Action.apply(handler, result, { key: "6" })
+		expect(result).toMatchObject({ value: "1111 1200 0033 3345", selection: { start: 19, end: 19 } }) // 17 digits - too long
 	})
 	it("key event full visa number", () => {
 		let result = { value: "", selection: { start: 0, end: 0 } }
