@@ -110,7 +110,12 @@ class Handler implements Converter<number>, Formatter {
 		return this.currency ? formatted.delete(" ").delete("" + this.currency) : formatted.delete(" ")
 	}
 	allowed(symbol: string, state: Readonly<State>): boolean {
-		return (symbol >= "0" && symbol <= "9") || (symbol == "." && !state.value.includes("."))
+		return (
+			(symbol >= "0" && symbol <= "9") ||
+			(symbol == "." &&
+				!state.value.includes(".") &&
+				(!this.currency || isoly.Currency.decimalDigits(this.currency) != 0))
+		)
 	}
 }
 add("price", (argument?: any[]) => new Handler(argument && argument.length > 0 ? argument[0] : undefined))
