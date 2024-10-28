@@ -38,7 +38,7 @@ class Handler implements Converter<number>, Formatter {
 			type: "text",
 			inputmode: "numeric",
 			length: [3, undefined],
-			pattern: new RegExp("^(\\d{0,3})( \\d{3})*(\\.\\d+)?" + (this.currency ? " " + this.currency : "") + "$"),
+			pattern: new RegExp("^(\\d{0,3})( \\d{3})*(\\.\\d*)?$"),
 		}
 	}
 	format(unformatted: StateEditor): Readonly<State> & Settings {
