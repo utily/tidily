@@ -1,7 +1,7 @@
-import { Action } from "../Action"
-import { Converter } from "../Converter"
-import { Formatter } from "../Formatter"
-import { get } from "./index"
+import { Action } from "../../Action"
+import { Converter } from "../../Converter"
+import { Formatter } from "../../Formatter"
+import { get } from "../index"
 
 describe("card-number", () => {
 	const handler = get("card-number") as Converter<"string" | unknown> & Formatter
@@ -15,17 +15,12 @@ describe("card-number", () => {
 			result = Action.apply(handler, result, { key: character })
 		expect(result).toMatchObject({ value: "4242 4242", selection: { start: 9, end: 9 } })
 	})
-	it("key event unknown 13,14,15,16 digit numbers", () => {
+	it("key event forced issuer", () => {
+		const dinersHandler = get("card-number", { forceIssuer: "diners" }) as Converter<"string" | unknown> & Formatter
 		let result = { value: "", selection: { start: 0, end: 0 } }
-		for (const character of "1111120000333")
-			result = Action.apply(handler, result, { key: character })
-		expect(result).toMatchObject({ value: "1111 1200 0033 3", selection: { start: 16, end: 16 } }) // 13 digits
-		result = Action.apply(handler, result, { key: "3" })
-		expect(result).toMatchObject({ value: "1111 120000 3333", selection: { start: 16, end: 16 } }) // 14 digits
-		result = Action.apply(handler, result, { key: "4" })
-		expect(result).toMatchObject({ value: "1111 1200 0033 334", selection: { start: 18, end: 18 } }) // 15 digits
-		// result = Action.apply(handler, result, { key: "5" })
-		// expect(result).toMatchObject({ value: "1111 1200 0033 3345", selection: { start: 19, end: 19 } }) // 16 digits
+		for (const character of "11111200003333")
+			result = Action.apply(dinersHandler, result, { key: character })
+		expect(result).toMatchObject({ value: "1111 120000 3333", selection: { start: 16, end: 16 } })
 	})
 	it("key event full visa number", () => {
 		let result = { value: "", selection: { start: 0, end: 0 } }

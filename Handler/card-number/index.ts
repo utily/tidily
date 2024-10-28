@@ -1,11 +1,16 @@
-import { Converter } from "../Converter"
-import { Formatter } from "../Formatter"
-import { Settings } from "../Settings"
-import { State } from "../State"
-import { StateEditor } from "../StateEditor"
-import { add } from "./base"
+import { Converter } from "../../Converter"
+import { Formatter } from "../../Formatter"
+import { Settings } from "../../Settings"
+import { State } from "../../State"
+import { StateEditor } from "../../StateEditor"
+import { add } from "../base"
+import { CardNumberOptions, Issuer } from "./CardNumberOptions"
 
 class Handler implements Converter<string>, Formatter {
+	readonly forceIssuer: Issuer | undefined
+	constructor(options: CardNumberOptions | undefined) {
+		this.forceIssuer = options?.forceIssuer
+	}
 	toString(data?: string | unknown): string {
 		return typeof data == "string" ? data : ""
 	}
@@ -14,7 +19,7 @@ class Handler implements Converter<string>, Formatter {
 	}
 	partialFormat = this.format
 	format(unformatted: StateEditor): Readonly<State> & Settings {
-		const issuer = getIssuer(unformatted.value)
+		const issuer = getIssuer(unformatted.value, this.forceIssuer)
 		const result = unformatted.map(
 			(symbol, index) => (index + 1 < issuer.length[0] && issuer.spaceIndexes.includes(index) ? " " : "") + symbol
 		)
@@ -32,11 +37,11 @@ class Handler implements Converter<string>, Formatter {
 		return formatted.delete(" ")
 	}
 	allowed(symbol: string, state: Readonly<State>): boolean {
-		const issuer = getIssuer(state.value)
+		const issuer = getIssuer(state.value, this.forceIssuer)
 		return symbol >= "0" && symbol <= "9" && state.value.length < issuer.length[0]
 	}
 }
-add("card-number", () => new Handler())
+add("card-number", (argument?: any[]) => new Handler(argument && argument.length > 0 ? argument[0] : undefined))
 
 interface CardIssuer {
 	name: string
@@ -46,24 +51,18 @@ interface CardIssuer {
 	length: [number, number, number] // Max unformatted, min formatted, max formatted
 	icon: string
 }
-function getIssuer(value: string): CardIssuer & { name: string } {
+function getIssuer(value: string, forceIssuer?: Issuer): CardIssuer & { name: string } {
 	let result: CardIssuer & { name: string } = defaultIssuer
-	if (default14DigitIssuer.identification.test(value))
-		result = default14DigitIssuer
-	for (const key in issuers)
-		if (Object.prototype.hasOwnProperty.call(issuers, key) && issuers[key].identification.test(value)) {
-			result = { ...defaultIssuer, name: key, ...issuers[key] }
-			break
-		}
+	if (forceIssuer)
+		result = forceIssuer == "unknown" ? defaultIssuer : { ...defaultIssuer, ...issuers[forceIssuer], name: forceIssuer }
+	else {
+		for (const key in issuers)
+			if (Object.prototype.hasOwnProperty.call(issuers, key) && issuers[key].identification.test(value)) {
+				result = { ...defaultIssuer, name: key, ...issuers[key] }
+				break
+			}
+	}
 	return result
-}
-const default14DigitIssuer: CardIssuer = {
-	name: "unknown14DigitIssuer",
-	verification: /^\d{4}\s\d{6}\s\d{4}$/,
-	spaceIndexes: [4, 10],
-	identification: /^\d{14}$/,
-	length: [14, 16, 16],
-	icon: "generic",
 }
 const defaultIssuer: CardIssuer = {
 	name: "unknown",

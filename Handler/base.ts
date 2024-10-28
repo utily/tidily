@@ -4,7 +4,7 @@ import { DateFormat } from "../DateFormat"
 import { Formatter } from "../Formatter"
 import { StateEditor } from "../StateEditor"
 import { Type } from "../Type"
-import { PriceOptions } from "./price"
+import { CardNumberOptions } from "./card-number/CardNumberOptions"
 
 const handlers: { [type: string]: ((argument?: any[]) => Converter<any> & Formatter) | undefined } = {}
 export function add(type: Type, create: (argument?: any[]) => Converter<any> & Formatter): void {
@@ -15,6 +15,7 @@ export function get(
 	type: "card-csc" | "card-number" | "date" | "date-time" | "email" | "password" | "text",
 	format: DateFormat | isoly.Locale
 ): (Converter<string> & Formatter) | undefined
+export function get(type: "card-number", options: CardNumberOptions): (Converter<any> & Formatter) | undefined
 export function get(type: "card-expires"): (Converter<[number, number]> & Formatter) | undefined
 export function get(type: "divisor"): (Converter<number | [number, number]> & Formatter) | undefined
 export function get(type: "percent"): (Converter<number> & Formatter) | undefined
