@@ -66,11 +66,9 @@ class Handler implements Converter<number>, Formatter {
 		return state
 	}
 	addLeadingIntegerZero(state: StateEditor) {
-		let separatorIndex = state.value && state.value.includes(".") ? state.value.indexOf(".") : undefined
-		if (separatorIndex == 0) {
+		const separatorIndex = state.value && state.value.includes(".") ? state.value.indexOf(".") : undefined
+		if (separatorIndex == 0)
 			state = state.prepend("0")
-			separatorIndex++
-		}
 		return state
 	}
 	fillDecimalsIfPresent(state: StateEditor, decimals: number | undefined, zeroHandling: "fillAndLimit" | "onlyLimit") {
