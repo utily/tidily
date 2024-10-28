@@ -47,7 +47,10 @@ interface CardIssuer {
 	icon: string
 }
 function getIssuer(value: string): CardIssuer & { name: string } {
-	let result: CardIssuer & { name: string } = defaultIssuer
+	let result: CardIssuer & { name: string } = {
+		...defaultIssuer,
+		spaceIndexes: value.length == 14 ? [4, 10] : defaultIssuer.spaceIndexes,
+	}
 	for (const key in issuers)
 		if (Object.prototype.hasOwnProperty.call(issuers, key) && issuers[key].identification.test(value)) {
 			result = { ...defaultIssuer, name: key, ...issuers[key] }
