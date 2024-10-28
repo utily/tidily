@@ -13,7 +13,7 @@ export function add(type: Type, create: (argument?: any[]) => Converter<any> & F
 }
 
 export function get(
-	type: "card-csc" | "card-number" | "date" | "date-time" | "email" | "password" | "text",
+	type: "card-csc" | "date" | "date-time" | "email" | "password" | "text",
 	format: DateFormat | isoly.Locale
 ): (Converter<string> & Formatter) | undefined
 export function get(type: "card-number", options: CardNumberOptions): (Converter<any> & Formatter) | undefined
@@ -31,7 +31,8 @@ export function get<T>(type: Type, ...argument: any[]): (Converter<T> & Formatte
 	const create = handlers[type]
 	return create && create(argument)
 }
-export function format(data: string, type: "card-csc" | "card-number" | "email" | "password" | "text"): string
+export function format(data: string, type: "card-csc" | "email" | "password" | "text"): string
+export function format(data: string, type: "card-number", options: CardNumberOptions): string
 export function format(data: [number, number], type: "card-expires"): string
 export function format(data: isoly.Date, type: "date", format?: DateFormat | isoly.Locale): string
 export function format(data: isoly.DateTime, type: "date-time"): string
