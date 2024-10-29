@@ -29,6 +29,7 @@ class Handler implements Converter<number>, Formatter {
 		let result =
 			unformatted.value == "NaN" ? unformatted.replace(0, unformatted.value.length, "") : StateEditor.copy(unformatted)
 		const decimals = this.currency && isoly.Currency.decimalDigits(this.currency)
+		result = this.addLeadingIntegerZero(result)
 		result = this.fillDecimalsIfPresent(result, decimals, "onlyLimit")
 		result = this.truncateIntegerZeros(result)
 		result = this.addThousandSeparators(result)
@@ -38,7 +39,7 @@ class Handler implements Converter<number>, Formatter {
 			type: "text",
 			inputmode: "numeric",
 			length: [3, undefined],
-			pattern: new RegExp("^(\\d{0,3})( \\d{3})*(\\.\\d+)?" + (this.currency ? " " + this.currency : "") + "$"),
+			pattern: new RegExp("^(\\d{0,3})( \\d{3})*(\\.\\d*)?$"),
 		}
 	}
 	format(unformatted: StateEditor): Readonly<State> & Settings {
@@ -66,11 +67,9 @@ class Handler implements Converter<number>, Formatter {
 		return state
 	}
 	addLeadingIntegerZero(state: StateEditor) {
-		let separatorIndex = state.value && state.value.includes(".") ? state.value.indexOf(".") : undefined
-		if (separatorIndex == 0) {
+		const separatorIndex = state.value && state.value.includes(".") ? state.value.indexOf(".") : undefined
+		if (separatorIndex == 0)
 			state = state.prepend("0")
-			separatorIndex++
-		}
 		return state
 	}
 	fillDecimalsIfPresent(state: StateEditor, decimals: number | undefined, zeroHandling: "fillAndLimit" | "onlyLimit") {
@@ -111,7 +110,12 @@ class Handler implements Converter<number>, Formatter {
 		return this.currency ? formatted.delete(" ").delete("" + this.currency) : formatted.delete(" ")
 	}
 	allowed(symbol: string, state: Readonly<State>): boolean {
-		return (symbol >= "0" && symbol <= "9") || (symbol == "." && !state.value.includes("."))
+		return (
+			(symbol >= "0" && symbol <= "9") ||
+			(symbol == "." &&
+				!state.value.includes(".") &&
+				(!this.currency || isoly.Currency.decimalDigits(this.currency) != 0))
+		)
 	}
 }
 add("price", (argument?: any[]) => new Handler(argument && argument.length > 0 ? argument[0] : undefined))
