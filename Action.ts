@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import { Direction } from "./Direction"
 import { Formatter } from "./Formatter"
 import { getAdjecentWordBreakIndex } from "./getAdjecentWordBreakIndex"

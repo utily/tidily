@@ -5,6 +5,7 @@ function getForwardWordBreakIndex(str: string, index: number, wordRegex: RegExp)
 		if (wordRegex.lastIndex > index)
 			break
 	}
+	// eslint-disable-next-line @typescript-eslint/no-unused-expressions
 	wordRegex.lastIndex <= index && (result = str.length)
 	return result
 }
