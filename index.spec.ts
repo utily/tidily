@@ -1,4 +1,4 @@
-import * as tidily from "./index"
+import { tidily } from "./index"
 
 describe("Handler", () => {
 	const data: [string, tidily.Type, string, ...string[]][] = [
