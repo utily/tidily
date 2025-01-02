@@ -1,4 +1,4 @@
-import * as isoly from "isoly"
+import { isoly } from "isoly"
 import { DateFormat } from "./DateFormat"
 import { Settings } from "./Settings"
 import { State } from "./State"

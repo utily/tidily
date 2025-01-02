@@ -1,4 +1,4 @@
-import * as isoly from "isoly"
+import { isoly } from "isoly"
 export type DateFormat = "YYYY-mm-dd" | "dd-mm-YYYY" | "mm/dd/YYYY" | "dd/mm/YYYY" | "dd.mm.YYYY"
 
 export namespace DateFormat {

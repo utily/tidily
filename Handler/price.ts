@@ -15,7 +15,7 @@ class Handler implements Converter<number>, Formatter {
 	readonly currency: isoly.Currency | undefined
 	readonly toInteger: boolean | undefined
 	constructor(options: PriceOptions | isoly.Currency | undefined) {
-		this.currency = options && typeof options == "object" ? options.currency : options
+		this.currency = options && typeof options == "object" ? options.currency : (options as isoly.Currency)
 		this.toInteger = options && typeof options == "object" ? options.toInteger : undefined
 	}
 	toString(data?: number | unknown): string {

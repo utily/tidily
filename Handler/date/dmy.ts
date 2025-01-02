@@ -1,4 +1,4 @@
-import * as isoly from "isoly"
+import { isoly } from "isoly"
 import { Settings } from "../../Settings"
 import { State } from "../../State"
 import { StateEditor } from "../../StateEditor"
