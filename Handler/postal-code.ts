@@ -1,4 +1,4 @@
-import * as isoly from "isoly"
+import { isoly } from "isoly"
 import { Converter } from "../Converter"
 import { Formatter } from "../Formatter"
 import { Settings } from "../Settings"

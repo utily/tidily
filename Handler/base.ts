@@ -1,4 +1,4 @@
-import * as isoly from "isoly"
+import { isoly } from "isoly"
 import { Converter } from "../Converter"
 import { DateFormat } from "../DateFormat"
 import { Formatter } from "../Formatter"

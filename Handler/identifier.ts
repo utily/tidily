@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import { Converter } from "../Converter"
 import { Formatter } from "../Formatter"
 import { Settings } from "../Settings"
@@ -5,6 +6,7 @@ import { State } from "../State"
 import { StateEditor } from "../StateEditor"
 import { add } from "./base"
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const modeTypes = ["code", "pascal", "snake", "camel", "attribute"] as const
 type Mode = typeof modeTypes[number]
 
