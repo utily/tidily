@@ -5,7 +5,18 @@ import { State } from "../State"
 import { StateEditor } from "../StateEditor"
 import { add } from "./base"
 
+export interface IntegerOptions {
+	min?: number
+	max?: number
+}
+
 class Handler implements Converter<number>, Formatter {
+	readonly min: number | undefined
+	readonly max: number | undefined
+	constructor(options: IntegerOptions) {
+		this.min = options.min
+		this.max = options.max
+	}
 	toString(data?: number | unknown): string {
 		return typeof data == "number" ? data.toString() : ""
 	}
@@ -13,8 +24,8 @@ class Handler implements Converter<number>, Formatter {
 		const parsed = typeof value == "string" ? Number.parseInt(value) : undefined
 		return typeof parsed == "number" && !Number.isNaN(parsed) ? parsed : undefined
 	}
-	partialFormat = this.format
-	format(unformatted: StateEditor): Readonly<State> & Settings {
+
+	partialFormat(unformatted: StateEditor): Readonly<State> & Settings {
 		return {
 			...unformatted,
 			type: "text",
@@ -23,6 +34,22 @@ class Handler implements Converter<number>, Formatter {
 			pattern: /^[0-9]+$/,
 		}
 	}
+	format(unformatted: StateEditor): Readonly<State> & Settings {
+		const result = this.partialFormat(unformatted)
+		if (this.min != undefined || this.max != undefined) {
+			const value = this.fromString(result.value)
+			let strValue = ""
+			if (value != undefined) {
+				if (this.min != undefined && value < this.min) {
+					strValue = this.toString(this.min)
+				} else if (this.max != undefined && value > this.max) {
+					strValue = this.toString(this.max)
+				}
+			}
+			return { ...result, value: strValue }
+		}
+		return result
+	}
 	unformat(formatted: StateEditor): Readonly<State> {
 		return formatted
 	}
@@ -30,4 +57,4 @@ class Handler implements Converter<number>, Formatter {
 		return symbol >= "0" && symbol <= "9"
 	}
 }
-add("integer", () => new Handler())
+add("integer", (argument?: any[]) => new Handler(argument?.[0] ?? {}))

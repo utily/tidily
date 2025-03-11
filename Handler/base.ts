@@ -4,6 +4,7 @@ import { DateFormat } from "../DateFormat"
 import { Formatter } from "../Formatter"
 import { StateEditor } from "../StateEditor"
 import { Type } from "../Type"
+import { IntegerOptions } from "./integer"
 import { PriceOptions } from "./price"
 
 const handlers: { [type: string]: ((argument?: any[]) => Converter<any> & Formatter) | undefined } = {}
@@ -41,6 +42,7 @@ export function format(
 	country?: isoly.CountryCode.Alpha2
 ): string
 export function format(data: number, type: "price", currency: isoly.Currency | PriceOptions): string
+export function format(data: number, type: "integer", options: IntegerOptions): string
 export function format(data: any, type: Type, ...argument: any[]): string
 export function format(data: any, type: Type, ...argument: any[]): string {
 	const handler = get(type, ...argument)
