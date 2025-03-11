@@ -4,11 +4,7 @@ import { Settings } from "../Settings"
 import { State } from "../State"
 import { StateEditor } from "../StateEditor"
 import { add } from "./base"
-
-export interface IntegerOptions {
-	min?: number
-	max?: number
-}
+import { IntegerOptions } from "./IntegerOptions"
 
 class Handler implements Converter<number>, Formatter {
 	readonly min: number | undefined

@@ -4,8 +4,8 @@ import { DateFormat } from "../DateFormat"
 import { Formatter } from "../Formatter"
 import { StateEditor } from "../StateEditor"
 import { Type } from "../Type"
-import { IntegerOptions } from "./integer"
-import { PriceOptions } from "./price"
+import { IntegerOptions } from "./IntegerOptions"
+import { PriceOptions } from "./PriceOptions"
 
 const handlers: { [type: string]: ((argument?: any[]) => Converter<any> & Formatter) | undefined } = {}
 export function add(type: Type, create: (argument?: any[]) => Converter<any> & Formatter): void {
