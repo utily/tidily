@@ -36,19 +36,18 @@ class Handler implements Converter<number>, Formatter {
 	}
 	format(unformatted: StateEditor): Readonly<State> & Settings {
 		const result = this.partialFormat(unformatted)
-		if (this.min != undefined || this.max != undefined) {
-			const value = this.fromString(result.value)
-			let strValue = ""
-			if (value != undefined) {
-				if (this.min != undefined && value < this.min) {
-					strValue = this.toString(this.min)
-				} else if (this.max != undefined && value > this.max) {
-					strValue = this.toString(this.max)
-				}
-			}
-			return { ...result, value: strValue }
+		const value = this.fromString(result.value)
+		return {
+			...result,
+			value:
+				value == undefined
+					? result.value
+					: this.min != undefined && value < this.min
+					? this.toString(this.min)
+					: this.max != undefined && value > this.max
+					? this.toString(this.max)
+					: result.value,
 		}
-		return result
 	}
 	unformat(formatted: StateEditor): Readonly<State> {
 		return formatted
