@@ -1,3 +1,4 @@
+import { tidily } from "index"
 import { Action } from "../Action"
 import { Converter } from "../Converter"
 import { Formatter } from "../Formatter"
@@ -50,4 +51,22 @@ describe("percent", () => {
 		expect(handler.fromString("0")).toEqual(0)
 		expect(handler.fromString("")).toEqual(undefined)
 	})
+	it.each([
+		[undefined, "15", undefined, "15"],
+		[10, "15", undefined, "15"],
+		[10, "8", undefined, "10"],
+		[undefined, "15", 20, "15"],
+		[undefined, "25", 20, "20"],
+		[10, "15", 20, "15"],
+		[10, "8", 20, "10"],
+		[10, "30", 20, "20"],
+	])(
+		"Min-max options %s ≤ %s ≤ %s --> %s",
+		(min: number | undefined, data: string, max: number | undefined, formattedValue: string) => {
+			const handler = tidily.get("integer", { min, max }) as tidily.Converter<"string" | unknown> & tidily.Formatter
+			const partialFormattedState = handler.partialFormat(tidily.StateEditor.modify(data))
+			expect(partialFormattedState.value).toEqual(data)
+			expect(tidily.format(data, "integer", { min, max })).toEqual(formattedValue)
+		}
+	)
 })
