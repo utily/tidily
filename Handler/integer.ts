@@ -49,7 +49,7 @@ class Handler implements Converter<number>, Formatter {
 		return formatted
 	}
 	allowed(symbol: string, state: Readonly<State>): boolean {
-		return symbol >= "0" && symbol <= "9"
+		return symbol >= "0" && symbol <= "9" && (this.max == undefined || this.max.toString().length > state.value.length)
 	}
 }
 add("integer", (argument?: any[]) => new Handler(argument?.[0] ?? {}))
