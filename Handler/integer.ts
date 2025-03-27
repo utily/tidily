@@ -9,11 +9,11 @@ import { IntegerOptions } from "./IntegerOptions"
 class Handler implements Converter<number>, Formatter {
 	readonly min: number | undefined
 	readonly max: number | undefined
-	readonly padToLength: number | undefined
+	readonly pad: number | undefined
 	constructor(options: IntegerOptions) {
 		this.min = options.min
 		this.max = options.max
-		this.padToLength = options.padToLength
+		this.pad = options.pad
 	}
 	toString(data?: number | unknown): string {
 		return typeof data == "number" ? data.toString() : ""
@@ -45,7 +45,7 @@ class Handler implements Converter<number>, Formatter {
 				: result.value
 		return {
 			...result,
-			value: typeof this.padToLength == "number" && value ? value.padStart(this.padToLength, "0") : value,
+			value: typeof this.pad == "number" && value ? value.padStart(this.pad, "0") : value,
 		}
 	}
 	unformat(formatted: StateEditor): Readonly<State> {
