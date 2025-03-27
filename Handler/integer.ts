@@ -9,9 +9,11 @@ import { IntegerOptions } from "./IntegerOptions"
 class Handler implements Converter<number>, Formatter {
 	readonly min: number | undefined
 	readonly max: number | undefined
+	readonly pad: number | undefined
 	constructor(options: IntegerOptions) {
 		this.min = options.min
 		this.max = options.max
+		this.pad = options.pad
 	}
 	toString(data?: number | unknown): string {
 		return typeof data == "number" ? data.toString() : ""
@@ -32,17 +34,18 @@ class Handler implements Converter<number>, Formatter {
 	}
 	format(unformatted: StateEditor): Readonly<State> & Settings {
 		const result = this.partialFormat(unformatted)
-		const value = this.fromString(result.value)
+		const number = this.fromString(result.value)
+		const value =
+			number == undefined
+				? result.value
+				: this.min != undefined && number < this.min
+				? this.toString(this.min)
+				: this.max != undefined && number > this.max
+				? this.toString(this.max)
+				: result.value
 		return {
 			...result,
-			value:
-				value == undefined
-					? result.value
-					: this.min != undefined && value < this.min
-					? this.toString(this.min)
-					: this.max != undefined && value > this.max
-					? this.toString(this.max)
-					: result.value,
+			value: typeof this.pad == "number" && value ? value.padStart(this.pad, "0") : value,
 		}
 	}
 	unformat(formatted: StateEditor): Readonly<State> {
