@@ -69,4 +69,21 @@ describe("percent", () => {
 			expect(tidily.format(data, "integer", { min, max })).toEqual(formattedValue)
 		}
 	)
+	it.each([
+		["15", undefined, "15"],
+		["15", 3, "015"],
+		["8", 3, "008"],
+		["15", 0, "15"],
+		["5", 2, "05"],
+		["0", 2, "00"],
+		["", 2, ""],
+	])(
+		"padToLength options %s.padToLength(%s) -.> %s",
+		(data: string | undefined, padToLength: number | undefined, formattedValue: string) => {
+			const handler = tidily.get("integer", { padToLength }) as tidily.Converter<"string" | unknown> & tidily.Formatter
+			const partialFormattedState = handler.partialFormat(tidily.StateEditor.modify(data))
+			expect(partialFormattedState.value).toEqual(data)
+			expect(tidily.format(data, "integer", { padToLength })).toEqual(formattedValue)
+		}
+	)
 })
