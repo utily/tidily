@@ -15,6 +15,7 @@ export type Type =
 	| "identifier-attribute"
 	| "identity-number"
 	| "integer"
+	| "number"
 	| "password"
 	| "percent"
 	| "phone"

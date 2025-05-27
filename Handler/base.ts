@@ -4,6 +4,7 @@ import { DateFormat } from "../DateFormat"
 import { Formatter } from "../Formatter"
 import { StateEditor } from "../StateEditor"
 import { Type } from "../Type"
+import { Precision as NumberPrecision } from "./number"
 import { PriceOptions } from "./price"
 
 const handlers: { [type: string]: ((argument?: any[]) => Converter<any> & Formatter) | undefined } = {}
@@ -17,6 +18,7 @@ export function get(
 ): (Converter<string> & Formatter) | undefined
 export function get(type: "card-expires"): (Converter<[number, number]> & Formatter) | undefined
 export function get(type: "divisor"): (Converter<number | [number, number]> & Formatter) | undefined
+export function get(type: "number", precision: NumberPrecision): (Converter<number> & Formatter) | undefined
 export function get(type: "percent"): (Converter<number> & Formatter) | undefined
 export function get(
 	type: "identity-number" | "phone" | "postal-code",
@@ -34,6 +36,7 @@ export function format(data: [number, number], type: "card-expires"): string
 export function format(data: isoly.Date, type: "date", format?: DateFormat | isoly.Locale): string
 export function format(data: isoly.DateTime, type: "date-time"): string
 export function format(data: number | [number, number], type: "divisor"): string
+export function format(data: number, type: "number", precision: NumberPrecision): string
 export function format(data: number, type: "percent"): string
 export function format(
 	data: string,
@@ -57,6 +60,7 @@ export function parse(value: string, type: "card-expires"): [number, number] | u
 export function parse(value: string, type: "date", format?: DateFormat | isoly.Locale): isoly.Date | undefined
 export function parse(value: string, type: "date-time"): isoly.DateTime | undefined
 export function parse(value: string, type: "divisor"): number | [number, number]
+export function parse(value: string, type: "number", precision: NumberPrecision): number | undefined
 export function parse(value: string, type: "percent"): number | undefined
 export function parse(
 	value: string,
