@@ -10,6 +10,7 @@ import { PriceOptions } from "./PriceOptions"
 class Handler implements Converter<number>, Formatter {
 	readonly currency: isoly.Currency | undefined
 	readonly toInteger: boolean | undefined
+	readonly variant: "long" | "short" = "long"
 	constructor(options: PriceOptions | isoly.Currency | undefined) {
 		this.currency = options && typeof options == "object" ? options.currency : (options as isoly.Currency)
 		this.toInteger = options && typeof options == "object" ? options.toInteger : undefined
@@ -54,7 +55,9 @@ class Handler implements Converter<number>, Formatter {
 			type: "text",
 			inputmode: "numeric",
 			length: [3, undefined],
-			pattern: new RegExp("^(\\d{0,3})( \\d{3})*(\\.\\d+)?" + (this.currency ? " " + this.currency : "") + "$"),
+			pattern: new RegExp(
+				"^(\\d{0,3})( \\d{3})*(\\.\\d+)?" + (this.variant == "long" && this.currency ? " " + this.currency : "") + "$"
+			),
 		}
 	}
 	forceDecimalZero(state: StateEditor, decimals?: number) {
@@ -98,7 +101,9 @@ class Handler implements Converter<number>, Formatter {
 		return state
 	}
 	appendCurrency(state: StateEditor) {
-		return this.currency && (state.value.length > 1 || (state.value.length == 1 && state.value.charAt(0) != "."))
+		return this.variant == "long" &&
+			this.currency &&
+			(state.value.length > 1 || (state.value.length == 1 && state.value.charAt(0) != "."))
 			? state.suffix(" " + this.currency)
 			: state
 	}

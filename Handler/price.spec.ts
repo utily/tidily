@@ -10,7 +10,10 @@ describe("price", () => {
 		expect(tidily.format(212.0, "price", "XPD")).toBe("212 XPD")
 	})
 	const handler = tidily.get("price", "SEK") as tidily.Converter<"string" | unknown> & tidily.Formatter
-	const noCurrencyHandler = tidily.get("price") as tidily.Converter<"string" | unknown> & tidily.Formatter
+	const noCurrencyHandler = tidily.get("price", { variant: "short", currency: "SEK" }) as tidily.Converter<
+		"string" | unknown
+	> &
+		tidily.Formatter
 	it("key event first key 1", () => {
 		const result = tidily.Action.apply(handler, { value: "", selection: { start: 0, end: 0 } }, { key: "1" })
 		expect(result).toMatchObject({ value: "1.00 SEK", selection: { start: 1, end: 1 } })
