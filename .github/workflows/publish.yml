@@ -6,9 +6,9 @@ on:
       - "release-*"
 jobs:
   publish:
-    name: "Publish from master"
+    name: "Publish"
     timeout-minutes: 60
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - name: "Checkout source code"
         uses: "actions/checkout@v3"
@@ -17,8 +17,10 @@ jobs:
         with:
           node-version: current
           cache: "npm"
-      - name: Update NPM
-        run: npm install -g npm
+      - uses: actions/cache@v3
+        with:
+          path: "**/node_modules"
+          key: node_modules-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
       - name: Install
         run: npm install
       - name: Build
@@ -26,7 +28,12 @@ jobs:
       - name: Publish
         run: |
           echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
-          npm publish --access public
+          VERSION=$(node -p "require('./package.json').version")
+          if [[ "$VERSION" == *-* ]]; then
+            npm publish --access public --tag prerelease
+          else
+            npm publish --access public
+          fi
         shell: bash
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -1,5 +1,4 @@
-/// <reference types="vitest/config" />
-import { defineConfig } from "vite"
+import { defineConfig } from "vitest/config"
 
 export default defineConfig({
 	test: {
@@ -8,7 +7,15 @@ export default defineConfig({
 		},
 		coverage: {
 			reporter: ["text", "json", "html"],
-			provider: "istanbul",
+			enabled: true,
+			all: true,
+			cleanOnRerun: true,
+			thresholds: {
+				statements: 85,
+				branches: 85,
+				functions: 85,
+				lines: 85,
+			},
 		},
 		globals: true,
 		include: ["**/*.spec.[tj]s"],
@@ -17,24 +24,7 @@ export default defineConfig({
 		exclude: ["node_modules", "dist"],
 		server: {
 			deps: {
-				inline: [
-					"authly",
-					"isly",
-					"typedly",
-					"cloudly-analytics",
-					"cryptly",
-					"isoly",
-					"cloudly-http",
-					"sessionly",
-					"flagly",
-					"cloudly-storage",
-					"cloudly-rest",
-					"tidily",
-					"gracely",
-					"cloudly-router",
-					"selectively",
-					"langly",
-				],
+				inline: ["isoly", "isly"],
 			},
 		},
 	},

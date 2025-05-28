@@ -9,7 +9,23 @@
 		"LICENSE": true,
 		"tsconfig.*": true,
 		"node_modules": true,
-		"*.code-workspace": true
+		"*.code-workspace": true,
+		"*.config.ts": true,
+		"coverage": true
+	},
+	"search.exclude": {
+		".*": false,
+		"*.sh": false,
+		"*.json": false,
+		"CODEOWNERS": false,
+		"dist": false,
+		"README.md": false,
+		"LICENSE": false,
+		"tsconfig.*": false,
+		"node_modules": false,
+		"*.code-workspace": false,
+		"*.config.ts": false,
+		"coverage": false
 	},
 	"files.insertFinalNewline": true,
 	"editor.tabSize": 2,
@@ -31,8 +47,10 @@
 		"cryptly",
 		"flagly",
 		"gracely",
+		"isly",
 		"isoly",
 		"langly",
+		"måndag",
 		"paramly",
 		"persistly",
 		"selectivly",
@@ -41,8 +59,10 @@
 		"smoothly",
 		"tidily",
 		"transactly",
-		"unformat",
-		"uply"
+		"transcoders",
+		"typedly",
+		"uply",
+		"Utily"
 	],
-	"jest.runMode": "on-demand",
+	"typescript.tsdk": "node_modules/typescript/lib"
 }
